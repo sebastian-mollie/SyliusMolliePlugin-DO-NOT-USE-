@@ -1,6 +1,7 @@
 services:
     bitbag_sylius_mollie_plugin.controller.action.admin.refund:
         class: BitBag\SyliusMolliePlugin\Controller\Action\Admin\Refund
+        public: true
         arguments:
             - "@sylius.repository.payment"
             - "@payum"
