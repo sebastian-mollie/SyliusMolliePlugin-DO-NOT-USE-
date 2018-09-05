@@ -34,6 +34,7 @@ services:
 
     bitbag_sylius_mollie_plugin.payum_action.refund:
         class: BitBag\SyliusMolliePlugin\Action\RefundAction
+        public: true
         tags:
             - { name: payum.action, factory: mollie, alias: payum.action.refund }
 
