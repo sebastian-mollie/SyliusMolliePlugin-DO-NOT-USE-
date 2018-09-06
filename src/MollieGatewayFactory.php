@@ -46,7 +46,7 @@ final class MollieGatewayFactory extends GatewayFactory
                 $config->validateNotEmpty($config['payum.required_options']);
 
                 /** @var MollieApiClient $mollieApiClient */
-                $mollieApiClient = $config['payum.http_client'];
+                $mollieApiClient = new MollieApiClient();
 
                 $mollieApiClient->setApiKey($config['api_key']);
 
