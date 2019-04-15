@@ -21,7 +21,7 @@ use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayInterface;
 use Payum\Core\Payum;
-use Payum\Core\Reply\HttpPostRedirect;
+use Payum\Core\Reply\HttpRedirect;
 use Payum\Core\Request\Capture;
 use Payum\Core\Security\GenericTokenFactory;
 use Payum\Core\Security\GenericTokenFactoryAwareInterface;
@@ -110,7 +110,7 @@ final class CaptureActionSpec extends ObjectBehavior
         $arrayObject->offsetSet('webhookUrl', 'url')->shouldBeCalled();
 
         $this
-            ->shouldThrow(HttpPostRedirect::class)
+            ->shouldThrow(HttpRedirect::class)
             ->during('execute', [$request])
         ;
     }
