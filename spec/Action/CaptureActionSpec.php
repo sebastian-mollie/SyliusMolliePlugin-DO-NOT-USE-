@@ -88,7 +88,7 @@ final class CaptureActionSpec extends ObjectBehavior
         $request->getToken()->willReturn($token);
         $payment = \Mockery::mock('payment');
         $payment->id = 1;
-        $payment->shouldReceive('getCheckoutUrl')->andReturn('');
+        $payment->shouldReceive('getCheckoutUrl')->andReturn('https://thisisnotanemptyurl.com');
         $paymentEndpoint->create([
             'amount' => null,
             'description' => null,
