@@ -21,6 +21,7 @@ final class DocumentationLinks implements DocumentationLinksInterface
         'mollie_components' => 'https://www.mollie.com/en/news/post/better-checkout-flows-with-mollie-components',
         'payment_methods' => 'https://docs.mollie.com/orders/why-use-orders',
         'profile_id' => 'https://www.mollie.com/dashboard/developers/api-keys',
+        'api_key' => 'https://www.mollie.com/dashboard/developers/api-keys',
     ];
 
     /** @var TranslatorInterface */
@@ -57,7 +58,18 @@ final class DocumentationLinks implements DocumentationLinksInterface
             $this->translator->trans('bitbag_sylius_mollie_plugin.ui.click'),
             self::DOCUMENTATION_LINKS['payment_methods'],
             $this->translator->trans('bitbag_sylius_mollie_plugin.ui.here'),
-            $this->translator->trans('bitbag_sylius_mollie_plugin.ui.payment_methods_doc'));
+            $this->translator->trans('bitbag_sylius_mollie_plugin.ui.payment_methods_doc')
+        );
+    }
+
+    public function getApiKeyDoc(): string
+    {
+        return \sprintf('%s <a target="_blank" href="%s"> %s </a> %s',
+        $this->translator->trans('bitbag_sylius_mollie_plugin.ui.find_you_api_key'),
+        self::DOCUMENTATION_LINKS['api_key'],
+        $this->translator->trans('bitbag_sylius_mollie_plugin.ui.mollie_profile'),
+        $this->translator->trans('bitbag_sylius_mollie_plugin.ui.it_starts_with')
+        );
     }
 
     public function getProfileIdDoc(): string
