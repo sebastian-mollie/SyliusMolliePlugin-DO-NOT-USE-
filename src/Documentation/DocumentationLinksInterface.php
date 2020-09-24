@@ -20,5 +20,7 @@ interface DocumentationLinksInterface
 
     public function getPaymentMethodDoc(): string;
 
+    public function getApiKeyDoc(): string;
+
     public function getProfileIdDoc(): string;
 }
