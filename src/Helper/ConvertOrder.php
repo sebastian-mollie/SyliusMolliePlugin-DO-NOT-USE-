@@ -117,7 +117,7 @@ final class ConvertOrder implements ConvertOrderInterface
                 ],
                 'metadata' => [
                     'item_id' => $item->getId(),
-                ]
+                ],
             ];
         }
 

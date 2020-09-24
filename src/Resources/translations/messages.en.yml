@@ -66,6 +66,8 @@ bitbag_sylius_mollie_plugin:
         payment_methods_doc: 'to read more about the differences between the Payment and Orders API'
         click: 'Click'
         no_fee: 'No fee'
+        you_can_find_you_profile_id: 'You can find your Profile ID in your'
+        mollie_profile_id: 'Mollie Profile'
     form:
         payment_methods:
             payment_description: 'Description'

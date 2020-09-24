@@ -54,6 +54,8 @@ final class MollieGatewayConfigurationType extends AbstractType
             ])
             ->add('profile_id', TextType::class, [
                 'label' => 'bitbag_sylius_mollie_plugin.ui.profilie_id',
+                'help' => $this->documentationLinks->getProfileIdDoc(),
+                'help_html' => true,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'bitbag_sylius_mollie_plugin.profile_id.not_blank',
