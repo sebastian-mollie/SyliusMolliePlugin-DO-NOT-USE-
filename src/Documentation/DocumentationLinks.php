@@ -65,10 +65,10 @@ final class DocumentationLinks implements DocumentationLinksInterface
     public function getApiKeyDoc(): string
     {
         return \sprintf('%s <a target="_blank" href="%s"> %s </a> %s',
-        $this->translator->trans('bitbag_sylius_mollie_plugin.ui.find_you_api_key'),
-        self::DOCUMENTATION_LINKS['api_key'],
-        $this->translator->trans('bitbag_sylius_mollie_plugin.ui.mollie_profile'),
-        $this->translator->trans('bitbag_sylius_mollie_plugin.ui.it_starts_with')
+            $this->translator->trans('bitbag_sylius_mollie_plugin.ui.find_you_api_key'),
+            self::DOCUMENTATION_LINKS['api_key'],
+            $this->translator->trans('bitbag_sylius_mollie_plugin.ui.mollie_profile'),
+            $this->translator->trans('bitbag_sylius_mollie_plugin.ui.it_starts_with')
         );
     }
 
