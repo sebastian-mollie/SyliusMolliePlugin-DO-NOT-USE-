@@ -23,8 +23,7 @@ final class MollieGatewayFactory extends GatewayFactory
 
     protected function populateConfig(ArrayObject $config): void
     {
-
-        $environment = true === $config['environment'] ? "api_key_live": "api_key_test";
+        $environment = true === $config['environment'] ? 'api_key_live' : 'api_key_test';
         $config->defaults([
             'payum.factory_name' => self::FACTORY_NAME,
             'payum.factory_title' => 'Mollie',
@@ -49,7 +48,7 @@ final class MollieGatewayFactory extends GatewayFactory
                 $mollieApiClient = $config['payum.http_client'];
                 $mollieApiClient->setApiKey($config[$environment]);
                 $mollieApiClient->setConfig($config->toUnsafeArray());
-                $mollieApiClient->addVersionString('Sylius/' .  Kernel::VERSION);
+                $mollieApiClient->addVersionString('Sylius/' . Kernel::VERSION);
                 $mollieApiClient->addVersionString('BitBagSyliusMolliePlugin/' . $mollieApiClient->getVersion());
 
                 return $mollieApiClient;
