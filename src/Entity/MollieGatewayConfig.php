@@ -33,13 +33,19 @@ class MollieGatewayConfig extends AbstractMethod implements ResourceInterface, M
     private $customizeMethodImage;
 
     /** @var array */
-    private $countryLevel;
+    private $countryLevelAllowed;
+
+    /** @var array */
+    private $countryLevelExcluded;
 
     /** @var int */
     private $orderExpiration = 28;
 
     /** @var string */
     private $paymentDescription;
+
+    /** @var string|null */
+    private $countryRestriction;
 
     public function getId(): int
     {
@@ -86,14 +92,24 @@ class MollieGatewayConfig extends AbstractMethod implements ResourceInterface, M
         $this->customizeMethodImage = $customizeMethodImage;
     }
 
-    public function getCountryLevel(): ?array
+    public function getCountryLevelAllowed(): ?array
     {
-        return $this->countryLevel;
+        return $this->countryLevelAllowed;
     }
 
-    public function setCountryLevel(?array $countryLevel): void
+    public function setCountryLevelAllowed(?array $countryLevelAllowed): void
     {
-        $this->countryLevel = $countryLevel;
+        $this->countryLevelAllowed = $countryLevelAllowed;
+    }
+
+    public function getCountryLevelExcluded(): ?array
+    {
+        return $this->countryLevelExcluded;
+    }
+
+    public function setCountryLevelExcluded(?array $countryLevelExcluded): void
+    {
+        $this->countryLevelExcluded = $countryLevelExcluded;
     }
 
     public function getOrderExpiration(): ?int
@@ -114,5 +130,15 @@ class MollieGatewayConfig extends AbstractMethod implements ResourceInterface, M
     public function setPaymentDescription(?string $paymentDescription): void
     {
         $this->paymentDescription = $paymentDescription;
+    }
+
+    public function getCountryRestriction(): ?string
+    {
+        return $this->countryRestriction;
+    }
+
+    public function setCountryRestriction(?string $countryRestriction): void
+    {
+        $this->countryRestriction = $countryRestriction;
     }
 }

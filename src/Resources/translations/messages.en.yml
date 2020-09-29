@@ -71,6 +71,9 @@ bitbag_sylius_mollie_plugin:
         find_you_api_key: 'You can find your API key in your '
         mollie_profile: 'Mollie Profile'
         it_starts_with: 'it starts with test or live.'
+        country_restriction: 'Payment allowed from'
+        all_countries: 'All countries'
+        selected_countries: 'Selected countries'
     form:
         payment_methods:
             payment_description: 'Description'
