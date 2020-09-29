@@ -7,10 +7,10 @@
         <service id="bitbag_sylius_mollie_plugin.resolver.payment_methods" class="BitBag\SyliusMolliePlugin\Resolver\MolliePaymentsMethodResolver">
             <argument type="service" id="sylius.repository.order"/>
             <argument type="service" id="sylius.repository.gateway_config"/>
-            <argument type="service" id="bitbag_sylius_mollie_plugin.resolver.payment_methods_image"/>
             <argument type="service" id="bitbag_sylius_mollie_plugin.repository.mollie_gateway_config"/>
             <argument type="service" id="session"/>
             <argument type="service" id="sylius.context.cart"/>
+            <argument type="service" id="bitbag_sylius_mollie_plugin.resolver.mollie_countries_restriction_resolver"/>
         </service>
         <service id="bitbag_sylius_mollie_plugin.resolver.payment_methods_image" class="BitBag\SyliusMolliePlugin\Resolver\MolliePaymentMethodImageResolver">
             <argument>%images_dir%</argument>
@@ -33,6 +33,9 @@
         <service id="bitbag_sylius_mollie_plugin.resolver.partial_ship.from_mollie_to_sylius_resolver" class="BitBag\SyliusMolliePlugin\Resolver\PartialShip\FromMollieToSyliusResolver">
             <argument type="service" id="sylius.repository.order_item_unit"/>
             <argument type="service" id="bitbag_sylius_mollie_plugin.remover.partial_ship.old_shipment_items_remover"/>
+        </service>
+        <service id="bitbag_sylius_mollie_plugin.resolver.mollie_countries_restriction_resolver" class="BitBag\SyliusMolliePlugin\Resolver\MollieCountriesRestrictionResolver">
+            <argument type="service" id="bitbag_sylius_mollie_plugin.resolver.payment_methods_image"/>
         </service>
     </services>
 </container>
