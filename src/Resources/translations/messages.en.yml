@@ -4,7 +4,7 @@ bitbag_sylius_mollie_plugin:
         api_key_live: 'API Key Live'
         api_key_choice_test: 'Test'
         api_key_choice_live: 'Live'
-        profilie_id: 'Profile ID'
+        profilie_id: 'Profile ID {help_label}'
         environment: 'Environment'
         mollie_gateway_label: 'Mollie'
         refunded_only_locally: 'The payment refund was made only locally'
@@ -66,9 +66,11 @@ bitbag_sylius_mollie_plugin:
         payment_methods_doc: 'to read more about the differences between the Payment and Orders API'
         click: 'Click'
         no_fee: 'No fee'
-        you_can_find_you_profile_id: 'You can find your Profile ID in your'
+        you_can_find_you_profile_id: "Profile ID * \n
+                                     You can find your Profile ID in your"
         mollie_profile_id: 'Mollie Profile'
-        find_you_api_key: 'You can find your API key in your '
+        find_you_api_key: "API Key Test * \n
+                          You can find your API key in your "
         mollie_profile: 'Mollie Profile'
         it_starts_with: 'it starts with test or live.'
         country_restriction: 'Payment allowed from'

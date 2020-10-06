@@ -53,9 +53,7 @@ final class MollieGatewayConfigurationType extends AbstractType
                 ],
             ])
             ->add('profile_id', TextType::class, [
-                'label' => 'bitbag_sylius_mollie_plugin.ui.profilie_id',
-                'help' => $this->documentationLinks->getProfileIdDoc(),
-                'help_html' => true,
+                'label' => $this->documentationLinks->getProfileIdDoc(),
                 'constraints' => [
                     new NotBlank([
                         'message' => 'bitbag_sylius_mollie_plugin.profile_id.not_blank',
@@ -64,9 +62,8 @@ final class MollieGatewayConfigurationType extends AbstractType
                 ],
             ])
             ->add('api_key_test', TextType::class, [
-                'label' => 'bitbag_sylius_mollie_plugin.ui.api_key_test',
-                'help' => $this->documentationLinks->getApiKeyDoc(),
-                'help_html' => true,
+                'label' => $this->documentationLinks->getApiKeyDoc(),
+                'help' => ' ',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'bitbag_sylius_mollie_plugin.api_key.not_blank',
@@ -87,8 +84,6 @@ final class MollieGatewayConfigurationType extends AbstractType
             ->add('api_key_live', PasswordType::class, [
                 'label' => 'bitbag_sylius_mollie_plugin.ui.api_key_live',
                 'attr' => ['placeholder' => '*******************'],
-                'help' => $this->documentationLinks->getApiKeyDoc(),
-                'help_html' => true,
                 'constraints' => [
                     new Regex([
                         'message' => 'bitbag_sylius_mollie_plugin.api_key.invalid_live',
