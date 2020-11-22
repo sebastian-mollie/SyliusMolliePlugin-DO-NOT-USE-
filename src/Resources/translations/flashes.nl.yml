@@ -1,0 +1,21 @@
+bitbag_sylius_mollie_plugin:
+    refunded_only_locally: 'De terugbetaling vond alleen lokaal plaats'
+    subscription:
+        cancelled: 'Het abonnement is opgezegd.'
+    admin:
+        shipment:
+            successfuly_split_and_sent: 'De verzending is succesvol gesplitst en verzonden'
+        success_got_methods: "Methoden zijn succesvol bijgewerkt"
+        paymentlink:
+            successfuly_generated: 'Betaallink succesvol gegenereerd'
+    credit_cart_error:
+        invalid_card_number: 'Ongeldige kaartnummer'
+        invalid_cvv: 'Ongeldige veiligheidscode (cvv)'
+        invalid_card_holder_name: 'Ongeldige naam van kaarthouder'
+        card_expired: 'Kaart is verlopen'
+        invalid_card_type: 'Ongeldig kaarttype'
+        refused_by_issuer: 'Geweigerd door de uitgever van de kaart'
+        insufficient_funds: 'Onvoldoende saldo'
+        inactive_card: 'Inactieve kaart'
+        possible_fraud: 'Mogelijke fraude'
+        authentication_failed: 'Authenticatie mislukt'
