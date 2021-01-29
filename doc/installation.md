@@ -1,18 +1,22 @@
 ## Installation
 
-1.Require with composer
-
-
-Right now we are using the Refund plugin. This plugin is on RC version. 
-We are recommended to install first Refund plugin by adding this line to composer.json
-Then install mollie plugin.
+The Refund plugin does not yet have stable release. 
+You can install first Refund plugin by adding this line to composer.json
 
 ```diff
     "require": {
-        "sylius/refund-plugin": "1.0.0-RCX as 1.0.0",
+        "sylius/refund-plugin": "1.0.0-RC5 as 1.0.0",
     },
     ...
 ```
+Or configure project to accept releases candidate version
+
+```bash
+composer config minimum-stability rc
+composer config prefer-stable true
+```
+
+1.Require with composer
 
 ```bash
 $ composer require bitbag/mollie-plugin
