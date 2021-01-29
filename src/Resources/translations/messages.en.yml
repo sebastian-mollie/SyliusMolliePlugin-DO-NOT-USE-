@@ -111,6 +111,12 @@ bitbag_sylius_mollie_plugin:
         available_methods: 'Available methods'
         success: 'Success'
         fail: 'Fail'
+        developed_by: 'Developed by'
+        you_can_fin_info_about: 'You can find more information about us on'
+        sylius_bundle: 'Visit the Sylius bundle'
+        contact_bitbag: 'Contact Bitbag'
+        contact_mollie: 'Contact Mollie'
+        more_info_about_mollie: 'More info on Mollie'
     form:
         payment_methods:
             payment_description: 'Description'
