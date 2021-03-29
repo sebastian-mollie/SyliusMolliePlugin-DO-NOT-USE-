@@ -79,5 +79,10 @@
             <argument>%bitbag_sylius_mollie_plugin.model.template_mollie_email_translation.class%</argument>
             <tag name="form.type" />
         </service>
+        <service id="sylius.form.type.checkout_select_payment" class="Sylius\Bundle\CoreBundle\Form\Type\Checkout\SelectPaymentType">
+            <argument>%sylius.model.order.class%</argument>
+            <argument>%sylius.form.type.checkout_select_payment.validation_groups%</argument>
+            <tag name="form.type" />
+        </service>
     </services>
 </container>
