@@ -39,6 +39,10 @@
                 {% include 'bundles/SyliusAdminBundle/PaymentMethod/_api_test_key.html.twig' %}
             {% elseif field.vars.name == 'api_key_live' %}
                 {% include 'bundles/SyliusAdminBundle/PaymentMethod/_api_live_key.html.twig' %}
+            {% elseif field.vars.name == 'components' %}
+                <div class="mollie-components">
+                    {{ form_row(field) }}
+                </div>
             {% else %}
                 {{ form_row(field) }}
                 {{ form_help(field) }}

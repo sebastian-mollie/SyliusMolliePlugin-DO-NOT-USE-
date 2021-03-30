@@ -7,3 +7,44 @@
   right: 20px;
   top: 20px;
 }
+
+.modal-onboarding {
+  position: fixed !important;
+  top: auto !important;
+  left: auto !important;
+  bottom: 100px !important;
+  right: 50px !important;
+  transform: none !important;
+}
+
+.d-none {
+  display: none !important;
+}
+
+.mr-auto {
+  margin-right: auto !important;
+}
+.ml-auto {
+  margin-left: auto;
+}
+
+
+.active .step-1 {
+  width: 100vw;
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  max-width: initial;
+  justify-content: center;
+  background: black;
+}
+
+.step-1 .shepherd-text {
+  color: white;
+  text-align: center;
+  font-size: 80px;
+  font-weight: 600;
+}
+.step-1 .shepherd-content {
+  width: 50%;
+}
