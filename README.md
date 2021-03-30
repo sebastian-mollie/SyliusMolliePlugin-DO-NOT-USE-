@@ -120,6 +120,27 @@ Available states:
 * Suspended: Mandates became invalid, so the subscription is suspended
 * Completed: All subscription payments are executed according to the timetable
 
+## Frontend part
+----
+### Starting and building assets
+
+* Go to `./tests/Application/` directory
+* Run `gulp watch` in terminal. It will watch your changes in: 
+  `../../src/Resources/public/js/Admin/**/*.js`, `../../src/Resources/public/css/**/*.css`
+
+### Rebuilding assets
+
+* `bin/console assets:install` or
+* `gulp buildJsAssets` and
+* `gulp buildCssAssets`
+
+more details in `./tests/Application/gulpfile.babel.js`
+
+### CSS & JS files directory
+
+* CSS: go to `./src/Resources/public/css/**/`
+* JS: go to `./src/Resources/public/js/**/`
+
 ## Testing
 ----
 ```
