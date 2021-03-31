@@ -1,7 +1,7 @@
 $(function () {
   const container = document.querySelector('.js-sortable');
 
-  if (!container && !container.length) {
+  if (!container) {
     return;
   }
 

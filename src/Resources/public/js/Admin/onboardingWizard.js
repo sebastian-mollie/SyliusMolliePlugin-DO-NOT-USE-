@@ -1,7 +1,5 @@
 $(function () {
-  const container = document.querySelector('#mollie-payment-form');
-
-  if (!container) {
+  if (!document.querySelector('#mollie-payment-form')) {
     return;
   }
 
