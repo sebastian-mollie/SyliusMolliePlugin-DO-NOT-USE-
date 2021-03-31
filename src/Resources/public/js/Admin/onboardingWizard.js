@@ -4,24 +4,23 @@ $(function () {
   }
 
   const steps = [
-    {
-      text: 'Onboarding Assistant Designs',
-      stepNoClass: 'step-1',
-      classActive: 'active',
-      btnBackText:'Skip this',
-      btnBackClass:'d-none',
-      btnNextText: 'Start guide',
-      btnNextClass:'ml-auto mr-auto',
-      attachToElement: 'body'
-    },
-    {
-      text: 'Thank you for installing Mollie for payment services. This guide will take you through the configuration setup. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam suscipit nibh quis urna congue, et interdum nulla rutrum. Cras at justo ornare.',
-      stepNoClass: 'step-2',
-      title: '<h2>Let me help you</h2>',
-      btnBackText:'Skip this',
-      btnNextText: 'Start guide',
-      scrollToTarget: '#sylius_payment_method_gatewayConfig_config_api_key_test'
-    },
+    // {
+    //   text: 'Onboarding Assistant Designs',
+    //   stepNoClass: 'step-1',
+    //   classActive: 'active-step-1',
+    //   btnBackClass:'d-none',
+    //   btnNextText: 'Start guide',
+    //   btnNextClass:'ml-auto mr-auto',
+    //   attachToElement: 'body'
+    // },
+    // {
+    //   text: 'Thank you for installing Mollie for payment services. This guide will take you through the configuration setup. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam suscipit nibh quis urna congue, et interdum nulla rutrum. Cras at justo ornare.',
+    //   stepNoClass: 'step-2',
+    //   title: '<h2>Let me help you</h2>',
+    //   btnBackText:'Skip this, I know how it works',
+    //   btnNextText: 'Start onboarding assistant',
+    //   scrollToTarget: '#sylius_payment_method_gatewayConfig_config_api_key_test'
+    // },
     {
       text: 'TEST will be the default in the plugin. You only need to do the configuration once to have TEST + LIVE environments available. Try easily togging between the two.',
       stepNoClass: 'step-3 modal-onboarding',
@@ -29,6 +28,7 @@ $(function () {
       scrollToTarget: '.ui.dropdown.selection',
       btnBackText:'Go back',
       btnNextText: 'Next',
+      btnCollapseClass: 'btn-collapse'
     },
     {
       text: 'To sync the Mollie plugin to your webshop you\'ll hneed Mollie API keys and Profile ID.',
@@ -36,6 +36,7 @@ $(function () {
       title: '<h2>Connect to your account</h2>',
       btnBackText:'Login to my account',
       btnNextText: 'Create a Mollie account',
+      btnCollapseClass: 'btn-collapse',
     },
     {
       text: 'Fill in your correct details and click "TEST API Key" this will return a successful or failed result for both the LIVE and TEST environments.\n' +
@@ -45,6 +46,7 @@ $(function () {
       btnBackText:'Go back',
       btnNextText: 'Next',
       attachToElement: '[for="sylius_payment_method_gatewayConfig_config_api_key_test"] + *',
+      btnCollapseClass: 'btn-collapse',
     },
     {
       text: 'Enabling components, allows you to add the fields needed for credit card holder data to your own\n' +
@@ -54,19 +56,22 @@ $(function () {
       btnBackText:'Go back',
       btnNextText: 'Next',
       attachToElement: '.onboardingWizard-mollieComponents',
+      btnCollapseClass: 'btn-collapse',
     },
     {
       text: 'Enabling single click payments remembers your consumer\'s payment preferences in order to expedite follow-up payments. Your consumer does not have to perform any additional actions to enjoy quick and easy payments.',
       stepNoClass: 'step-7 modal-onboarding',
       btnBackText:'Go back',
       btnNextText: 'Next',
-      attachToElement: '.onboardingWizard-singleClick'
+      attachToElement: '.onboardingWizard-singleClick',
+      btnCollapseClass: 'btn-collapse',
     },
     {
       text: 'We\'ll go through setup with the Payments API first and then highlight differences if you choose to use the Orders API',
       stepNoClass: 'step-8 modal-onboarding',
       btnBackText:'Go back',
       btnNextText: 'Next',
+      btnCollapseClass: 'btn-collapse',
     },
     {
       text: 'You can enter a custom title here - it will be displayed on your checkout page',
@@ -124,14 +129,14 @@ $(function () {
 
   const tour = new Shepherd.Tour({
     useModalOverlay: true,
+    confirmCancel: false,
     defaultStepOptions: {
-      arrow: false,
+      class: 'onboardingWizard-popup',
+      arrow: true,
       cancelIcon: {
         enabled: true,
       },
-      scrollTo: {
-        behavior: 'smooth',
-      }
+      scrollTo: true,
     },
   });
 
@@ -142,6 +147,7 @@ $(function () {
       classes: step.stepNoClass,
       attachTo: {
         ...(step.attachToElement && { element: step.attachToElement }),
+        on: 'top-start'
       },
       ...(step.classActive && { highlightClass: step.classActive }),
       scrollToHandler: function () {
@@ -152,11 +158,16 @@ $(function () {
         }
 
         window.scroll({
-          top: $(target).offset().top - 100,
+          top: $(target).offset().top - 150,
           behavior: 'smooth',
         });
       },
       buttons: [
+        {
+          text: '',
+          action: index === 0 ? tour.cancel : tour.back,
+          ...(step.btnCollapseClass && { classes: step.btnCollapseClass }),
+        },
         {
           text: step.btnBackText,
           action: index === 0 ? tour.cancel : tour.back,

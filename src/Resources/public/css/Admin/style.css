@@ -48,3 +48,75 @@
 .step-1 .shepherd-content {
   width: 50%;
 }
+
+.shepherd-arrow {
+  transform: translate(360px, 0px) !important;
+}
+
+.shepherd-arrow::before {
+  background-color: #0040FF;
+}
+
+.shepherd-footer {
+  padding: 0;
+}
+
+.shepherd-header {
+  background-color: #fff;
+  padding: 0;
+  position: absolute;
+  right: 0;
+  top: -40px;
+  width: 100%;
+}
+
+.shepherd-header .shepherd-cancel-icon {
+  color: black;
+  background: #F3F3F3;
+  border-radius: 50%;
+  width: 1em;
+  height: 1em;
+
+}
+
+.shepherd-cancel-icon span {
+  font-size: .8em;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.shepherd-button:not(.btn-collapse) {
+  font-weight: 600;
+  margin-right: 0;
+  min-width: 100px;
+  padding: 13px;
+}
+
+.shepherd-button:not(.shepherd-button-secondary):not(.btn-collapse) {
+  background-color: #0040FF;
+  border-radius: 0;
+  border-bottom-right-radius: 4px;
+  color: #fff;
+}
+
+.shepherd-button.shepherd-button-secondary {
+  color: #979797;
+  background-color: transparent;
+}
+
+.shepherd-button.btn-collapse {
+  position: absolute;
+  top: -40px;
+  right: 30px;
+  padding: 1px;
+  background: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+
+.shepherd-text {
+  padding: 27px;
+}
