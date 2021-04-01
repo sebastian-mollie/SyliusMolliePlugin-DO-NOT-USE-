@@ -23,26 +23,26 @@ $(function () {
     // },
     {
       text: 'TEST will be the default in the plugin. You only need to do the configuration once to have TEST + LIVE environments available. Try easily togging between the two.',
-      stepNoClass: 'step-3 modal-onboarding',
+      stepNoClass: ' right-bottom',
       attachToElement: '.onboardingWizard-environment',
       scrollToTarget: '.ui.dropdown.selection',
       btnBackText:'Go back',
       btnNextText: 'Next',
-      btnCollapseClass: 'btn-collapse'
+      btnCollapseClass: 'btn-collapse',
     },
     {
+      title: 'Connect to your account',
       text: 'To sync the Mollie plugin to your webshop you\'ll hneed Mollie API keys and Profile ID.',
       stepNoClass: 'step-4',
-      title: '<h2>Connect to your account</h2>',
       btnBackText:'Login to my account',
       btnNextText: 'Create a Mollie account',
-      btnCollapseClass: 'btn-collapse',
+      btnCollapseClass: 'btn-collapse d-none',
     },
     {
       text: 'Fill in your correct details and click "TEST API Key" this will return a successful or failed result for both the LIVE and TEST environments.\n' +
         '\n' +
         'Learn about the difference between: Orders API or the Payments API',
-      stepNoClass: 'step-5 modal-onboarding',
+      stepNoClass: 'step-5 right-bottom',
       btnBackText:'Go back',
       btnNextText: 'Next',
       attachToElement: '[for="sylius_payment_method_gatewayConfig_config_api_key_test"] + *',
@@ -52,15 +52,15 @@ $(function () {
       text: 'Enabling components, allows you to add the fields needed for credit card holder data to your own\n' +
         'checkout. If you select NO, users will be redirected to the Mollie\n' +
         'checkout page',
-      stepNoClass: 'step-6 modal-onboarding',
+      stepNoClass: 'step-6 right-bottom',
       btnBackText:'Go back',
       btnNextText: 'Next',
-      attachToElement: '.onboardingWizard-mollieComponents',
+      attachToElement: '#sylius_payment_method_gatewayConfig_config_components + label',
       btnCollapseClass: 'btn-collapse',
     },
     {
       text: 'Enabling single click payments remembers your consumer\'s payment preferences in order to expedite follow-up payments. Your consumer does not have to perform any additional actions to enjoy quick and easy payments.',
-      stepNoClass: 'step-7 modal-onboarding',
+      stepNoClass: 'step-7 right-bottom',
       btnBackText:'Go back',
       btnNextText: 'Next',
       attachToElement: '.onboardingWizard-singleClick',
@@ -68,71 +68,80 @@ $(function () {
     },
     {
       text: 'We\'ll go through setup with the Payments API first and then highlight differences if you choose to use the Orders API',
-      stepNoClass: 'step-8 modal-onboarding',
+      stepNoClass: 'step-8 right-bottom',
       btnBackText:'Go back',
       btnNextText: 'Next',
       btnCollapseClass: 'btn-collapse',
     },
     {
       text: 'You can enter a custom title here - it will be displayed on your checkout page',
-      stepNoClass: 'step-9 modal-onboarding',
+      stepNoClass: 'step-9 right-bottom',
       btnBackText:'Go back',
       btnNextText: 'Next',
-      attachToElement: '#sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_name'
+      attachToElement: '#sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_name',
+      btnCollapseClass: 'btn-collapse',
     },
     {
       text: 'Choose Payments API (Payments API can not be used for methods such as Klarna - we\'ll set-up that up later) Learn about the difference  between Orders APIor the Payments API',
-      stepNoClass: 'step-10 modal-onboarding',
+      stepNoClass: 'step-10 right-bottom',
       btnBackText:'Go back',
       btnNextText: 'Next',
-      attachToElement: '[for="sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_paymentType"] + .dropdown'
+      attachToElement: '[for="sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_paymentType"] + .dropdown',
+      btnCollapseClass: 'btn-collapse',
     },
     {
       text: 'When using Payments API you may want additional details to help you match payments with customer orders -- you can enter those values here but make sure to use the correct tags provide in the text below',
-      stepNoClass: 'step-11 modal-onboarding',
+      stepNoClass: 'step-11 right-bottom',
       btnBackText:'Go back',
       btnNextText: 'Next',
-      attachToElement: '#sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_paymentDescription'
+      btnCollapseClass: 'btn-collapse',
     },
     {
       text: 'Restrict/ allow payment per individual countries.',
-      stepNoClass: 'step-12 modal-onboarding',
+      stepNoClass: 'step-12 right-bottom',
       btnBackText:'Go back',
       btnNextText: 'Next',
       attachToElement: '[for="sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_country_restriction"] +' +
         ' .dropdown',
+      btnCollapseClass: 'btn-collapse',
     },
     {
       text: 'In case you have fees that you are passing on to the consumer, you can add them here',
-      stepNoClass: 'step-13 modal-onboarding',
+      stepNoClass: 'step-13 right-bottom',
       btnBackText:'Go back',
       btnNextText: 'Next',
       attachToElement: '[for="sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_paymentSurchargeFee_type"] +' +
         ' .dropdown',
+      btnCollapseClass: 'btn-collapse',
     },
     {
       text: 'Upload a custom image for the payment method icon, this will be shown in the checkout page',
-      stepNoClass: 'step-14 modal-onboarding',
+      stepNoClass: 'step-14 right-bottom',
       btnBackText:'Go back',
       btnNextText: 'Next',
       attachToElement: '#sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_customizeMethodImage_file',
+      btnCollapseClass: 'btn-collapse',
     },
     {
-      title: '<h2>You\'re all set!</h2>',
+      title: 'You\'re all set!',
       stepNoClass: 'step-15',
       text: 'You\'re all done, you can now attempt a consumer order or your website',
       btnBackClass: 'd-none',
       btnNextClass: 'ml-auto mr-auto',
       btnNextText: 'Start using Mollie plugin',
+      btnCollapseClass: 'btn-collapse d-none',
     },
   ];
 
   const tour = new Shepherd.Tour({
     useModalOverlay: true,
     confirmCancel: false,
+    popperOptions: {
+      modifiers: [{ name: 'offset', options: { offset: [0, 12] } }]
+    },
     defaultStepOptions: {
       class: 'onboardingWizard-popup',
-      arrow: true,
+      arrow: false,
       cancelIcon: {
         enabled: true,
       },
@@ -145,6 +154,7 @@ $(function () {
       title: step.title ? step.title : null,
       text: step.text,
       classes: step.stepNoClass,
+      ...step.advanceOn && { selector: '.btn-collapse', event: 'click' },
       attachTo: {
         ...(step.attachToElement && { element: step.attachToElement }),
         on: 'top-start'
@@ -164,8 +174,23 @@ $(function () {
       },
       buttons: [
         {
-          text: '',
-          action: index === 0 ? tour.cancel : tour.back,
+          text: '<i class="arrow down icon"></i>',
+          action() {
+            const currentStep = this.currentStep.el;
+            const buttonCollapse = currentStep.querySelector('.btn-collapse');
+            const isCollapsed = [...currentStep.classList].includes('-collapsed');
+
+            const paragraph = document.createElement('p');
+            paragraph.classList.add('btn-text-open');
+            paragraph.textContent = 'Open';
+
+            const textOpen = buttonCollapse.querySelector('.btn-text-open ')
+
+            !isCollapsed ? buttonCollapse.appendChild(paragraph) : buttonCollapse.removeChild(textOpen)
+
+            currentStep.classList.toggle('-collapsed', !isCollapsed);
+            currentStep.setAttribute('aria-hidden', !isCollapsed);
+          },
           ...(step.btnCollapseClass && { classes: step.btnCollapseClass }),
         },
         {
@@ -187,7 +212,7 @@ $(function () {
 
   const stepsOrderApi = [
     {
-      stepNoClass: 'step-1 modal-onboarding',
+      stepNoClass: 'step-1 right-bottom',
       text: 'Choose Payments API (Payments API can not be used for methods such as Klarna - we\'ll set-up that up later)\n' +
         'Learn about the difference between: Orders API or the Payments API ',
       btnBackText:'Go back',
