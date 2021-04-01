@@ -37,6 +37,7 @@ $(function () {
       btnBackText:'Login to my account',
       btnNextText: 'Create a Mollie account',
       btnCollapseClass: 'btn-collapse d-none',
+      urlMollie: 'https://www.mollie.com/dashboard',
     },
     {
       text: 'Fill in your correct details and click "TEST API Key" this will return a successful or failed result for both the LIVE and TEST environments.\n' +
@@ -178,9 +179,9 @@ $(function () {
           action() {
             const currentStep = this.currentStep.el;
             const buttonCollapse = currentStep.querySelector('.btn-collapse');
-            const isCollapsed = [...currentStep.classList].includes('-collapsed');
+            const isCollapsed = [...currentStep.classList].includes('collapsed');
 
-            const paragraph = document.createElement('p');
+            const paragraph = document.createElement('span');
             paragraph.classList.add('btn-text-open');
             paragraph.textContent = 'Open';
 
@@ -188,25 +189,48 @@ $(function () {
 
             !isCollapsed ? buttonCollapse.appendChild(paragraph) : buttonCollapse.removeChild(textOpen)
 
-            currentStep.classList.toggle('-collapsed', !isCollapsed);
+            currentStep.classList.toggle('collapsed', !isCollapsed);
             currentStep.setAttribute('aria-hidden', !isCollapsed);
           },
           ...(step.btnCollapseClass && { classes: step.btnCollapseClass }),
         },
         {
           text: step.btnBackText,
-          action: index === 0 ? tour.cancel : tour.back,
+          action() {
+            if (index === 0) {
+              tour.cancel();
+            } else {
+              if(step.urlMollie) {
+                window.open(`${step.urlMollie}/signin`, '_blank');
+                tour.next();
+                return
+              }
+              tour.back();
+            }
+          },
           secondary: true,
           ...(step.btnBackClass && { classes: step.btnBackClass }),
         },
         {
           text: step.btnNextText,
-          action: index === steps.length - 1 ? tour.complete : tour.next,
+          action() {
+            if(index === steps.length - 1) {
+              tour.complete();
+            } else {
+              if(step.urlMollie) {
+                window.open(`${step.urlMollie}/signup`, '_blank');
+                tour.next();
+                return
+              }
+              tour.next();
+            }
+          },
           ...(step.btnNextClass && { classes: step.btnNextClass }),
         },
       ],
     });
   });
+
 
   tour.start();
 
