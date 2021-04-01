@@ -4,10 +4,9 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <defaults public="true" />
-        <service id="bitbag_sylius_mollie_plugin.order.order_payment_refund" class="BitBag\SyliusMolliePlugin\Order\OrderPaymentRefund">
+        <service id="bitbag_sylius_mollie_plugin.checker.refund.duplicate_refund_the_same_amount_checker" class="BitBag\SyliusMolliePlugin\Checker\Refund\DuplicateRefundTheSameAmountChecker">
+            <argument type="service" id="sylius_refund.repository.credit_memo"/>
             <argument type="service" id="sylius.repository.order"/>
-            <argument type="service" id="bitbag_sylius_mollie_plugin.logger.mollie_logger_action"/>
-            <argument type="service" id="payum"/>
         </service>
     </services>
 </container>
