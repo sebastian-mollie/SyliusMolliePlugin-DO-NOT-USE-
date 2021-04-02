@@ -1,6 +1,8 @@
 :root {
   --paddingSize: 27px;
   --colorPrimary: #0040FF;
+  --colorGray: #979797;
+  --colorGreen: #32AD30;
 }
 
 .draggable {
@@ -38,6 +40,70 @@
   display: block;
   width: 100px;
   height: 50px;
+}
+
+.onboardingWizard-nav {
+  background-color: white;
+  border-radius: 30px;
+  bottom: 10px;
+  color: var(--colorGray);
+  counter-reset: nav-element 0;
+  min-height: 46px;
+  padding: 20px;
+  position: fixed;
+  right: 125px;
+  z-index: 9999;
+}
+
+.onboardingWizard-nav-item {
+  font-weight: 600;
+  counter-increment: nav-element 1;
+}
+
+.onboardingWizard-nav-item.active {
+  position: relative;
+  color: #000;
+}
+
+.onboardingWizard-nav-item.active::before {
+  background-color: var(--colorGreen);
+  content: counter(nav-element);
+  border-radius: 50%;
+  color: #fff;
+  display: flex;
+  font-weight: 600;
+  height: 18px;
+  justify-content: center;
+  left: -2px;
+  align-items: center;
+  position: absolute;
+  width: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.onboardingWizard-nav-item .icon {
+  margin: 0 10px 0 0;
+}
+
+.onboardingWizard-logo {
+  bottom: 0;
+  right: -75px;
+  position: absolute;
+  width: 60px;
+  height: 60px;
+}
+
+.onboardingWizard-nav ul {
+  align-items: center;
+  display: flex;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.onboardingWizard-nav li:not(.onboardingWizard-nav-item) {
+  padding: 0 5px;
 }
 
 .active-step-1 .shepherd-element {

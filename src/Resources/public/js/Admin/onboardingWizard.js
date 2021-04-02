@@ -35,7 +35,7 @@ $(function () {
       text: 'To sync the Mollie plugin to your webshop you\'ll hneed Mollie API keys and Profile ID.',
       stepNoClass: 'step-4',
       btnBackText:'Login to my account',
-      btnNextText: 'Create a Mollie account',
+      btnNextText: 'Create a Mollie account <i class="icon angle right"></i>',
       btnCollapseClass: 'btn-collapse d-none',
       urlMollie: 'https://www.mollie.com/dashboard',
     },
