@@ -33,7 +33,12 @@
 </div>
 
 {% if payment_method is defined and payment_method.gatewayConfig.factoryName == mollie %}
-    <nav aria-label="onboarding wizard" class="onboardingWizard-nav" role="navigation">
+    <nav
+        aria-hidden="false"
+        aria-label="onboarding wizard"
+        class="onboardingWizard-nav d-none"
+        role="navigation"
+    >
         <div class="onboardingWizard-logo">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -50,13 +55,25 @@
             </svg>
         </div>
         <ul>
-            <li class="onboardingWizard-nav-item active"><i class="icon check circle"></i>Intro</li>
+            <li class="onboardingWizard-nav-item active" data-navigation-step="intro">
+                <i class="icon check circle"></i>
+                Intro
+            </li>
             <li><i class="icon angle right"></i></li>
-            <li class="onboardingWizard-nav-item"><i class="icon check circle"></i>API settings</li>
+            <li class="onboardingWizard-nav-item" data-navigation-step="api-settings">
+                <i class="icon check circle"></i>
+                API settings
+            </li>
             <li><i class="icon angle right"></i></li>
-            <li class="onboardingWizard-nav-item"><i class="icon check circle"></i>Store settings</li>
+            <li class="onboardingWizard-nav-item" data-navigation-step="store-settings">
+                <i class="icon check circle"></i>
+                Store settings
+            </li>
             <li><i class="icon angle right"></i></li>
-            <li class="onboardingWizard-nav-item"><i class="icon check circle"></i>Payment settings</li>
+            <li class="onboardingWizard-nav-item" data-navigation-step="payment-settings">
+                <i class="icon check circle"></i>
+                Payment settings
+            </li>
         </ul>
     </nav>
 {% endif %}

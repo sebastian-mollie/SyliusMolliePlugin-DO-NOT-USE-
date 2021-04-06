@@ -3,27 +3,33 @@ $(function () {
     return;
   }
 
+  const navbar = document.querySelector('.onboardingWizard-nav');
+  const navbarItems = [...navbar.querySelectorAll('.onboardingWizard-nav-item')];
+
+  navbar.classList.remove('d-none');
+
   const steps = [
-    // {
-    //   text: 'Onboarding Assistant Designs',
-    //   stepNoClass: 'step-1',
-    //   classActive: 'active-step-1',
-    //   btnBackClass:'d-none',
-    //   btnNextText: 'Start guide',
-    //   btnNextClass:'ml-auto mr-auto',
-    //   attachToElement: 'body'
-    // },
-    // {
-    //   text: 'Thank you for installing Mollie for payment services. This guide will take you through the configuration setup. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam suscipit nibh quis urna congue, et interdum nulla rutrum. Cras at justo ornare.',
-    //   stepNoClass: 'step-2',
-    //   title: '<h2>Let me help you</h2>',
-    //   btnBackText:'Skip this, I know how it works',
-    //   btnNextText: 'Start onboarding assistant',
-    //   scrollToTarget: '#sylius_payment_method_gatewayConfig_config_api_key_test'
-    // },
+    {
+      text: 'Onboarding Assistant Designs',
+      stepNoClass: 'step-1',
+      classActive: 'intro',
+      btnBackClass:'d-none',
+      btnNextText: 'Start guide',
+      btnNextClass:'ml-auto mr-auto',
+      attachToElement: 'body'
+    },
+    {
+      text: 'Thank you for installing Mollie for payment services. This guide will take you through the configuration setup. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam suscipit nibh quis urna congue, et interdum nulla rutrum. Cras at justo ornare.',
+      stepNoClass: 'step-2',
+      title: '<h2>Let me help you</h2>',
+      btnBackText:'Skip this, I know how it works',
+      btnNextText: 'Start onboarding assistant',
+      scrollToTarget: '#sylius_payment_method_gatewayConfig_config_api_key_test'
+    },
     {
       text: 'TEST will be the default in the plugin. You only need to do the configuration once to have TEST + LIVE environments available. Try easily togging between the two.',
-      stepNoClass: ' right-bottom',
+      stepNoClass: 'right-bottom',
+      classActive: 'api-settings',
       attachToElement: '.onboardingWizard-environment',
       scrollToTarget: '.ui.dropdown.selection',
       btnBackText:'Go back',
@@ -32,8 +38,9 @@ $(function () {
     },
     {
       title: 'Connect to your account',
-      text: 'To sync the Mollie plugin to your webshop you\'ll hneed Mollie API keys and Profile ID.',
+      text: 'To sync the Mollie plugin to your webshop you\'ll need Mollie API keys and Profile ID.',
       stepNoClass: 'step-4',
+      classActive: 'api-settings',
       btnBackText:'Login to my account',
       btnNextText: 'Create a Mollie account <i class="icon angle right"></i>',
       btnCollapseClass: 'btn-collapse d-none',
@@ -44,9 +51,18 @@ $(function () {
         '\n' +
         'Learn about the difference between: Orders API or the Payments API',
       stepNoClass: 'step-5 right-bottom',
+      classActive: 'api-settings',
       btnBackText:'Go back',
       btnNextText: 'Next',
       attachToElement: '[for="sylius_payment_method_gatewayConfig_config_api_key_test"] + *',
+      btnCollapseClass: 'btn-collapse',
+    },
+    {
+      text: 'Webshop checkout Configurations, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce semper velit et urna gravida efficitur.',
+      stepNoClass: 'step-6 right-bottom',
+      classActive: 'store-settings',
+      btnBackText:'Go back',
+      btnNextText: 'Next',
       btnCollapseClass: 'btn-collapse',
     },
     {
@@ -54,6 +70,7 @@ $(function () {
         'checkout. If you select NO, users will be redirected to the Mollie\n' +
         'checkout page',
       stepNoClass: 'step-6 right-bottom',
+      classActive: 'store-settings',
       btnBackText:'Go back',
       btnNextText: 'Next',
       attachToElement: '#sylius_payment_method_gatewayConfig_config_components + label',
@@ -62,6 +79,7 @@ $(function () {
     {
       text: 'Enabling single click payments remembers your consumer\'s payment preferences in order to expedite follow-up payments. Your consumer does not have to perform any additional actions to enjoy quick and easy payments.',
       stepNoClass: 'step-7 right-bottom',
+      classActive: 'store-settings',
       btnBackText:'Go back',
       btnNextText: 'Next',
       attachToElement: '.onboardingWizard-singleClick',
@@ -70,6 +88,7 @@ $(function () {
     {
       text: 'We\'ll go through setup with the Payments API first and then highlight differences if you choose to use the Orders API',
       stepNoClass: 'step-8 right-bottom',
+      classActive: 'payment-settings',
       btnBackText:'Go back',
       btnNextText: 'Next',
       btnCollapseClass: 'btn-collapse',
@@ -77,6 +96,7 @@ $(function () {
     {
       text: 'You can enter a custom title here - it will be displayed on your checkout page',
       stepNoClass: 'step-9 right-bottom',
+      classActive: 'payment-settings',
       btnBackText:'Go back',
       btnNextText: 'Next',
       attachToElement: '#sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_name',
@@ -85,6 +105,7 @@ $(function () {
     {
       text: 'Choose Payments API (Payments API can not be used for methods such as Klarna - we\'ll set-up that up later) Learn about the difference  between Orders APIor the Payments API',
       stepNoClass: 'step-10 right-bottom',
+      classActive: 'payment-settings',
       btnBackText:'Go back',
       btnNextText: 'Next',
       attachToElement: '[for="sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_paymentType"] + .dropdown',
@@ -93,6 +114,7 @@ $(function () {
     {
       text: 'When using Payments API you may want additional details to help you match payments with customer orders -- you can enter those values here but make sure to use the correct tags provide in the text below',
       stepNoClass: 'step-11 right-bottom',
+      classActive: 'payment-settings',
       btnBackText:'Go back',
       btnNextText: 'Next',
       btnCollapseClass: 'btn-collapse',
@@ -100,6 +122,7 @@ $(function () {
     {
       text: 'Restrict/ allow payment per individual countries.',
       stepNoClass: 'step-12 right-bottom',
+      classActive: 'payment-settings',
       btnBackText:'Go back',
       btnNextText: 'Next',
       attachToElement: '[for="sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_country_restriction"] +' +
@@ -109,6 +132,7 @@ $(function () {
     {
       text: 'In case you have fees that you are passing on to the consumer, you can add them here',
       stepNoClass: 'step-13 right-bottom',
+      classActive: 'payment-settings',
       btnBackText:'Go back',
       btnNextText: 'Next',
       attachToElement: '[for="sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_paymentSurchargeFee_type"] +' +
@@ -118,6 +142,7 @@ $(function () {
     {
       text: 'Upload a custom image for the payment method icon, this will be shown in the checkout page',
       stepNoClass: 'step-14 right-bottom',
+      classActive: 'payment-settings',
       btnBackText:'Go back',
       btnNextText: 'Next',
       attachToElement: '#sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_customizeMethodImage_file',
@@ -126,6 +151,7 @@ $(function () {
     {
       title: 'You\'re all set!',
       stepNoClass: 'step-15',
+      classActive: 'payment-settings',
       text: 'You\'re all done, you can now attempt a consumer order or your website',
       btnBackClass: 'd-none',
       btnNextClass: 'ml-auto mr-auto',
@@ -137,9 +163,6 @@ $(function () {
   const tour = new Shepherd.Tour({
     useModalOverlay: true,
     confirmCancel: false,
-    popperOptions: {
-      modifiers: [{ name: 'offset', options: { offset: [0, 12] } }]
-    },
     defaultStepOptions: {
       class: 'onboardingWizard-popup',
       arrow: false,
@@ -155,7 +178,6 @@ $(function () {
       title: step.title ? step.title : null,
       text: step.text,
       classes: step.stepNoClass,
-      ...step.advanceOn && { selector: '.btn-collapse', event: 'click' },
       attachTo: {
         ...(step.attachToElement && { element: step.attachToElement }),
         on: 'top-start'
@@ -173,6 +195,31 @@ $(function () {
           behavior: 'smooth',
         });
       },
+      when: {
+        show() {
+          const currentStep = this.tour.getCurrentStep().target;
+
+          navbarItems.some((navItem) => {
+            const { navigationStep } = navItem.dataset;
+
+            if (!currentStep) {
+              return false;
+            }
+
+            if ([...currentStep.classList].includes(navigationStep)) {
+              navbarItems.forEach(item => {
+                item.classList.remove('active');
+              })
+
+              navItem.classList.add('active');
+
+              return true
+            }
+
+            return false;
+          });
+        }
+      },
       buttons: [
         {
           text: '<i class="arrow down icon"></i>',
@@ -184,6 +231,10 @@ $(function () {
             const paragraph = document.createElement('span');
             paragraph.classList.add('btn-text-open');
             paragraph.textContent = 'Open';
+
+            if (!buttonCollapse) {
+              return;
+            }
 
             const textOpen = buttonCollapse.querySelector('.btn-text-open ')
 
