@@ -35,6 +35,15 @@
   margin-left: auto;
 }
 
+[data-shepherd-step-id="step-start"] .shepherd-footer {
+  flex-direction: column-reverse;
+  padding: 0 var(--paddingSize) var(--paddingSize);
+}
+
+[data-shepherd-step-id="step-start"] .shepherd-footer .shepherd-button:not(.btn-collapse) {
+  border-radius: 25px;
+}
+
 body.shepherd-target .shepherd-footer {
   flex-direction: column-reverse;
   padding: 0 var(--paddingSize) var(--paddingSize);
@@ -115,34 +124,8 @@ body.shepherd-target .shepherd-footer .shepherd-button {
   padding: 0 5px;
 }
 
-.intro .shepherd-element {
-  width: 100vw;
-  display: flex;
-  height: 100vh;
-  align-items: center;
-  max-width: initial;
-  justify-content: center;
-  background: black;
-}
-
-.intro .shepherd-button:not(.shepherd-button-secondary):not(.btn-collapse) {
-  background-color: #fff;
-  border-radius: 3px;
-  color: #000;
-}
-
 .shepherd-button:not(.shepherd-button-secondary):not(.btn-collapse) .icon {
   margin-left: 15px;
-}
-
-.step-1 .shepherd-text {
-  color: white;
-  text-align: center;
-  font-size: 80px;
-  font-weight: 600;
-}
-.step-1 .shepherd-content {
-  width: 50%;
 }
 
 .shepherd-element.collapsed {
@@ -185,6 +168,7 @@ body.shepherd-target .shepherd-footer .shepherd-button {
 .shepherd-has-title .shepherd-title {
   font-size: 30px;
   font-weight: 600;
+  width: 100%;
 }
 
 .shepherd-has-title .shepherd-title .icon {

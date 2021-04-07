@@ -8,20 +8,10 @@ $(function () {
 
   const steps = [
     {
-      text: 'Onboarding Assistant Designs',
-      stepNoClass: 'step-1',
-      classActive: 'intro',
-      btnBackClass:'d-none',
-      btnNextText: 'Go to first step <i class="play circle icon"></i>',
-      btnNextClass:'ml-auto mr-auto',
-      attachToElement: 'body',
-      btnCollapseClass: 'd-none',
-    },
-    {
+      id: 'step-start',
       text: 'Thank you for installing Mollie for payment services. This guide will take you through the configuration setup. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam suscipit nibh quis urna congue, et interdum nulla rutrum. Cras at justo ornare.',
       title: '<h2>Let me help you</h2>',
       stepNoClass: 'step-2',
-      classActive: 'intro',
       btnBackText:'Skip this, I know how it works',
       btnNextText: 'Start onboarding assistant <i class="icon angle right"></i>',
       scrollToTarget: '#sylius_payment_method_gatewayConfig_config_api_key_test',
@@ -168,7 +158,27 @@ $(function () {
       btnNextText: 'Start using Mollie plugin <i class="icon angle right"></i>',
       btnCollapseClass: 'btn-collapse d-none',
     },
+    {
+      id: 'step-quitConfirmation',
+      title: 'Are you sure you want to quit ?',
+      text: 'You\'re all done, you can now attempt a consumer order or your website',
+      btnNextClass: 'mr-auto js-onboarding-continue',
+      btnBackClass: 'js-onboarding-quit',
+      btnNextText: 'Continue onboarding <i class="icon angle right"></i>',
+      btnBackText: 'Quit the onboarding assistant',
+      btnCollapseClass: 'btn-collapse d-none',
+    },
   ];
+
+  // function skipStep(step, forward) {
+  //   const index = this.steps.indexOf(step);
+  //   const nextIndex = forward ? index + 1 : index - 1;
+  //   if (nextIndex === this.steps.length - 1) {
+  //     this.complete();
+  //   } else {
+  //     this.show(nextIndex, forward);
+  //   }
+  // }
 
   const tour = new Shepherd.Tour({
     useModalOverlay: true,
@@ -179,12 +189,16 @@ $(function () {
       cancelIcon: {
         enabled: true,
       },
-      scrollTo: true,
+      scrollTo: { behavior: 'smooth', block: 'center' },
     },
   });
 
+  tour.on('show', () => navbar.classList.remove('d-none'));
+  ['complete', 'cancel'].forEach(event => tour.on(event, () => navbar.classList.add('d-none')))
+
   steps.forEach((step, index) => {
     tour.addStep({
+      id: step.id,
       title: step.title ? step.title : null,
       text: step.text,
       classes: step.stepNoClass,
@@ -193,18 +207,6 @@ $(function () {
         on: 'top-start'
       },
       ...(step.classActive && { highlightClass: step.classActive }),
-      scrollToHandler: function () {
-        const target = document.querySelector(step.attachToElement);
-
-        if (!target) {
-          return;
-        }
-
-        window.scroll({
-          top: $(target).offset().top - 150,
-          behavior: 'smooth',
-        });
-      },
       when: {
         show() {
           const currentStep = this.tour.getCurrentStep().target;
@@ -229,9 +231,23 @@ $(function () {
           });
         },
         cancel() {
-          // tour.show(3, true);
+          const previousStepIndex = tour.steps.indexOf(tour.getCurrentStep());
 
-          console.log('cancel');
+          tour.show('step-quitConfirmation', true);
+
+          const currentElement = tour.currentStep.el;
+          const buttonClose = currentElement.querySelector('.shepherd-cancel-icon');
+          buttonClose.classList.add('d-none');
+
+          document.querySelector('.js-onboarding-continue').addEventListener('click', () => {
+            tour.show(previousStepIndex, true);
+            return;
+          })
+
+          document.querySelector('.js-onboarding-quit').addEventListener('click', () => {
+            tour.complete();
+            return;
+          })
         }
       },
       buttons: [
@@ -279,7 +295,7 @@ $(function () {
         {
           text: step.btnNextText,
           action() {
-            if(index === steps.length - 1) {
+            if(index === steps.length - 2) {
               tour.complete();
             } else {
               if(step.urlMollie) {
