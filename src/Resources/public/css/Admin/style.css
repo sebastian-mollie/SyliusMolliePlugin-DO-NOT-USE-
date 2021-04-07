@@ -1,5 +1,5 @@
 :root {
-  --paddingSize: 27px;
+  --paddingSize: 40px;
   --colorPrimary: #0040FF;
   --colorGray: #979797;
   --colorGreen: #32AD30;
@@ -33,6 +33,15 @@
 }
 .ml-auto {
   margin-left: auto;
+}
+
+body.shepherd-target .shepherd-footer {
+  flex-direction: column-reverse;
+  padding: 0 var(--paddingSize) var(--paddingSize);
+}
+
+body.shepherd-target .shepherd-footer .shepherd-button {
+  border-radius: 25px;
 }
 
 .onboardingWizard-mollieComponents.shepherd-step-highlight {
@@ -116,6 +125,16 @@
   background: black;
 }
 
+.intro .shepherd-button:not(.shepherd-button-secondary):not(.btn-collapse) {
+  background-color: #fff;
+  border-radius: 3px;
+  color: #000;
+}
+
+.shepherd-button:not(.shepherd-button-secondary):not(.btn-collapse) .icon {
+  margin-left: 15px;
+}
+
 .step-1 .shepherd-text {
   color: white;
   text-align: center;
@@ -166,6 +185,10 @@
 .shepherd-has-title .shepherd-title {
   font-size: 30px;
   font-weight: 600;
+}
+
+.shepherd-has-title .shepherd-title .icon {
+  color: var(--colorGreen);
 }
 
 .shepherd-has-title .shepherd-text {
@@ -235,7 +258,7 @@
   font-weight: 600;
   margin-right: 0;
   min-width: 100px;
-  padding: 13px;
+  padding: 15px 25px;
 }
 
 .shepherd-button:not(.btn-collapse).collapsed {
@@ -246,6 +269,19 @@
   background-color: var(--colorPrimary);
   border-radius: 0 0 4px 0;
   color: #fff;
+  position: relative;
+}
+
+.shepherd-button.with-triangle::after {
+  border-style: solid;
+  border-width: 10px 10px 0 10px;
+  border-color: #0040ff transparent transparent transparent;
+  bottom: -10px;
+  content: "";
+  right: 15px;
+  position: absolute;
+  width: 0;
+  height: 0;
 }
 
 .shepherd-button.shepherd-button-secondary {

@@ -6,25 +6,26 @@ $(function () {
   const navbar = document.querySelector('.onboardingWizard-nav');
   const navbarItems = [...navbar.querySelectorAll('.onboardingWizard-nav-item')];
 
-  navbar.classList.remove('d-none');
-
   const steps = [
     {
       text: 'Onboarding Assistant Designs',
       stepNoClass: 'step-1',
       classActive: 'intro',
       btnBackClass:'d-none',
-      btnNextText: 'Start guide',
+      btnNextText: 'Go to first step <i class="play circle icon"></i>',
       btnNextClass:'ml-auto mr-auto',
-      attachToElement: 'body'
+      attachToElement: 'body',
+      btnCollapseClass: 'd-none',
     },
     {
       text: 'Thank you for installing Mollie for payment services. This guide will take you through the configuration setup. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam suscipit nibh quis urna congue, et interdum nulla rutrum. Cras at justo ornare.',
-      stepNoClass: 'step-2',
       title: '<h2>Let me help you</h2>',
+      stepNoClass: 'step-2',
+      classActive: 'intro',
       btnBackText:'Skip this, I know how it works',
-      btnNextText: 'Start onboarding assistant',
-      scrollToTarget: '#sylius_payment_method_gatewayConfig_config_api_key_test'
+      btnNextText: 'Start onboarding assistant <i class="icon angle right"></i>',
+      scrollToTarget: '#sylius_payment_method_gatewayConfig_config_api_key_test',
+      btnCollapseClass: 'd-none',
     },
     {
       text: 'TEST will be the default in the plugin. You only need to do the configuration once to have TEST + LIVE environments available. Try easily togging between the two.',
@@ -33,7 +34,8 @@ $(function () {
       attachToElement: '.onboardingWizard-environment',
       scrollToTarget: '.ui.dropdown.selection',
       btnBackText:'Go back',
-      btnNextText: 'Next',
+      btnNextText: 'Next <i class="icon angle right"></i>',
+      btnNextClass: 'with-triangle',
       btnCollapseClass: 'btn-collapse',
     },
     {
@@ -53,7 +55,8 @@ $(function () {
       stepNoClass: 'step-5 right-bottom',
       classActive: 'api-settings',
       btnBackText:'Go back',
-      btnNextText: 'Next',
+      btnNextText: 'Next <i class="icon angle right"></i>',
+      btnNextClass: 'with-triangle',
       attachToElement: '[for="sylius_payment_method_gatewayConfig_config_api_key_test"] + *',
       btnCollapseClass: 'btn-collapse',
     },
@@ -61,7 +64,7 @@ $(function () {
       text: 'Webshop checkout Configurations, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce semper velit et urna gravida efficitur.',
       stepNoClass: 'step-6 right-bottom',
       classActive: 'store-settings',
-      btnBackText:'Go back',
+      btnBackText: 'Go back',
       btnNextText: 'Next',
       btnCollapseClass: 'btn-collapse',
     },
@@ -72,7 +75,8 @@ $(function () {
       stepNoClass: 'step-6 right-bottom',
       classActive: 'store-settings',
       btnBackText:'Go back',
-      btnNextText: 'Next',
+      btnNextText: 'Next <i class="icon angle right"></i>',
+      btnNextClass: 'with-triangle',
       attachToElement: '#sylius_payment_method_gatewayConfig_config_components + label',
       btnCollapseClass: 'btn-collapse',
     },
@@ -81,7 +85,8 @@ $(function () {
       stepNoClass: 'step-7 right-bottom',
       classActive: 'store-settings',
       btnBackText:'Go back',
-      btnNextText: 'Next',
+      btnNextText: 'Next <i class="icon angle right"></i>',
+      btnNextClass: 'with-triangle',
       attachToElement: '.onboardingWizard-singleClick',
       btnCollapseClass: 'btn-collapse',
     },
@@ -98,7 +103,8 @@ $(function () {
       stepNoClass: 'step-9 right-bottom',
       classActive: 'payment-settings',
       btnBackText:'Go back',
-      btnNextText: 'Next',
+      btnNextText: 'Next <i class="icon angle right"></i>',
+      btnNextClass: 'with-triangle',
       attachToElement: '#sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_name',
       btnCollapseClass: 'btn-collapse',
     },
@@ -107,7 +113,8 @@ $(function () {
       stepNoClass: 'step-10 right-bottom',
       classActive: 'payment-settings',
       btnBackText:'Go back',
-      btnNextText: 'Next',
+      btnNextText: 'Next <i class="icon angle right"></i>',
+      btnNextClass: 'with-triangle',
       attachToElement: '[for="sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_paymentType"] + .dropdown',
       btnCollapseClass: 'btn-collapse',
     },
@@ -124,7 +131,8 @@ $(function () {
       stepNoClass: 'step-12 right-bottom',
       classActive: 'payment-settings',
       btnBackText:'Go back',
-      btnNextText: 'Next',
+      btnNextText: 'Next <i class="icon angle right"></i>',
+      btnNextClass: 'with-triangle',
       attachToElement: '[for="sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_country_restriction"] +' +
         ' .dropdown',
       btnCollapseClass: 'btn-collapse',
@@ -134,7 +142,8 @@ $(function () {
       stepNoClass: 'step-13 right-bottom',
       classActive: 'payment-settings',
       btnBackText:'Go back',
-      btnNextText: 'Next',
+      btnNextText: 'Next <i class="icon angle right"></i>',
+      btnNextClass: 'with-triangle',
       attachToElement: '[for="sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_paymentSurchargeFee_type"] +' +
         ' .dropdown',
       btnCollapseClass: 'btn-collapse',
@@ -144,18 +153,19 @@ $(function () {
       stepNoClass: 'step-14 right-bottom',
       classActive: 'payment-settings',
       btnBackText:'Go back',
-      btnNextText: 'Next',
+      btnNextText: 'Next <i class="icon angle right"></i>',
+      btnNextClass: 'with-triangle',
       attachToElement: '#sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_customizeMethodImage_file',
       btnCollapseClass: 'btn-collapse',
     },
     {
-      title: 'You\'re all set!',
+      title: '<i class="icon check circle"></i> You\'re all set!',
       stepNoClass: 'step-15',
       classActive: 'payment-settings',
       text: 'You\'re all done, you can now attempt a consumer order or your website',
       btnBackClass: 'd-none',
-      btnNextClass: 'ml-auto mr-auto',
-      btnNextText: 'Start using Mollie plugin',
+      btnNextClass: 'mr-auto',
+      btnNextText: 'Start using Mollie plugin <i class="icon angle right"></i>',
       btnCollapseClass: 'btn-collapse d-none',
     },
   ];
@@ -199,18 +209,17 @@ $(function () {
         show() {
           const currentStep = this.tour.getCurrentStep().target;
 
+          if (!currentStep) {
+            return false;
+          }
+
           navbarItems.some((navItem) => {
             const { navigationStep } = navItem.dataset;
-
-            if (!currentStep) {
-              return false;
-            }
 
             if ([...currentStep.classList].includes(navigationStep)) {
               navbarItems.forEach(item => {
                 item.classList.remove('active');
               })
-
               navItem.classList.add('active');
 
               return true
@@ -218,6 +227,11 @@ $(function () {
 
             return false;
           });
+        },
+        cancel() {
+          // tour.show(3, true);
+
+          console.log('cancel');
         }
       },
       buttons: [
@@ -281,7 +295,6 @@ $(function () {
       ],
     });
   });
-
 
   tour.start();
 
