@@ -29,7 +29,7 @@ $(function () {
       btnCollapseClass: 'btn-collapse',
     },
     {
-      title: 'Connect to your account',
+      title: 'Connect to your Mollie account',
       text: 'To sync the Mollie plugin to your webshop you\'ll need Mollie API keys and Profile ID.',
       stepNoClass: 'step-4',
       classActive: 'api-settings',

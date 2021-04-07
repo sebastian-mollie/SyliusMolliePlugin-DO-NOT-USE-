@@ -176,7 +176,7 @@ body.shepherd-target .shepherd-footer .shepherd-button {
 }
 
 .shepherd-has-title .shepherd-text {
-  margin-top: 15px;
+  padding: 0 var(--paddingSize) var(--paddingSize);
 }
 
 .shepherd-has-title .shepherd-button.btn-collapse {
@@ -191,6 +191,7 @@ body.shepherd-target .shepherd-footer .shepherd-button {
   background-color: #fff;
   color: #000;
   padding: var(--paddingSize) var(--paddingSize) 0;
+  position: relative;
   width: 100%;
 }
 
