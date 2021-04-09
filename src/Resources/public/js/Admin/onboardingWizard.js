@@ -323,20 +323,6 @@ $(function () {
 
  tour.start();
 
-  const stepsOrderApi = [
-    {
-      id: 'orderApi-1',
-      stepClass: 'right-bottom',
-      text: 'Select Orders API - this is Mollie\n' +
-        'suggested API to use for webshops b/c it allows you to create “orders”. An order contains the personal information of a customer (e.g. address) and products that the customer ordered. When an order is made, a corresponding payment will be created automatically.',
-      btnBackText:'Go back',
-      btnNextText: 'Next',
-      attachToElement: '.onboardingWizard-paymentType .dropdown',
-      btnNextClass: 'with-triangle',
-      btnCollapseClass: 'btn-collapse',
-    },
-  ];
-
   function mountTourOrderApi () {
     const select = document.querySelector(
       '#sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_paymentType ~ .menu'
