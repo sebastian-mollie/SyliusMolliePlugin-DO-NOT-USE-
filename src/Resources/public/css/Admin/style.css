@@ -40,11 +40,13 @@
   margin-left: auto;
 }
 
+[data-shepherd-step-id="mollie-connect"] .shepherd-footer,
 [data-shepherd-step-id="step-start"] .shepherd-footer {
   flex-direction: column-reverse;
   padding: 0 var(--paddingSize) var(--paddingSize);
 }
 
+[data-shepherd-step-id="mollie-connect"] .shepherd-footer .shepherd-button:not(.btn-collapse),
 [data-shepherd-step-id="step-start"] .shepherd-footer .shepherd-button:not(.btn-collapse) {
   border-radius: 25px;
 }

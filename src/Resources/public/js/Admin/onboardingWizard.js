@@ -8,7 +8,6 @@ $(function () {
       id: 'step-start',
       text: 'Thank you for installing Mollie for payment services. This guide will take you through the configuration setup. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam suscipit nibh quis urna congue, et interdum nulla rutrum. Cras at justo ornare.',
       title: 'Let me help you',
-      stepClass: 'step-2',
       btnBackText:'Skip this, I know how it works',
       btnNextText: 'Start onboarding assistant <i class="icon angle right"></i>',
       scrollToTarget: '#sylius_payment_method_gatewayConfig_config_api_key_test',
@@ -25,9 +24,9 @@ $(function () {
       btnCollapseClass: 'btn-collapse',
     },
     {
+      id: 'mollie-connect',
       title: 'Connect to your Mollie account',
       text: 'To sync the Mollie plugin to your webshop you\'ll need Mollie API keys and Profile ID.',
-      stepClass: 'step-4',
       classActive: 'api-settings',
       btnBackText:'Login to my account',
       btnNextText: 'Create a Mollie account <i class="icon angle right"></i>',
@@ -38,7 +37,7 @@ $(function () {
       text: 'Fill in your correct details and click "TEST API Key" this will return a successful or failed result for both the LIVE and TEST environments.\n' +
         '\n' +
         'Learn about the difference between: Orders API or the Payments API',
-      stepClass: 'step-5 right-bottom',
+      stepClass: 'right-bottom',
       classActive: 'api-settings',
       btnBackText:'Go back',
       btnNextText: 'Next <i class="icon angle right"></i>',
@@ -161,13 +160,17 @@ $(function () {
 
   const stepQuitConfirmation = (previousStepIndex) => {
     return {
+      useModalOverlay: true,
       id: 'step-quitConfirmation',
+      keyboardNavigation: false,
       title: 'Are you sure you want to quit ?',
       text: 'You\'re all done, you can now attempt a consumer order or your website',
       buttons: [
         {
           text: 'Quit the onboarding assistant',
           action: () => {
+            tour.removeStep('step-quitConfirmation');
+            tour.removeStep('orderApi');
             tour.complete();
           },
           secondary: true,
@@ -177,6 +180,7 @@ $(function () {
           text: 'Continue onboarding <i class="icon angle right"></i>',
           action: () => {
             tour.show(previousStepIndex, true);
+            tour.removeStep('step-quitConfirmation');
           },
           classes: 'js-onboarding-continue',
         },
@@ -186,23 +190,29 @@ $(function () {
 
   const navbar = document.querySelector('.onboardingWizard-nav');
 
-  const navbarVisibilityHandler = () => {
-    navbar.classList.toggle('d-none', !tour.isActive());
-    navbar.setAttribute('aria-hidden', tour.isActive());
+  const navbarVisibilityHandler = (isActive) => {
+    navbar.classList.toggle('d-none', !isActive());
+    navbar.setAttribute('aria-hidden', !isActive());
   }
 
-  const navbarProgressHandler = (currentStep) => {
+  const navbarProgressHandler = (tour) => {
+    const currentStep = tour.getCurrentStep().target;
+
+    if (!currentStep) {
+      return;
+    }
     const navbarItems = [...navbar.querySelectorAll('.onboardingWizard-nav-item')];
 
-    navbarItems.some((navItem, index) => {
+    navbarItems.some((navItem) => {
       const { navigationStep } = navItem.dataset;
 
       if ([...currentStep.classList].includes(navigationStep)) {
-        navItem.classList.add('active');
-
         navbarItems.forEach(item => {
-          item.classList.remove('last')
-        })
+          const itemClasses = item.classList;
+
+          itemClasses.add('active')
+          itemClasses.remove('last')
+        });
 
         $(navItem).last().addClass('last')
 
@@ -237,6 +247,7 @@ $(function () {
   const tour = new Shepherd.Tour({
     useModalOverlay: true,
     confirmCancel: false,
+    keyboardNavigation: false,
     defaultStepOptions: {
       class: 'onboardingWizard-popup',
       arrow: false,
@@ -248,7 +259,17 @@ $(function () {
     },
   });
 
-  ['inactive', 'show'].forEach(event => tour.on(event, navbarVisibilityHandler));
+  ['inactive', 'show'].forEach(event => tour.on(event, () => navbarVisibilityHandler(tour.isActive)));
+
+  tour.on('cancel', function() {
+    const previousStepIndex = this.steps.indexOf(this.getCurrentStep());
+    tour.addStep(stepQuitConfirmation(previousStepIndex));
+
+    tour.show('step-quitConfirmation', true);
+
+    const buttonClose = tour.currentStep.el.querySelector('.shepherd-cancel-icon');
+    buttonClose.classList.add('d-none');
+  })
 
   steps.forEach((step, index) => {
     tour.addStep({
@@ -261,27 +282,7 @@ $(function () {
         on: 'top-start'
       },
       ...(step.classActive && { highlightClass: step.classActive }),
-      when: {
-        show() {
-          const currentStep = this.tour.getCurrentStep().target;
-
-          if (!currentStep) {
-            return;
-          }
-
-          navbarProgressHandler(currentStep);
-        },
-        cancel() {
-          const previousStepIndex = tour.steps.indexOf(tour.getCurrentStep());
-          tour.complete();
-          tour.addStep(stepQuitConfirmation(previousStepIndex));
-
-          tour.show('step-quitConfirmation', true);
-
-          const buttonClose = tour.currentStep.el.querySelector('.shepherd-cancel-icon');
-          buttonClose.classList.add('d-none');
-        }
-      },
+      when: { show: () => navbarProgressHandler(tour) },
       buttons: [
         {
           text: '<i class="arrow down icon"></i>',
@@ -297,7 +298,8 @@ $(function () {
               if(step.urlMollie) {
                 window.open(`${step.urlMollie}/signin`, '_blank');
                 tour.next();
-                return
+
+                return;
               }
 
               tour.back();
@@ -329,10 +331,12 @@ $(function () {
   tour.start();
 
   function mountTourOrderApi () {
-    const select = document.querySelector(
+    const selectCustom = document.querySelector(
       '#sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_paymentType ~ .menu'
     )
-    const orderApiOption = select.querySelector('[data-value="ORDER_API"]');
+
+    const select = document.querySelector('#sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_paymentType');
+    const orderApiOption = selectCustom.querySelector('[data-value="ORDER_API"]');
 
     if (!orderApiOption) {
       return;
@@ -343,73 +347,44 @@ $(function () {
         .find(':selected')
         .val() === 'ORDER_API'
 
-    select.addEventListener('click', (event) => {
-      if (!orderApiOptionSelected) {
-        event.target.click();
-      }
-    });
 
     orderApiOption.addEventListener('click', () => {
       tour.addStep({
-        id: 'orderApi-1',
-        classActive: 'payment-settings',
+        useModalOverlay: true,
+        keyboardNavigation: false,
+        id: 'orderApi',
+        highlightClass: 'payment-settings',
         classes: 'right-bottom',
         text: 'Select Orders API - this is Mollie\n' +
           'suggested API to use for webshops b/c it allows you to create “orders”. An order contains the personal information of a customer (e.g. address) and products that the customer ordered. When an order is made, a corresponding payment will be created automatically.',
         btnBackText:'Go back',
         btnNextText: 'Next',
-        attachToElement: '[for="sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_paymentType"] + .dropdown',
-        when: {
-          show() {
-            const currentStep = this.tour.getCurrentStep().target;
-
-            if (!currentStep) {
-              return;
-            }
-
-            navbarProgressHandler(currentStep);
-          },
+        attachTo: {
+          element: '[for="sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_paymentType"] + .dropdown',
+          on: 'top-start',
         },
+        when: { show: () => navbarProgressHandler(tour) },
         buttons: [
           {
             text: '<i class="arrow down icon"></i>',
-            action() {
-              const currentStep = this.currentStep.el;
-              const buttonCollapse = currentStep.querySelector('.btn-collapse');
-              const isCollapsed = [...currentStep.classList].includes('collapsed');
-
-              if (!buttonCollapse) {
-                return;
-              }
-
-              const paragraph = document.createElement('span');
-              paragraph.classList.add('btn-text-open');
-              paragraph.textContent = 'Open';
-
-
-              const textOpen = buttonCollapse.querySelector('.btn-text-open ')
-
-              !isCollapsed ? buttonCollapse.appendChild(paragraph) : buttonCollapse.removeChild(textOpen)
-
-              currentStep.classList.toggle('collapsed', !isCollapsed);
-              currentStep.setAttribute('aria-hidden', !isCollapsed);
-            },
+            action: () => modalCollapseHandler(tour),
             classes: 'btn-collapse',
           },
           {
             text: 'Go back',
-            action: () => tour.show('paymentTitle', true),
+            action: () => tour.show('paymentTitle'),
             secondary: true,
           },
           {
             text: 'Next',
             action: () => {
-              tour.show('restrictPayment', true)
+              tour.show('restrictPayment')
             },
+            classes: 'with-triangle',
           },
         ],
       });
-      tour.show('orderApi-1', true);
+      tour.show('orderApi');
     })
   }
 
