@@ -63,7 +63,7 @@ $(function () {
       btnBackText:'Go back',
       btnNextText: 'Next <i class="icon angle right"></i>',
       btnNextClass: 'with-triangle',
-      attachToElement: '.onboardingWizard-components',
+      attachToElement: '.onboardingWizard-mollieComponents',
       btnCollapseClass: 'btn-collapse',
     },
     {
@@ -371,17 +371,17 @@ $(function () {
             text: '<i class="arrow down icon"></i>',
             action() {
               const currentStep = this.currentStep.el;
-              console.log(tour.steps.indexOf(currentStep));
               const buttonCollapse = currentStep.querySelector('.btn-collapse');
               const isCollapsed = [...currentStep.classList].includes('collapsed');
+
+              if (!buttonCollapse) {
+                return;
+              }
 
               const paragraph = document.createElement('span');
               paragraph.classList.add('btn-text-open');
               paragraph.textContent = 'Open';
 
-              if (!buttonCollapse) {
-                return;
-              }
 
               const textOpen = buttonCollapse.querySelector('.btn-text-open ')
 

@@ -5,6 +5,10 @@
   --colorGreen: #32AD30;
 }
 
+.pushable {
+  height: fit-content;
+}
+
 .draggable {
   position: relative;
 }
@@ -31,6 +35,7 @@
 .mr-auto {
   margin-right: auto !important;
 }
+
 .ml-auto {
   margin-left: auto;
 }
