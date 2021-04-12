@@ -85,6 +85,7 @@ $(function () {
       btnCollapseClass: 'btn-collapse',
     },
     {
+      id: 'paymentTitle',
       text: 'You can enter a custom title here - it will be displayed on your checkout page',
       stepClass: 'step-9 right-bottom',
       classActive: 'payment-settings',
@@ -193,14 +194,17 @@ $(function () {
   const navbarProgressHandler = (currentStep) => {
     const navbarItems = [...navbar.querySelectorAll('.onboardingWizard-nav-item')];
 
-    navbarItems.some((navItem) => {
+    navbarItems.some((navItem, index) => {
       const { navigationStep } = navItem.dataset;
 
       if ([...currentStep.classList].includes(navigationStep)) {
-        navbarItems.forEach(item => {
-          item.classList.remove('active');
-        })
         navItem.classList.add('active');
+
+        navbarItems.forEach(item => {
+          item.classList.remove('last')
+        })
+
+        $(navItem).last().addClass('last')
 
         return true
       }
@@ -269,12 +273,12 @@ $(function () {
         },
         cancel() {
           const previousStepIndex = tour.steps.indexOf(tour.getCurrentStep());
-
+          tour.complete();
           tour.addStep(stepQuitConfirmation(previousStepIndex));
 
           tour.show('step-quitConfirmation', true);
-          const currentElement = tour.currentStep.el;
-          const buttonClose = currentElement.querySelector('.shepherd-cancel-icon');
+
+          const buttonClose = tour.currentStep.el.querySelector('.shepherd-cancel-icon');
           buttonClose.classList.add('d-none');
         }
       },
@@ -295,6 +299,7 @@ $(function () {
                 tour.next();
                 return
               }
+
               tour.back();
             }
           },
@@ -357,8 +362,6 @@ $(function () {
         when: {
           show() {
             const currentStep = this.tour.getCurrentStep().target;
-            console.log(this.tour.getCurrentStep());
-            this.previousStepIndex = tour.steps.indexOf(currentStep);
 
             if (!currentStep) {
               return;
@@ -395,7 +398,7 @@ $(function () {
           },
           {
             text: 'Go back',
-            action: () => tour.back(),
+            action: () => tour.show('paymentTitle', true),
             secondary: true,
           },
           {

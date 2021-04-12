@@ -69,7 +69,6 @@ body.shepherd-target .shepherd-footer .shepherd-button {
   background-color: white;
   border-radius: 30px;
   bottom: 10px;
-  color: var(--colorGray);
   counter-reset: nav-element 0;
   min-height: 46px;
   padding: 20px;
@@ -79,30 +78,69 @@ body.shepherd-target .shepherd-footer .shepherd-button {
 }
 
 .onboardingWizard-nav-item {
-  font-weight: 600;
+  position: relative;
   counter-increment: nav-element 1;
 }
 
-.onboardingWizard-nav-item.active {
-  position: relative;
-  color: #000;
-}
-
-.onboardingWizard-nav-item.active::before {
-  background-color: var(--colorGreen);
-  content: counter(nav-element);
-  border-radius: 50%;
-  color: #fff;
-  display: flex;
-  font-weight: 600;
-  height: 18px;
-  justify-content: center;
-  left: -2px;
-  align-items: center;
+.onboardingWizard-nav-item::before {
   position: absolute;
   width: 18px;
   top: 50%;
   transform: translateY(-50%);
+  height: 18px;
+}
+
+.onboardingWizard-nav-item::before {
+  content: counter(nav-element);
+  border-radius: 50%;
+  color: #fff;
+  background-color: black;
+  display: flex;
+  font-weight: 600;
+  justify-content: center;
+  left: -2px;
+  align-items: center;
+}
+
+.onboardingWizard-nav-item.active.last ~ .active {
+  color: #000;
+}
+
+.onboardingWizard-nav-item.active.last ~ .active::before {
+  color: #fff;
+  content: counter(nav-element);
+}
+
+.onboardingWizard-nav-item.active:not(.last)::before {
+  content: none;
+}
+
+.onboardingWizard-nav-item.active:not(.last) {
+  color: var(--colorGray);
+}
+
+.onboardingWizard-nav-item::before,
+.onboardingWizard-nav-item::before:not(.last):not(.active) {
+  background-color: black;
+}
+
+.onboardingWizard-nav-item.active.last::before {
+  background-color: var(--colorGreen);
+}
+
+.onboardingWizard-nav-item.active.last {
+  font-weight: 600;
+}
+
+.onboardingWizard-nav-item.active.last ~ .active .icon,
+.onboardingWizard-nav-item:not(.active) .icon,
+.onboardingWizard-nav-item.active.last .icon {
+  visibility: hidden;
+}
+
+.onboardingWizard-nav-item.active:not(.last) .icon {
+  visibility: visible;
+  color: var(--colorGray);
 }
 
 .onboardingWizard-nav-item .icon {
