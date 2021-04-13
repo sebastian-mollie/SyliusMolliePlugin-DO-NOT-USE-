@@ -57,7 +57,7 @@ body.shepherd-target .shepherd-footer {
 }
 
 body.shepherd-target .shepherd-footer .shepherd-button {
-  border-radius: 25px;
+  border-radius: 25px !important;
 }
 
 .onboardingWizard-mollieComponents.shepherd-step-highlight {
@@ -169,7 +169,7 @@ body.shepherd-target .shepherd-footer .shepherd-button {
   padding: 0 5px;
 }
 
-.shepherd-button:not(.shepherd-button-secondary):not(.btn-collapse) .icon {
+.shepherd-button:not(.shepherd-button-secondary):not(.btn-collapse):not(.btn-close) .icon {
   margin-left: 15px;
 }
 
@@ -224,12 +224,9 @@ body.shepherd-target .shepherd-footer .shepherd-button {
   padding: 0 var(--paddingSize) var(--paddingSize);
 }
 
+.shepherd-has-title .shepherd-button.btn-close,
 .shepherd-has-title .shepherd-button.btn-collapse {
   top: -80px;
-}
-
-.shepherd-has-title .shepherd-content .shepherd-cancel-icon {
-  color: #000;
 }
 
 .shepherd-has-title .shepherd-content .shepherd-header {
@@ -238,12 +235,6 @@ body.shepherd-target .shepherd-footer .shepherd-button {
   padding: var(--paddingSize) var(--paddingSize) 0;
   position: relative;
   width: 100%;
-}
-
-.shepherd-title + .shepherd-cancel-icon {
-  position: absolute;
-  top: -40px;
-  right: 0;
 }
 
 .shepherd-footer {
@@ -257,37 +248,18 @@ body.shepherd-target .shepherd-footer .shepherd-button {
   top: -40px;
 }
 
-.shepherd-header .shepherd-cancel-icon {
-  background: #F3F3F3;
-  border-radius: 50%;
-  width: 1em;
-  height: 1em;
-}
-
-.shepherd-button.btn-collapse:hover,
-.shepherd-header .shepherd-cancel-icon:hover {
+.shepherd-button.btn-close:hover,
+.shepherd-button.btn-collapse:hover {
   background-color: var(--colorPrimary);
 }
 
-.shepherd-button.btn-collapse:hover,
-.shepherd-header .shepherd-cancel-icon:hover span {
+.shepherd-button.btn-collapse:hover {
   color: #fff;
-}
-
-.shepherd-cancel-icon span {
-  color: #000;
-  font-weight: 600;
-  font-size: .8em;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
 }
 
 .shepherd-button:not(.btn-collapse) {
   font-weight: 600;
   margin-right: 0;
-  min-width: 100px;
   padding: 15px 25px;
 }
 
@@ -295,7 +267,7 @@ body.shepherd-target .shepherd-footer .shepherd-button {
   opacity: 0;
 }
 
-.shepherd-button:not(.shepherd-button-secondary):not(.btn-collapse) {
+.shepherd-button:not(.shepherd-button-secondary):not(.btn-collapse):not(.btn-close) {
   background-color: var(--colorPrimary);
   border-radius: 0 0 4px 0;
   color: #fff;
@@ -319,6 +291,7 @@ body.shepherd-target .shepherd-footer .shepherd-button {
   background-color: transparent;
 }
 
+.shepherd-button.btn-close,
 .shepherd-button.btn-collapse {
   align-items: center;
   background: white;
@@ -329,12 +302,20 @@ body.shepherd-target .shepherd-footer .shepherd-button {
   justify-content: center;
   position: absolute;
   padding: 1px;
-  right: 30px;
   top: -40px;
   transition: unset;
   width: 28px;
 }
 
+.shepherd-button.btn-close {
+  right: 0;
+}
+
+.shepherd-button.btn-collapse {
+  right: 30px;
+}
+
+.btn-close .icon,
 .btn-collapse .icon {
   margin: 0;
 }

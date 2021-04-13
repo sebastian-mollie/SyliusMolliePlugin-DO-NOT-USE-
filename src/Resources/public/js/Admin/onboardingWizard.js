@@ -12,6 +12,7 @@ $(function () {
       btnNextText: 'Start onboarding assistant <i class="icon angle right"></i>',
       scrollToTarget: '#sylius_payment_method_gatewayConfig_config_api_key_test',
       btnCollapseClass: 'd-none',
+      btnCloseClass: 'd-none',
     },
     {
       text: 'TEST will be the default in the plugin. You only need to do the configuration once to have TEST + LIVE environments available. Try easily togging between the two.',
@@ -22,6 +23,7 @@ $(function () {
       btnNextText: 'Next <i class="icon angle right"></i>',
       btnNextClass: 'with-triangle',
       btnCollapseClass: 'btn-collapse',
+      btnCloseClass: 'btn-close',
     },
     {
       id: 'mollie-connect',
@@ -31,6 +33,7 @@ $(function () {
       btnBackText:'Login to my account',
       btnNextText: 'Create a Mollie account <i class="icon angle right"></i>',
       btnCollapseClass: 'btn-collapse d-none',
+      btnCloseClass: 'btn-close',
       urlMollie: 'https://www.mollie.com/dashboard',
     },
     {
@@ -44,6 +47,7 @@ $(function () {
       btnNextClass: 'with-triangle',
       attachToElement: '[for="sylius_payment_method_gatewayConfig_config_api_key_test"] + *',
       btnCollapseClass: 'btn-collapse',
+      btnCloseClass: 'btn-close',
     },
     {
       text: 'Webshop checkout Configurations, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce semper velit et urna gravida efficitur.',
@@ -52,6 +56,7 @@ $(function () {
       btnBackText: 'Go back',
       btnNextText: 'Next',
       btnCollapseClass: 'btn-collapse',
+      btnCloseClass: 'btn-close',
     },
     {
       text: 'Enabling components, allows you to add the fields needed for credit card holder data to your own\n' +
@@ -64,6 +69,7 @@ $(function () {
       btnNextClass: 'with-triangle',
       attachToElement: '.onboardingWizard-mollieComponents',
       btnCollapseClass: 'btn-collapse',
+      btnCloseClass: 'btn-close',
     },
     {
       text: 'Enabling single click payments remembers your consumer\'s payment preferences in order to expedite follow-up payments. Your consumer does not have to perform any additional actions to enjoy quick and easy payments.',
@@ -74,6 +80,7 @@ $(function () {
       btnNextClass: 'with-triangle',
       attachToElement: '.onboardingWizard-singleClick',
       btnCollapseClass: 'btn-collapse',
+      btnCloseClass: 'btn-close',
     },
     {
       text: 'We\'ll go through setup with the Payments API first and then highlight differences if you choose to use the Orders API',
@@ -82,6 +89,7 @@ $(function () {
       btnBackText:'Go back',
       btnNextText: 'Next',
       btnCollapseClass: 'btn-collapse',
+      btnCloseClass: 'btn-close',
     },
     {
       id: 'paymentTitle',
@@ -93,6 +101,7 @@ $(function () {
       btnNextClass: 'with-triangle',
       attachToElement: '#sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_name',
       btnCollapseClass: 'btn-collapse',
+      btnCloseClass: 'btn-close',
     },
     {
       text: 'Choose Payments API (Payments API can not be used for methods such as Klarna - we\'ll set-up that up later) Learn about the difference  between Orders APIor the Payments API',
@@ -103,6 +112,7 @@ $(function () {
       btnNextClass: 'with-triangle',
       attachToElement: '[for="sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_paymentType"] + .dropdown',
       btnCollapseClass: 'btn-collapse',
+      btnCloseClass: 'btn-close',
     },
     {
       text: 'When using Payments API you may want additional details to help you match payments with customer orders -- you can enter those values here but make sure to use the correct tags provide in the text below',
@@ -111,6 +121,7 @@ $(function () {
       btnBackText:'Go back',
       btnNextText: 'Next',
       btnCollapseClass: 'btn-collapse',
+      btnCloseClass: 'btn-close',
     },
     {
       id: 'restrictPayment',
@@ -123,6 +134,7 @@ $(function () {
       attachToElement: '[for="sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_country_restriction"] +' +
         ' .dropdown',
       btnCollapseClass: 'btn-collapse',
+      btnCloseClass: 'btn-close',
     },
     {
       text: 'In case you have fees that you are passing on to the consumer, you can add them here',
@@ -134,6 +146,7 @@ $(function () {
       attachToElement: '[for="sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_paymentSurchargeFee_type"] +' +
         ' .dropdown',
       btnCollapseClass: 'btn-collapse',
+      btnCloseClass: 'btn-close',
     },
     {
       text: 'Upload a custom image for the payment method icon, this will be shown in the checkout page',
@@ -144,23 +157,22 @@ $(function () {
       btnNextClass: 'with-triangle',
       attachToElement: '#sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_customizeMethodImage_file',
       btnCollapseClass: 'btn-collapse',
+      btnCloseClass: 'btn-close',
     },
     {
       title: '<i class="icon check circle"></i> You\'re all set!',
-      stepClass: 'step-15',
       classActive: 'payment-settings',
       text: 'You\'re all done, you can now attempt a consumer order or your website',
       btnBackClass: 'd-none',
       btnNextClass: 'mr-auto',
       btnNextText: 'Start using Mollie plugin <i class="icon angle right"></i>',
       btnCollapseClass: 'btn-collapse d-none',
+      btnCloseClass: 'd-none',
     },
-
   ];
 
-  const stepQuitConfirmation = (previousStepIndex) => {
+  const quitConfirmationHandler = (previousStepIndex) => {
     return {
-      useModalOverlay: true,
       id: 'step-quitConfirmation',
       keyboardNavigation: false,
       title: 'Are you sure you want to quit ?',
@@ -174,7 +186,6 @@ $(function () {
             tour.complete();
           },
           secondary: true,
-          classes: 'js-onboarding-quit',
         },
         {
           text: 'Continue onboarding <i class="icon angle right"></i>',
@@ -182,7 +193,6 @@ $(function () {
             tour.show(previousStepIndex, true);
             tour.removeStep('step-quitConfirmation');
           },
-          classes: 'js-onboarding-continue',
         },
       ],
     }
@@ -244,6 +254,24 @@ $(function () {
     currentStep.setAttribute('aria-hidden', !isCollapsed);
   }
 
+  const closeTourHandler = (tour, previousStepIndex) => {
+    const buttonClose = document.querySelector('.btn-close');
+
+    console.log('asda');
+    buttonClose.addEventListener('click', function() {
+      tour.addStep(quitConfirmationHandler(previousStepIndex));
+      tour.show('step-quitConfirmation');
+      // tour.steps.some((step) => {
+      //   if (step.id === 'step-quitConfirmation') {
+      //     console.log(step.id);
+      //
+      //     return true;
+      //   }
+      //
+      //   tour.show('step-quitConfirmation');
+    });
+  }
+
   const tour = new Shepherd.Tour({
     useModalOverlay: true,
     confirmCancel: false,
@@ -252,24 +280,12 @@ $(function () {
       class: 'onboardingWizard-popup',
       arrow: false,
       cancelIcon: {
-        enabled: true,
+        enabled: false,
       },
       scrollTo: { behavior: 'smooth', block: 'center' },
       modalOverlayOpeningRadius: 4,
     },
   });
-
-  ['inactive', 'show'].forEach(event => tour.on(event, () => navbarVisibilityHandler(tour.isActive)));
-
-  tour.on('cancel', function() {
-    const previousStepIndex = this.steps.indexOf(this.getCurrentStep());
-    tour.addStep(stepQuitConfirmation(previousStepIndex));
-
-    tour.show('step-quitConfirmation', true);
-
-    const buttonClose = tour.currentStep.el.querySelector('.shepherd-cancel-icon');
-    buttonClose.classList.add('d-none');
-  })
 
   steps.forEach((step, index) => {
     tour.addStep({
@@ -282,8 +298,21 @@ $(function () {
         on: 'top-start'
       },
       ...(step.classActive && { highlightClass: step.classActive }),
-      when: { show: () => navbarProgressHandler(tour) },
+      when: {
+        show: () => {
+          this.previousStepIndex = tour.steps.indexOf(tour.getCurrentStep());
+          navbarProgressHandler(tour);
+        }
+      },
       buttons: [
+        {
+          text: '<i class="close icon"></i>',
+          action: () => {
+            tour.addStep(quitConfirmationHandler(this.previousStepIndex));
+            tour.show('step-quitConfirmation');
+          },
+          ...(step.btnCloseClass && { classes: step.btnCloseClass }),
+        },
         {
           text: '<i class="arrow down icon"></i>',
           action: () => modalCollapseHandler(tour),
@@ -330,6 +359,21 @@ $(function () {
 
   tour.start();
 
+  ['inactive', 'show'].forEach(event => tour.on(event, () => navbarVisibilityHandler(tour.isActive)));
+
+  tour.on('show', function () {
+    this.previousStepIndex = tour.steps.indexOf(tour.getCurrentStep());
+
+    setTimeout(() => {
+      const buttonClose = document.querySelector('.btn-close');
+
+      buttonClose.addEventListener('click', () => {
+        tour.addStep(quitConfirmationHandler(this.previousStepIndex));
+        tour.show('step-quitConfirmation');
+      });
+    }, 500)
+  })
+
   function mountTourOrderApi () {
     const selectCustom = document.querySelector(
       '#sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_paymentType ~ .menu'
@@ -349,8 +393,15 @@ $(function () {
 
 
     orderApiOption.addEventListener('click', () => {
+      tour.steps.forEach(step => {
+        if (step.id === 'orderApi') {
+          tour.show('orderApi');
+
+          return;
+        }
+      });
+
       tour.addStep({
-        useModalOverlay: true,
         keyboardNavigation: false,
         id: 'orderApi',
         highlightClass: 'payment-settings',
@@ -363,8 +414,18 @@ $(function () {
           element: '[for="sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_paymentType"] + .dropdown',
           on: 'top-start',
         },
-        when: { show: () => navbarProgressHandler(tour) },
+        when: {
+          show: () => {
+            this.previousStepIndex = tour.steps.indexOf(tour.getCurrentStep());
+            navbarProgressHandler(tour);
+          }
+        },
         buttons: [
+          {
+            text: '<i class="close icon"></i>',
+            action: () => tour.addStep(quitConfirmationHandler(this.previousStepIndex)),
+            classes: 'btn-close',
+          },
           {
             text: '<i class="arrow down icon"></i>',
             action: () => modalCollapseHandler(tour),
@@ -384,6 +445,8 @@ $(function () {
           },
         ],
       });
+
+      tour.start();
       tour.show('orderApi');
     })
   }
