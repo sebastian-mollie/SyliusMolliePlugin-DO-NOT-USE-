@@ -257,18 +257,9 @@ $(function () {
   const closeTourHandler = (tour, previousStepIndex) => {
     const buttonClose = document.querySelector('.btn-close');
 
-    console.log('asda');
     buttonClose.addEventListener('click', function() {
       tour.addStep(quitConfirmationHandler(previousStepIndex));
       tour.show('step-quitConfirmation');
-      // tour.steps.some((step) => {
-      //   if (step.id === 'step-quitConfirmation') {
-      //     console.log(step.id);
-      //
-      //     return true;
-      //   }
-      //
-      //   tour.show('step-quitConfirmation');
     });
   }
 
