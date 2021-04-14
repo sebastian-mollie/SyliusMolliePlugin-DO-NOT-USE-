@@ -173,7 +173,8 @@ $(function () {
       btnCloseClass: 'd-none',
     },
   ];
-  const quitConfirmationHandler = (previousStepIndex) => {
+
+  const stepQuitConfirmationHandler = (previousStepIndex) => {
     return {
       id: 'step-quitConfirmation',
       keyboardNavigation: false,
@@ -256,15 +257,6 @@ $(function () {
     currentStep.setAttribute('aria-hidden', !isCollapsed);
   }
 
-  const closeTourHandler = (tour, previousStepIndex) => {
-    const buttonClose = document.querySelector('.btn-close');
-
-    buttonClose.addEventListener('click', function() {
-      tour.addStep(quitConfirmationHandler(previousStepIndex));
-      tour.show('step-quitConfirmation');
-    });
-  }
-
   const tour = new Shepherd.Tour({
     useModalOverlay: true,
     confirmCancel: false,
@@ -301,7 +293,7 @@ $(function () {
         {
           text: '<i class="close icon"></i>',
           action: () => {
-            tour.addStep(quitConfirmationHandler(this.previousStepIndex));
+            tour.addStep(stepQuitConfirmationHandler(this.previousStepIndex));
             tour.show('step-quitConfirmation');
           },
           ...(step.btnCloseClass && { classes: step.btnCloseClass }),
@@ -400,7 +392,7 @@ $(function () {
         buttons: [
           {
             text: '<i class="close icon"></i>',
-            action: () => tour.addStep(quitConfirmationHandler(this.previousStepIndex)),
+            action: () => tour.addStep(stepQuitConfirmationHandler(this.previousStepIndex)),
             classes: 'btn-close',
           },
           {
