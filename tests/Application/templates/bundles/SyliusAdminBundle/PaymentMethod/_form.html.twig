@@ -2,16 +2,6 @@
 
 {% set mollie = constant('BitBag\\SyliusMolliePlugin\\Factory\\MollieGatewayFactory::FACTORY_NAME') %}
 
-{#{% for i in range(1,14) -%}#}
-{#    <span#}
-{#        {{ (('data-mollie-onboarding-step-' ~ i ~ '-text') ~ '=' ~ ('bitbag_sylius_mollie_plugin.onboardingMollie.step_' ~ i ~ '.text'|trans)|raw)}}#}
-{#    ></span>#}
-{#    <p>{{('bitbag_sylius_mollie_plugin.onboardingMollie.step_' ~ i ~ '.text')|trans}}</p>#}
-{#    <p>{{('bitbag_sylius_mollie_plugin.onboardingMollie.step_' ~ i ~ '.btnBack')|trans}}</p>#}
-{#    <p>{{('bitbag_sylius_mollie_plugin.onboardingMollie.step_' ~ i ~ '.title')|trans}}</p>#}
-{#{%- endfor %}#}
-
-
 {% if form.vars.value.gatewayConfig.factoryName == 'mollie' %}
     {% include '@SyliusAdmin/PaymentMethod/_mollieMessage.html.twig' %}
     {{ bitbag_render_version_widget() }}
