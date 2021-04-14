@@ -104,22 +104,13 @@ $(function () {
       btnCloseClass: 'btn-close',
     },
     {
-      text: 'Choose Payments API (Payments API can not be used for methods such as Klarna - we\'ll set-up that up later) Learn about the difference  between Orders APIor the Payments API',
-      stepClass: 'step-10 right-bottom',
+      text: 'Upload a custom image for the payment method icon, this will be shown in the checkout page',
+      stepClass: 'step-14 right-bottom',
       classActive: 'payment-settings',
       btnBackText:'Go back',
       btnNextText: 'Next <i class="icon angle right"></i>',
       btnNextClass: 'with-triangle',
-      attachToElement: '[for="sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_paymentType"] + .dropdown',
-      btnCollapseClass: 'btn-collapse',
-      btnCloseClass: 'btn-close',
-    },
-    {
-      text: 'When using Payments API you may want additional details to help you match payments with customer orders -- you can enter those values here but make sure to use the correct tags provide in the text below',
-      stepClass: 'step-11 right-bottom',
-      classActive: 'payment-settings',
-      btnBackText:'Go back',
-      btnNextText: 'Next',
+      attachToElement: '#sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_customizeMethodImage_file',
       btnCollapseClass: 'btn-collapse',
       btnCloseClass: 'btn-close',
     },
@@ -137,6 +128,29 @@ $(function () {
       btnCloseClass: 'btn-close',
     },
     {
+      text: 'Choose Payments API (Payments API can not be used for methods such as Klarna - we\'ll set-up that up later) Learn about the difference  between Orders APIor the Payments API',
+      stepClass: 'step-10 right-bottom',
+      classActive: 'payment-settings',
+      btnBackText:'Go back',
+      btnNextText: 'Next <i class="icon angle right"></i>',
+      btnNextClass: 'with-triangle',
+      attachToElement: '[for="sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_paymentType"] + .dropdown',
+      btnCollapseClass: 'btn-collapse',
+      btnCloseClass: 'btn-close',
+    },
+    {
+      id: 'orderNumber',
+      classActive: 'payment-settings',
+      text:'When using Payments API you may want additional details to help you match payments with customer orders -- you can enter those values here but make sure to use the correct tags provide in the text below',
+      stepClass: 'step-13 right-bottom',
+      btnNextText: 'Next <i class="icon angle right"></i>',
+      btnNextClass: 'with-triangle',
+      btnBackText: 'Go back',
+      attachToElement: '#sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_paymentDescription',
+      btnCollapseClass: 'btn-collapse',
+      btnCloseClass: 'btn-close',
+    },
+    {
       text: 'In case you have fees that you are passing on to the consumer, you can add them here',
       stepClass: 'step-13 right-bottom',
       classActive: 'payment-settings',
@@ -145,17 +159,6 @@ $(function () {
       btnNextClass: 'with-triangle',
       attachToElement: '[for="sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_paymentSurchargeFee_type"] +' +
         ' .dropdown',
-      btnCollapseClass: 'btn-collapse',
-      btnCloseClass: 'btn-close',
-    },
-    {
-      text: 'Upload a custom image for the payment method icon, this will be shown in the checkout page',
-      stepClass: 'step-14 right-bottom',
-      classActive: 'payment-settings',
-      btnBackText:'Go back',
-      btnNextText: 'Next <i class="icon angle right"></i>',
-      btnNextClass: 'with-triangle',
-      attachToElement: '#sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_customizeMethodImage_file',
       btnCollapseClass: 'btn-collapse',
       btnCloseClass: 'btn-close',
     },
@@ -170,7 +173,6 @@ $(function () {
       btnCloseClass: 'd-none',
     },
   ];
-
   const quitConfirmationHandler = (previousStepIndex) => {
     return {
       id: 'step-quitConfirmation',
@@ -352,19 +354,6 @@ $(function () {
 
   ['inactive', 'show'].forEach(event => tour.on(event, () => navbarVisibilityHandler(tour.isActive)));
 
-  tour.on('show', function () {
-    this.previousStepIndex = tour.steps.indexOf(tour.getCurrentStep());
-
-    setTimeout(() => {
-      const buttonClose = document.querySelector('.btn-close');
-
-      buttonClose.addEventListener('click', () => {
-        tour.addStep(quitConfirmationHandler(this.previousStepIndex));
-        tour.show('step-quitConfirmation');
-      });
-    }, 500)
-  })
-
   function mountTourOrderApi () {
     const selectCustom = document.querySelector(
       '#sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_paymentType ~ .menu'
@@ -406,10 +395,7 @@ $(function () {
           on: 'top-start',
         },
         when: {
-          show: () => {
-            this.previousStepIndex = tour.steps.indexOf(tour.getCurrentStep());
-            navbarProgressHandler(tour);
-          }
+          show: () => navbarProgressHandler(tour),
         },
         buttons: [
           {
@@ -430,7 +416,7 @@ $(function () {
           {
             text: 'Next',
             action: () => {
-              tour.show('restrictPayment')
+              tour.show('orderNumber')
             },
             classes: 'with-triangle',
           },
