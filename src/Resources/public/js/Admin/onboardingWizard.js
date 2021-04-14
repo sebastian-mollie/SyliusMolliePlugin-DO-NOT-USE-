@@ -351,7 +351,6 @@ $(function () {
       '#sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_paymentType ~ .menu'
     )
 
-    const select = document.querySelector('#sylius_payment_method_gatewayConfig_mollieGatewayConfig_1_paymentType');
     const orderApiOption = selectCustom.querySelector('[data-value="ORDER_API"]');
 
     if (!orderApiOption) {
@@ -387,7 +386,17 @@ $(function () {
           on: 'top-start',
         },
         when: {
-          show: () => navbarProgressHandler(tour),
+          show: () => {
+            const previousStepIndex = tour.steps.indexOf(tour.getCurrentStep());
+            const buttonClose = document.querySelector('.btn-close');
+
+            buttonClose.addEventListener('click', () => {
+              tour.addStep(stepQuitConfirmationHandler(previousStepIndex));
+              tour.show('step-quitConfirmation');
+            });
+
+            navbarProgressHandler(tour);
+          },
         },
         buttons: [
           {
