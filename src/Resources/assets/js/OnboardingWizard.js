@@ -22,7 +22,7 @@ export default class onboardingWizard {
 		this.previousStepIndex = 0;
 	}
 
-	modalCollapseHandler = () => {
+	modalCollapseHandler() {
 		const currentStep = this.tour.currentStep.el;
 		const buttonCollapse = currentStep.querySelector('.js-tour-collapse');
 		const isCollapsed = [...currentStep.classList].includes(
@@ -49,7 +49,7 @@ export default class onboardingWizard {
 		currentStep.setAttribute('aria-hidden', !isCollapsed);
 	};
 
-	handleQuitConfirmation = () => {
+	handleQuitConfirmation()  {
 		const returnStepIndex = this.previousStepIndex;
 
 		this.tour.addStep({
@@ -63,12 +63,12 @@ export default class onboardingWizard {
 		this.tour.show('step-quit-confirmation', true);
 	};
 
-	navbarVisibilityHandler = (isActive) => {
+	navbarVisibilityHandler(isActive) {
 		this.navbar.classList.toggle('d-none', !isActive);
 		this.navbar.setAttribute('aria-hidden', !isActive);
 	};
 
-	navbarProgressHandler = () => {
+	navbarProgressHandler() {
 		const currentStepProgress =
 			this.tour.getCurrentStep().options.highlightClass;
 
@@ -84,7 +84,7 @@ export default class onboardingWizard {
 		});
 	};
 
-	restartTourListener = () => {
+	restartTourListener() {
 		const restartTourTrigger = document.querySelector('.js-restart-tour');
 
 		restartTourTrigger.addEventListener('click', () => {
