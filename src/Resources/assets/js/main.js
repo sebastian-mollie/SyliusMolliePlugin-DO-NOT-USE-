@@ -1,4 +1,4 @@
-import onboardingWizard from './OnboardingWizard';
+import OnboardingWizard from './OnboardingWizard';
 
-const tour = new onboardingWizard();
+const tour = new OnboardingWizard();
 tour.initTour();
