@@ -126,8 +126,8 @@ Available states:
 ### Starting and building assets
 
 * Go to `./tests/Application/` directory
-* Run `gulp watch` in terminal. It will watch your changes in: 
-  `../../src/Resources/public/js/Admin/**/*.js`, `../../src/Resources/public/css/**/*.css`
+* Run `yarn encore dev --watch` in terminal. It will watch your changes in: 
+  `../../src/Resources/assets/admin/entry.js`, `../../src/Resources/assets/shop/entry.js`
 
 ### Rebuilding assets
 
@@ -139,8 +139,8 @@ more details in `./tests/Application/gulpfile.babel.js`
 
 ### CSS & JS files directory
 
-* CSS: go to `./src/Resources/public/css/**/`
-* JS: go to `./src/Resources/public/js/**/`
+* Admin: go to `./src/Resources/assets/admin/**/`
+* Shop: go to `./src/Resources/assets/shop/**/`
 
 ## Testing
 ----
@@ -148,7 +148,7 @@ more details in `./tests/Application/gulpfile.babel.js`
 $ composer install
 $ cd tests/Application
 $ yarn install
-$ yarn run gulp
+$ yarn encore dev --watch
 $ bin/console assets:install -e test
 $ bin/console doctrine:database:create -e test
 $ bin/console doctrine:schema:create -e test
@@ -157,6 +157,54 @@ $ open http://localhost:8080
 $ bin/behat
 $ bin/phpspec run
 ```
+
+## Beta
+---
+With the beta release, we are adding some important frontend changes.
+
+1. Adding an onboarding wizard tour.
+2. Removing gulp from the plugin.
+3. Webpack configuration for the entire plugin.
+
+The webpack changes are one of the biggest changes in this release. We've added two webpack configurations, one in root for projects that install mollie as a plugin, and a separate config in directory tests/application for people looking to run mollie in a test environment. There are several options for modifying and configuring the webpack depending on its use - which we will discuss below.
+
+* If you use webpack in your own project, you can import mollie webpack config and add it to your own (root) webpack config and also add this to your export module
+example: 
+```
+In your root webpack config add:
+const molliePluginConfig = require('../../webpack.config');
+module.exports = [shopConfig, adminConfig, molliePluginConfig];
+```
+
+The mollie assets will be build in directory specified in mollie webpack config but you can change this as you want, the base one is:
+```
+.setOutputPath('public/bitbag')
+.setPublicPath('/bitbag')
+```
+
+
+* If you are using the webpack in your own project, you can add entries to your own (root) webpack configuration which will build the mollie resources in the directory of your choice, the pre builded mollie assets are located in: 
+```
+../MolliePluginRootDirectory/src/Resources/assets/admin/entry.js  //scss and js files are imported into entry.js file
+../MolliePluginRootDirectory/src/Resources/assets/shop/entry.js  //scss and js files are imported into entry.js file
+```
+
+
+* If you are not using webpack, mollie plugin provide builded assets you can import into your own project, the builded assets are located in:
+```
+../MolliePluginRootDirectory/src/Resources/public/bitbag/mollie/admin.css
+../MolliePluginRootDirectory/src/Resources/public/bitbag/mollie/admin.js
+../MolliePluginRootDirectory/src/Resources/public/bitbag/mollie/shop.css
+../MolliePluginRootDirectory/src/Resources/public/bitbag/mollie/shop.js
+```
+
+
+* For testing purpose you have another webpack config in your tests/application, it will build your mollie and sylius assets in ```
+```
+tests/application/public/build/mollie-admin
+tests/application/public/build/mollie-shop
+```
+
 
 # About us
 ---
