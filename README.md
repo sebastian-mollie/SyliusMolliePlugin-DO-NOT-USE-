@@ -176,18 +176,18 @@ $ symfony server:start
 
 ## Beta
 ---
-* With the beta release, we are adding some important frontend changes.
+With the beta release, we are adding some important frontend changes.
 
-* 1. Adding an onboarding wizard tour.
-* 2. Removing gulp from the plugin.
-* 3. Webpack configuration for the entire plugin.
+1. Adding an onboarding wizard tour.
+2. Removing gulp from the plugin.
+3. Webpack configuration for the entire plugin.
 
-* The webpack changes are one of the biggest changes in this release. We've added two webpack configurations, one in root for projects that install mollie as a plugin, and a separate config in directory tests/application for people looking to run mollie in a test environment. There are several options for modifying and configuring the webpack depending on its use - which we will discuss below.
+The webpack changes are one of the biggest changes in this release. We've added two webpack configurations, one in root for projects that install mollie as a plugin, and a separate config in directory tests/application for people looking to run mollie in a test environment. There are several options for modifying and configuring the webpack depending on its use - which we will discuss below.
 
 
 ### Plugin Development
 
-* For testing purpose you have another webpack config in your tests/application, it will build your mollie and sylius assets in ```
+For testing purpose you have another webpack config in your tests/application, it will build your mollie and sylius assets in ```
 ```
 tests/application/public/build/mollie-admin
 tests/application/public/build/mollie-shop
@@ -196,17 +196,17 @@ tests/application/public/build/mollie-shop
 
 ### Project Development
 
-* If your not using webpack, you can install assets via
+If your not using webpack, you can install assets via
 ```
 $ bin/console assets:install
 ```
 
-* And then import them into twig via
+And then import them into twig via
 ```
 {{ asset('bitbag/mollie/admin.css') }}
 ```
 
-* These assets are located in:
+These assets are located in:
 ```
 ../MolliePluginRootDirectory/src/Resources/public/bitbag/mollie/admin.css
 ../MolliePluginRootDirectory/src/Resources/public/bitbag/mollie/admin.js
@@ -215,7 +215,7 @@ $ bin/console assets:install
 ```
 
 
-* If you use webpack in your own project, you can import mollie webpack config and add it to your own (root) webpack config and also add this to your export module
+If you use webpack in your own project, you can import mollie webpack config and add it to your own (root) webpack config and also add this to your export module
 example: 
 ```
 In your root webpack config add:
@@ -223,20 +223,20 @@ const molliePluginConfig = require('../../webpack.config');
 module.exports = [shopConfig, adminConfig, molliePluginConfig];
 ```
 
-* The mollie assets will be build in directory specified in mollie webpack.config but you can change this if you edit mollie webpack.config, the base one is:
+The mollie assets will be build in directory specified in mollie webpack.config but you can change this if you edit mollie webpack.config, the base one is:
 ```
 .setOutputPath('public/bitbag')
 .setPublicPath('/bitbag')
 ```
 
 
-* If you are using the webpack in your own project, you can add entries to your own (root) webpack configuration which will build the mollie resources in the directory of your choice, the pre builded mollie assets are located in: 
+If you are using the webpack in your own project, you can add entries to your own (root) webpack configuration which will build the mollie resources in the directory of your choice, the pre builded mollie assets are located in: 
 ```
 ../MolliePluginRootDirectory/src/Resources/assets/admin/entry.js  //scss and js files are imported into entry.js file
 ../MolliePluginRootDirectory/src/Resources/assets/shop/entry.js  //scss and js files are imported into entry.js file
 ```
 
-* And then in your root webpack.config just:
+And then in your root webpack.config add Entries:
 ```
 	.addEntry(
 		'mollie/admin',
