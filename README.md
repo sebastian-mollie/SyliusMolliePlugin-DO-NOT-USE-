@@ -131,11 +131,8 @@ Available states:
 
 ### Rebuilding assets
 
-* `bin/console assets:install` or
-* `gulp buildJsAssets` and
-* `gulp buildCssAssets`
+* `bin/console assets:install`
 
-more details in `./tests/Application/gulpfile.babel.js`
 
 ### CSS & JS files directory
 
