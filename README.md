@@ -184,7 +184,7 @@ The webpack changes are one of the biggest changes in this release. We've added 
 
 ### Plugin Development
 
-For testing purpose you have another webpack config in your tests/application, it will build your mollie and sylius assets in ```
+For testing purpose you have another webpack config in your tests/application, it will build your mollie and sylius assets in 
 ```
 tests/application/public/build/mollie-admin
 tests/application/public/build/mollie-shop
