@@ -121,28 +121,8 @@ Available states:
 * Suspended: Mandates became invalid, so the subscription is suspended
 * Completed: All subscription payments are executed according to the timetable
 
-## Frontend part
+## Plugin Development
 ----
-### Starting and building assets
-
-* Go to `./tests/Application/` directory
-* Run `yarn encore dev --watch` in terminal. It will watch your changes in: 
-  `../../src/Resources/assets/admin/entry.js`, `../../src/Resources/assets/shop/entry.js`
-
-### Rebuilding assets
-
-* `bin/console assets:install`
-
-
-### CSS & JS files directory
-
-* Admin: go to `./src/Resources/assets/admin/**/`
-* Shop: go to `./src/Resources/assets/shop/**/`
-
-
-## Testing
-----
-
 ### Instalation
 ```
 $ composer install
@@ -152,24 +132,77 @@ $ yarn encore dev
 $ bin/console assets:install -e test
 $ bin/console doctrine:database:create -e test
 $ bin/console doctrine:schema:create -e test
-$ bin/console server:run 127.0.0.1:8080 -e test
-$ open http://localhost:8080
+$ symfony server:start
+$ open http://localhost:8080 // or the port showed in your terminal while runing command with symfony server:start
+```
+
+* Also in tests/Application/config/packages/webpack_encore.yaml, make sure there is such configuration:
+
+```
+webpack_encore:
+    output_path: '%kernel.project_dir%/public/build/default'
+    builds:
+        mollie-admin: '%kernel.project_dir%/public/build/mollie-admin'
+        mollie-shop: '%kernel.project_dir%/public/build/mollie-shop'
+```
+
+* Also make sure you have such configuration in your shop and admin views directory:
+
+```Shop directory: 
+in: src/Resources/views/Shop/_javascripts.html.twig:
+<script src="https://js.mollie.com/v1/mollie.js"></script>
+{{ encore_entry_script_tags('shop-entry', null, 'mollie-shop') }}
+{{ encore_entry_script_tags('plugin-shop-entry', null, 'mollie-shop') }}
+
+in: src/Resources/views/Shop/_stylesheets.html.twig:
+{{ encore_entry_link_tags('shop-entry', null, 'mollie-shop') }}
+{{ encore_entry_link_tags('plugin-shop-entry', null, 'mollie-shop') }}
+```
+```Admin directory: 
+in: src/Resources/views/Admin/_javascripts.html.twig:
+{{ encore_entry_script_tags('admin-entry', null, 'mollie-admin') }}
+{{ encore_entry_script_tags('plugin-admin-entry', null, 'mollie-admin') }}
+
+in: src/Resources/views/Admin/_stylesheets.html.twig:
+{{ encore_entry_link_tags('admin-entry', null, 'mollie-admin') }}
+{{ encore_entry_link_tags('plugin-admin-entry', null, 'mollie-admin') }}
+
+```
+
+
+### Frontend
+
+#### Starting server and building assets
+
+* Go to `./tests/Application/` directory
+* Run `symfony server:start` in terminal. It will start local server.
+* Run `yarn watch` in terminal. It will watch your changes in admin and shop catalogs: 
+  `../../src/Resources/assets/admin/..`, `../../src/Resources/assets/shop/..`
+* Run `yarn dev` in terminal to build your assets once in development mode.
+* Run `yarn encore production` in terminal, to build your assets once in production mode - its required before creating every Pull Request.
+* All assets will be build in:
+```
+tests/application/public/build/mollie-admin/..
+tests/application/public/build/mollie-shop/..
+```
+
+#### Rebuilding assets in your root/SRC directory
+
+* `bin/console assets:install`
+
+
+#### CSS & JS files directory you can edit and work with:
+
+* Admin: go to `./src/Resources/assets/admin/**/`
+* Shop: go to `./src/Resources/assets/shop/**/`
+
+
+## Testing
+
+```
 $ bin/behat
 $ bin/phpspec run
 ```
-
-### Development
-```
-$ cd tests/Application
-
-$ yarn encore dev --watch
-$ yarn encore production
-
-$ bin/console server:run 127.0.0.1:8080
-or
-$ symfony server:start
-```
-
 
 ## Beta
 ---
@@ -188,61 +221,6 @@ For testing purpose you have another webpack config in your tests/application, i
 ```
 tests/application/public/build/mollie-admin
 tests/application/public/build/mollie-shop
-```
-
-
-### Project Development
-
-If your not using webpack, you can install assets via
-```
-$ bin/console assets:install
-```
-
-And then import them into twig via
-```
-{{ asset('bitbag/mollie/admin.css') }}
-```
-
-These assets are located in:
-```
-../MolliePluginRootDirectory/src/Resources/public/bitbag/mollie/admin.css
-../MolliePluginRootDirectory/src/Resources/public/bitbag/mollie/admin.js
-../MolliePluginRootDirectory/src/Resources/public/bitbag/mollie/shop.css
-../MolliePluginRootDirectory/src/Resources/public/bitbag/mollie/shop.js
-```
-
-
-If you use webpack in your own project, you can import mollie webpack config and add it to your own (root) webpack config and also add this to your export module
-example: 
-```
-In your root webpack config add:
-const molliePluginConfig = require('../../webpack.config');
-module.exports = [shopConfig, adminConfig, molliePluginConfig];
-```
-
-The mollie assets will be build in directory specified in mollie webpack.config but you can change this if you edit mollie webpack.config, the base one is:
-```
-.setOutputPath('public/bitbag')
-.setPublicPath('/bitbag')
-```
-
-
-If you are using the webpack in your own project, you can add entries to your own (root) webpack configuration which will build the mollie resources in the directory of your choice, the pre builded mollie assets are located in: 
-```
-../MolliePluginRootDirectory/src/Resources/assets/admin/entry.js  //scss and js files are imported into entry.js file
-../MolliePluginRootDirectory/src/Resources/assets/shop/entry.js  //scss and js files are imported into entry.js file
-```
-
-And then in your root webpack.config add Entries:
-```
-	.addEntry(
-		'mollie/admin',
-		path.resolve(__dirname, '../../src/Resources/assets/admin/entry.js')
-	)
-	.addEntry(
-		'mollie/shop',
-		path.resolve(__dirname, '../../src/Resources/assets/shop/entry.js')
-	)
 ```
 
 
