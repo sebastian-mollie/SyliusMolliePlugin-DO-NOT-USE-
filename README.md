@@ -180,11 +180,12 @@ in: src/Resources/views/Admin/_stylesheets.html.twig:
   `../../src/Resources/assets/admin/..`, `../../src/Resources/assets/shop/..`
 * Run `yarn dev` in terminal to build your assets once in development mode.
 * Run `yarn encore production` in terminal, to build your assets once in production mode - its required before creating every Pull Request.
-* All assets will be build in:
+* All assets (mollie assets + sylius base assets) will be build in:
 ```
 tests/application/public/build/mollie-admin/..
 tests/application/public/build/mollie-shop/..
 ```
+
 
 #### Rebuilding assets in your root/SRC directory
 
@@ -202,25 +203,6 @@ tests/application/public/build/mollie-shop/..
 ```
 $ bin/behat
 $ bin/phpspec run
-```
-
-## Beta
----
-With the beta release, we are adding some important frontend changes.
-
-1. Adding an onboarding wizard tour.
-2. Removing gulp from the plugin.
-3. Webpack configuration for the entire plugin.
-
-The webpack changes are one of the biggest changes in this release. We've added two webpack configurations, one in root for projects that install mollie as a plugin, and a separate config in directory tests/application for people looking to run mollie in a test environment. There are several options for modifying and configuring the webpack depending on its use - which we will discuss below.
-
-
-### Plugin Development
-
-For testing purpose you have another webpack config in your tests/application, it will build your mollie and sylius assets in 
-```
-tests/application/public/build/mollie-admin
-tests/application/public/build/mollie-shop
 ```
 
 
