@@ -435,3 +435,58 @@ winzou_state_machine:
         }
     }
 ```
+
+16. Frontend
+
+If your not using webpack, you can install assets via
+```
+$ bin/console assets:install
+```
+
+And then import these already builded assets into your project via
+```
+{{ asset('bitbag/mollie/admin.css') }}
+```
+
+These assets are located in:
+```
+../MolliePluginRootDirectory/src/Resources/public/bitbag/mollie/admin.css
+../MolliePluginRootDirectory/src/Resources/public/bitbag/mollie/admin.js
+../MolliePluginRootDirectory/src/Resources/public/bitbag/mollie/shop.css
+../MolliePluginRootDirectory/src/Resources/public/bitbag/mollie/shop.js
+```
+
+
+
+If you use webpack in your own project, you can import mollie webpack config and add it to your own (root) webpack config and also add this to your export module
+example: 
+```
+In your root webpack config add:
+const molliePluginConfig = require('../../webpack.config');
+module.exports = [shopConfig, adminConfig, molliePluginConfig];
+```
+
+The mollie assets will be build in directory specified in mollie webpack.config but you can change this if you edit mollie webpack.config, the base one is:
+```
+.setOutputPath('public/bitbag')
+.setPublicPath('/bitbag')
+```
+
+
+
+If you are using the webpack in your own project, you can add entries to your own (root) webpack configuration which will build the mollie resources in the directory of your choice, the pre builded mollie assets are located in: 
+```
+../MolliePluginRootDirectory/src/Resources/assets/admin/entry.js  //scss and js files are imported into entry.js file
+../MolliePluginRootDirectory/src/Resources/assets/shop/entry.js  //scss and js files are imported into entry.js file
+```
+
+And then in your root webpack.config add Entries:
+```
+	.addEntry(
+		'mollie/admin',
+		path.resolve(__dirname, '../../src/Resources/assets/admin/entry.js')
+	)
+	.addEntry(
+		'mollie/shop',
+		path.resolve(__dirname, '../../src/Resources/assets/shop/entry.js')
+	)
