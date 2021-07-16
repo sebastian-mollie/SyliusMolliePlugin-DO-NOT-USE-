@@ -78,5 +78,10 @@
         <service id="bitbag_sylius_mollie_plugin.controller.onboarding_wizard.completed" class="BitBag\SyliusMolliePlugin\Controller\Action\Admin\OnboardingWizard\CompletedAction">
             <argument type="service" id="bitbag_sylius_mollie_plugin.creator.onboarding_wizard.status_creator"/>
         </service>
+
+        <service id="bitbag_sylius_mollie_plugin.controller.action.admin.methods_list" class="BitBag\SyliusMolliePlugin\Controller\Action\Admin\MethodsListAction">
+            <argument type="service" id="sylius.repository.gateway_config"/>
+            <argument type="service" id="serializer"/>
+        </service>
     </services>
 </container>

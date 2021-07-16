@@ -82,7 +82,7 @@ trait ConfigTrait
         $this->paymentType = $paymentType;
     }
 
-    public function getCountry(): array
+    public function getCountry(): ?array
     {
         return $this->country;
     }
