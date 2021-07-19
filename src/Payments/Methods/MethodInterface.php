@@ -39,7 +39,7 @@ interface MethodInterface
 
     public function setPaymentType(string $paymentType): void;
 
-    public function getCountry(): ?array;
+    public function getCountry(): array;
 
     public function setCountry(array $country): void;
 
