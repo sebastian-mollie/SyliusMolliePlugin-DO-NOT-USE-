@@ -82,6 +82,7 @@
         <service id="bitbag_sylius_mollie_plugin.controller.action.admin.methods_form" class="BitBag\SyliusMolliePlugin\Controller\Action\Admin\MethodsFormAction">
             <argument type="service" id="sylius.repository.payment_method"/>
             <argument type="service" id="twig"/>
+            <argument type="service" id="form.factory"/>
         </service>
     </services>
 </container>

@@ -14,13 +14,13 @@ namespace BitBag\SyliusMolliePlugin\Controller\Action\Admin;
 use Sylius\Bundle\PaymentBundle\Form\Type\PaymentMethodType;
 use Sylius\Component\Core\Model\PaymentMethod;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
-final class MethodsFormAction extends AbstractController
+final class MethodsFormAction
 {
     /** @var RepositoryInterface $gatewayConfigRepository */
     private $gatewayConfigRepository;
@@ -28,15 +28,23 @@ final class MethodsFormAction extends AbstractController
     /** @var Environment $twig */
     private $twig;
 
-    public function __construct(RepositoryInterface $gatewayConfigRepository, Environment $twig)
+    /** @var FormFactory $formFactory*/
+    private $formFactory;
+
+    public function __construct(RepositoryInterface $gatewayConfigRepository, Environment $twig, FormFactory $formFactory)
     {
         $this->gatewayConfigRepository = $gatewayConfigRepository;
         $this->twig = $twig;
+        $this->formFactory = $formFactory;
     }
 
     public function __invoke(Request $request): Response
     {
         $paymentCode = $request->get('paymentCode');
+
+        if (null === $paymentCode) {
+            return new JsonResponse(['message' => 'Parameter paymentCode cannot be null'], Response::HTTP_BAD_REQUEST);
+        }
 
         /** @var PaymentMethod $paymentMethod */
         $paymentMethod = $this->gatewayConfigRepository->findOneBy([
@@ -44,16 +52,17 @@ final class MethodsFormAction extends AbstractController
         ]);
 
         if (null === $paymentMethod) {
-            return new JsonResponse(['message' => sprintf("Payment method with code %s doesn't exist", $paymentCode)]);
+            return new JsonResponse(['message' => sprintf("Payment method with code %s doesn't exist", $paymentCode)], Response::HTTP_BAD_REQUEST);
         }
 
-        $form = $this->createForm(PaymentMethodType::class, $paymentMethod);
+        $form = $this->formFactory->create(PaymentMethodType::class, $paymentMethod);
 
-        $renderedForm = $this->twig->render(
-            'bundles/SyliusAdminBundle/PaymentMethod/_mollieMethodsForm.html.twig',
-            ['form' => $form->createView()]
-        );
-
-        return new JsonResponse(['form' => $renderedForm]);
+        return new JsonResponse([
+            'form' => $this->twig->render(
+                'bundles/SyliusAdminBundle/PaymentMethod/_mollieMethodsForm.html.twig', [
+                    'form' => $form->createView(),
+                ]
+            )
+        ]);
     }
 }
