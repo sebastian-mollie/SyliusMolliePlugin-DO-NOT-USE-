@@ -11,8 +11,8 @@ declare(strict_types=1);
 
 namespace BitBag\SyliusMolliePlugin\Controller\Action\Admin;
 
-use BitBag\SyliusMolliePlugin\Entity\GatewayConfigInterface;
 use Sylius\Bundle\PaymentBundle\Form\Type\PaymentMethodType;
+use Sylius\Component\Core\Model\PaymentMethod;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
 
-final class MethodsListAction extends AbstractController
+final class MethodsFormAction extends AbstractController
 {
     /** @var RepositoryInterface $gatewayConfigRepository */
     private $gatewayConfigRepository;
@@ -37,23 +37,23 @@ final class MethodsListAction extends AbstractController
 
     public function __invoke(Request $request): Response
     {
-        $gatewayName = $request->get('gatewayName');
+        $paymentCode = $request->get('paymentCode');
 
-        /** @var GatewayConfigInterface $gatewayConfig */
-        $gatewayConfig = $this->gatewayConfigRepository->findOneBy([
-            'code' => $gatewayName,
+        /** @var PaymentMethod $paymentMethod */
+        $paymentMethod = $this->gatewayConfigRepository->findOneBy([
+            'code' => $paymentCode,
         ]);
 
-        $form = $this->createForm(PaymentMethodType::class, $gatewayConfig);
+        if (null === $paymentMethod) {
+            return new JsonResponse(['message' => sprintf("Payment method with code %s doesn't exist", $paymentCode)]);
+        }
+
+        $form = $this->createForm(PaymentMethodType::class, $paymentMethod);
 
         $renderedForm = $this->twig->render(
             'bundles/SyliusAdminBundle/PaymentMethod/_mollieMethodsForm.html.twig',
             ['form' => $form->createView()]
         );
-
-        if (null === $gatewayConfig) {
-            return new JsonResponse(['message' => sprintf("Gateway with name %s doesn't exist", $gatewayName)]);
-        }
 
         return new JsonResponse(['form' => $renderedForm]);
     }
