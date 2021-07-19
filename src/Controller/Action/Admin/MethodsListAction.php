@@ -12,26 +12,27 @@ declare(strict_types=1);
 namespace BitBag\SyliusMolliePlugin\Controller\Action\Admin;
 
 use BitBag\SyliusMolliePlugin\Entity\GatewayConfigInterface;
+use Sylius\Bundle\PaymentBundle\Form\Type\PaymentMethodType;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Component\Serializer\Serializer;
+use Twig\Environment;
 
 
-final class MethodsListAction
+final class MethodsListAction extends AbstractController
 {
     /** @var RepositoryInterface $gatewayConfigRepository */
     private $gatewayConfigRepository;
 
-    /** @var Serializer */
-    private $serializer;
+    /** @var Environment $twig */
+    private $twig;
 
-    public function __construct(RepositoryInterface $gatewayConfigRepository, Serializer $serializer)
+    public function __construct(RepositoryInterface $gatewayConfigRepository, Environment $twig)
     {
         $this->gatewayConfigRepository = $gatewayConfigRepository;
-        $this->serializer = $serializer;
+        $this->twig = $twig;
     }
 
     public function __invoke(Request $request): Response
@@ -40,19 +41,20 @@ final class MethodsListAction
 
         /** @var GatewayConfigInterface $gatewayConfig */
         $gatewayConfig = $this->gatewayConfigRepository->findOneBy([
-            'gatewayName' => $gatewayName,
+            'code' => $gatewayName,
         ]);
+
+        $form = $this->createForm(PaymentMethodType::class, $gatewayConfig);
+
+        $renderedForm = $this->twig->render(
+            'bundles/SyliusAdminBundle/PaymentMethod/_mollieMethodsForm.html.twig',
+            ['form' => $form->createView()]
+        );
 
         if (null === $gatewayConfig) {
             return new JsonResponse(['message' => sprintf("Gateway with name %s doesn't exist", $gatewayName)]);
         }
 
-        $molliePaymentMethods = $this->serializer->serialize(
-            $gatewayConfig->getMollieGatewayConfig(),
-            'json',
-            [AbstractNormalizer::IGNORED_ATTRIBUTES => ['mollieGatewayConfig']]
-        );
-
-        return new JsonResponse($molliePaymentMethods);
+        return new JsonResponse(['form' => $renderedForm]);
     }
 }
