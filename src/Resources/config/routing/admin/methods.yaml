@@ -17,7 +17,7 @@ bitbag_admin_change_position:
     _controller: bitbag_sylius_mollie_plugin.controller.action.admin.change_position_payment_method_action
 
 bitbag_admin_methods_list:
-  path: /mollie/methods/list
+  path: /mollie/methods/form
   methods: [GET]
   defaults:
     _controller: bitbag_sylius_mollie_plugin.controller.action.admin.methods_form

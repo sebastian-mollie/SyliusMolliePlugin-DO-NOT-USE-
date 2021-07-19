@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
-
 final class MethodsFormAction extends AbstractController
 {
     /** @var RepositoryInterface $gatewayConfigRepository */
