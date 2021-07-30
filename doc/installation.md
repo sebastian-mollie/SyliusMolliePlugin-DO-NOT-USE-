@@ -443,17 +443,13 @@ If your not using webpack, you can install assets via
 $ bin/console assets:install
 ```
 
-And then import these already builded assets into your project via
-```
-{{ asset('bitbag/mollie/admin.css') }}
-```
-
+And then import these already builded assets into your project.
 These assets are located in:
 ```
-../MolliePluginRootDirectory/src/Resources/public/bitbag/mollie/admin.css
-../MolliePluginRootDirectory/src/Resources/public/bitbag/mollie/admin.js
-../MolliePluginRootDirectory/src/Resources/public/bitbag/mollie/shop.css
-../MolliePluginRootDirectory/src/Resources/public/bitbag/mollie/shop.js
+vendor/bitbag/mollie-plugin/src/Resources/public/bitbag/mollie/admin.css
+vendor/bitbag/mollie-plugin/src/Resources/public/bitbag/mollie/admin.js
+vendor/bitbag/mollie-plugin/src/Resources/public/bitbag/mollie/shop.css
+vendor/bitbag/mollie-plugin/src/Resources/public/bitbag/mollie/shop.js
 ```
 
 
@@ -476,17 +472,37 @@ The mollie assets will be build in directory specified in mollie webpack.config 
 
 If you are using the webpack in your own project, you can add entries to your own (root) webpack configuration which will build the mollie resources in the directory of your choice, the pre builded mollie assets are located in: 
 ```
-../MolliePluginRootDirectory/src/Resources/assets/admin/entry.js  //scss and js files are imported into entry.js file
-../MolliePluginRootDirectory/src/Resources/assets/shop/entry.js  //scss and js files are imported into entry.js file
+"vendor/bitbag/mollie-plugin/src/Resources/assets/admin/entry.js"  //scss and js files are imported into entry.js file
+"vendor/bitbag/mollie-plugin/src/Resources/assets/shop/entry.js"  //scss and js files are imported into entry.js file
 ```
 
 And then in your root webpack.config add Entries:
 ```
-	.addEntry(
-		'mollie/admin',
-		path.resolve(__dirname, '../../src/Resources/assets/admin/entry.js')
-	)
-	.addEntry(
-		'mollie/shop',
-		path.resolve(__dirname, '../../src/Resources/assets/shop/entry.js')
-	)
+ .addEntry(
+    "mollie-admin",
+    path.resolve(
+      __dirname,
+      "vendor/bitbag/mollie-plugin/src/Resources/assets/admin/entry.js"
+    )
+  )
+  
+  .addEntry(
+    "mollie-shop",
+    path.resolve(
+      __dirname,
+      "vendor/bitbag/mollie-plugin/src/Resources/assets/shop/entry.js"
+    )
+  )
+```
+
+And then you can import css/js files inside your _scripts.html.twig and _styles.html.twig using:
+```
+{{ encore_entry_script_tags('mollie-shop', null, 'shop') }} // these are shop mollie assets (js)
+
+{{ encore_entry_link_tags('mollie-shop', null, 'shop') }} // these are shop mollie assets (css)
+
+{{ encore_entry_script_tags('mollie-admin', null, 'admin') }} // these are admin mollie assets (js)
+
+{{ encore_entry_link_tags('mollie-admin', null, 'admin') }} // these are admin mollie assets (css)
+```
+
