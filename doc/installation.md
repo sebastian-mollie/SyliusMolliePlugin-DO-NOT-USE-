@@ -437,14 +437,30 @@ winzou_state_machine:
 ```
 
 16. Frontend
-
+#
+16.1
 If your not using webpack, you can install assets via
 ```
 $ bin/console assets:install
 ```
 
-And then import these already builded assets into your project.
+And then import these already builded assets into twig using :
+```
+{{ asset('public/bundles/bitbagsyliusmollieplugin/bitbag/mollie/admin.css') }}
+{{ asset('public/bundles/bitbagsyliusmollieplugin/bitbag/mollie/admin.js') }}
+{{ asset('public/bundles/bitbagsyliusmollieplugin/bitbag/mollie/shop.css') }}
+{{ asset('public/bundles/bitbagsyliusmollieplugin/bitbag/mollie/shop.js') }}
+```
 These assets are located in:
+```
+public/bundles/bitbagsyliusmollieplugin/bitbag/mollie/admin.css
+public/bundles/bitbagsyliusmollieplugin/bitbag/mollie/admin.js
+public/bundles/bitbagsyliusmollieplugin/bitbag/mollie/shop.css
+public/bundles/bitbagsyliusmollieplugin/bitbag/mollie/shop.js
+```
+#
+16.2
+Another way is to import already builded assets directly from mollie source files:
 ```
 vendor/bitbag/mollie-plugin/src/Resources/public/bitbag/mollie/admin.css
 vendor/bitbag/mollie-plugin/src/Resources/public/bitbag/mollie/admin.js
@@ -452,34 +468,19 @@ vendor/bitbag/mollie-plugin/src/Resources/public/bitbag/mollie/shop.css
 vendor/bitbag/mollie-plugin/src/Resources/public/bitbag/mollie/shop.js
 ```
 
-
-
-If you use webpack in your own project, you can import mollie webpack config and add it to your own (root) webpack config and also add this to your export module
-example: 
-```
-In your root webpack config add:
-const molliePluginConfig = require('../../webpack.config');
-module.exports = [shopConfig, adminConfig, molliePluginConfig];
-```
-
-The mollie assets will be build in directory specified in mollie webpack.config but you can change this if you edit mollie webpack.config, the base one is:
-```
-.setOutputPath('public/bitbag')
-.setPublicPath('/bitbag')
-```
-
-
-
+#
+16.3 
+Another way is:
 If you are using the webpack in your own project, you can add entries to your own (root) webpack configuration which will build the mollie resources in the directory of your choice, the pre builded mollie assets are located in: 
 ```
-"vendor/bitbag/mollie-plugin/src/Resources/assets/admin/entry.js"  //scss and js files are imported into entry.js file
-"vendor/bitbag/mollie-plugin/src/Resources/assets/shop/entry.js"  //scss and js files are imported into entry.js file
+"vendor/bitbag/mollie-plugin/src/Resources/assets/admin/entry.js"  //admin scss and js files are imported into entry.js file
+"vendor/bitbag/mollie-plugin/src/Resources/assets/shop/entry.js"  //shop scss and js files are imported into entry.js file
 ```
 
 And then in your root webpack.config add Entries:
 ```
  .addEntry(
-    "mollie-admin",
+    "mollie-admin-entry",
     path.resolve(
       __dirname,
       "vendor/bitbag/mollie-plugin/src/Resources/assets/admin/entry.js"
@@ -487,7 +488,7 @@ And then in your root webpack.config add Entries:
   )
   
   .addEntry(
-    "mollie-shop",
+    "mollie-shop-entry",
     path.resolve(
       __dirname,
       "vendor/bitbag/mollie-plugin/src/Resources/assets/shop/entry.js"
@@ -495,14 +496,24 @@ And then in your root webpack.config add Entries:
   )
 ```
 
-And then you can import css/js files inside your _scripts.html.twig and _styles.html.twig using:
+Add your new mollie builds into your `webpack_encore.yaml`:
 ```
-{{ encore_entry_script_tags('mollie-shop', null, 'shop') }} // these are shop mollie assets (js)
-
-{{ encore_entry_link_tags('mollie-shop', null, 'shop') }} // these are shop mollie assets (css)
-
-{{ encore_entry_script_tags('mollie-admin', null, 'admin') }} // these are admin mollie assets (js)
-
-{{ encore_entry_link_tags('mollie-admin', null, 'admin') }} // these are admin mollie assets (css)
+builds:
+    mollie-admin: '%kernel.project_dir%/public/build/admin'
+    mollie-shop: '%kernel.project_dir%/public/build/shop'
 ```
+
+
+And then you can import css/js files inside your admin and shop _scripts.html.twig and _styles.html.twig using:
+```
+{{ encore_entry_script_tags('mollie-shop-entry', null, 'mollie-shop') }} // these are shop mollie assets (js)
+
+{{ encore_entry_link_tags('mollie-shop-entry', null, 'mollie-shop') }} // these are shop mollie assets (css)
+
+{{ encore_entry_script_tags('mollie-admin-entry', null, 'mollie-admin') }} // these are admin mollie assets (js)
+
+{{ encore_entry_link_tags('mollie-admin-entry', null, 'mollie-admin') }} // these are admin mollie assets (css)
+```
+
+
 
