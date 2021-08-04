@@ -503,7 +503,8 @@ builds:
 ```
 
 
-And then you can import css/js files inside your admin and shop _scripts.html.twig and _styles.html.twig using:
+And then you can import css/js files inside your admin and shop _scripts.html.twig and _styles.html.twig 
+for example in :`templates/bundles/SyliusAdminBundle/_scripts.html.twig `using:
 ```
 {{ encore_entry_script_tags('mollie-shop-entry', null, 'mollie-shop') }} // these are shop mollie assets (js)
 
