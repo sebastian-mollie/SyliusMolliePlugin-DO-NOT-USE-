@@ -444,7 +444,8 @@ If your not using webpack, you can install assets via
 $ bin/console assets:install
 ```
 
-And then import these already builded assets into twig using :
+And then import these already builded assets into shop/admin _script and _styles .html.twig 
+For example:`templates/bundles/SyliusAdminBundle/_scripts.html.twig ` using :
 ```
 {{ asset('public/bundles/bitbagsyliusmollieplugin/bitbag/mollie/admin.css') }}
 {{ asset('public/bundles/bitbagsyliusmollieplugin/bitbag/mollie/admin.js') }}
@@ -504,7 +505,7 @@ builds:
 
 
 And then you can import css/js files inside your admin and shop _scripts.html.twig and _styles.html.twig 
-for example in :`templates/bundles/SyliusAdminBundle/_scripts.html.twig `using:
+For example in :`templates/bundles/SyliusAdminBundle/_scripts.html.twig `using:
 ```
 {{ encore_entry_script_tags('mollie-shop-entry', null, 'mollie-shop') }} // these are shop mollie assets (js)
 
