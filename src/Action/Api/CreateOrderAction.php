@@ -46,6 +46,8 @@ final class CreateOrderAction extends BaseApiAwareAction
         $customerId = $details['metadata']['customer_mollie_id'] ?? null;
         $method = $details['metadata']['molliePaymentMethods'] ?: '';
 
+        $details['webhookUrl'] = str_replace('localhost', '91a7c12d7346.ngrok.io', $details['webhookUrl']);
+
         if (null !== $method) {
             /** @var MollieGatewayConfigInterface $paymentMethod */
             $paymentMethod = $this->methodConfigResolver->getConfigFromMethodId($method);

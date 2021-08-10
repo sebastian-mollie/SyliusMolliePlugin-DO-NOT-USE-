@@ -48,6 +48,8 @@ final class CreatePaymentAction extends BaseApiAwareAction
     {
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
+        $details['webhookUrl'] = str_replace('localhost', '91a7c12d7346.ngrok.io', $details['webhookUrl']);
+
         try {
             /** @var Payment $payment */
             $payment = $this->mollieApiClient->payments->create([
