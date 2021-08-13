@@ -115,7 +115,7 @@ For a better integration with Mollie's recurring subscription, [you can use stat
 
 Available states:
 
-* Processing: Subscription created but not active yet (startdate higher than "now")
+* Processing: Subscription created but not active yet (start date higher than "now")
 * Active: Subscription is in progress. Not all payments are done, but we wait until the next payment date
 * Cancelled: The merchant cancelled the subscription
 * Suspended: Mandates became invalid, so the subscription is suspended
@@ -184,7 +184,7 @@ Our team is fluent in **Polish, English, German and French**. That is why our co
 
 ---
 
-If you need some help with Sylius development, don't be hesitate to contact us directly. You can fill the form on [this site](https://bitbag.io/contact-us/?utm_source=github&utm_medium=referral&utm_campaign=plugins_mollie) or send us an e-mail to hello@bitbag.io!
+If you need some help with Sylius development, don't be hesitated to contact us directly. You can fill the form on [this site](https://bitbag.io/contact-us/?utm_source=github&utm_medium=referral&utm_campaign=plugins_mollie) or send us an e-mail to hello@bitbag.io!
 
 ---
 
@@ -194,15 +194,18 @@ If you need some help with Sylius development, don't be hesitate to contact us d
 ----
 For online communication, we invite you to chat with us & other users on [Sylius Slack](https://sylius-devs.slack.com/).
 
-# Demo Sylius shop
+# Demo Sylius Shop
+
 ---
 
 We created a demo app with some useful use-cases of plugins!
-Visit b2b.bitbag.shop to take a look at it. The admin can be accessed under b2b.bitbag.shop/admin/login link and sylius: sylius credentials.
+Visit [sylius-demo.bitbag.io](https://sylius-demo.bitbag.io/) to take a look at it. The admin can be accessed under
+[sylius-demo.bitbag.io/admin/login](https://sylius-demo.bitbag.io/admin/login) link and `sylius: sylius` credentials.
 Plugins that we have used in the demo:
+
 | BitBag's Plugin | GitHub | Sylius' Store|
 | ------ | ------ | ------|
-| ACL PLugin | *Private. Available after the purchasing.*| https://plugins.sylius.com/plugin/access-control-layer-plugin/|
+| ACL Plugin | *Private. Available after the purchasing.*| https://plugins.sylius.com/plugin/access-control-layer-plugin/|
 | Braintree Plugin | https://github.com/BitBagCommerce/SyliusBraintreePlugin |https://plugins.sylius.com/plugin/braintree-plugin/|
 | CMS Plugin | https://github.com/BitBagCommerce/SyliusCmsPlugin | https://plugins.sylius.com/plugin/cmsplugin/|
 | Elasticsearch Plugin | https://github.com/BitBagCommerce/SyliusElasticsearchPlugin | https://plugins.sylius.com/plugin/2004/|
@@ -216,11 +219,12 @@ Plugins that we have used in the demo:
 
 **If you need an overview of Sylius' capabilities, schedule a consultation with our expert.**
 
-[![](https://bitbag.io/wp-content/uploads/2020/10/button_free_consulatation-1.png)](https://bitbag.io/contact-us/?utm_source=github&utm_medium=referral&utm_campaign=plugins_mollie)
+[![](https://bitbag.io/wp-content/uploads/2020/10/button_free_consulatation-1.png)](https://bitbag.io/contact-us/?utm_source=github&utm_medium=referral&utm_campaign=plugins_catalog)
 
 ## Additional resources for developers
+
 ---
-To learn more about our contribution workflow and more, we encourage ypu to use the following resources:
+To learn more about our contribution workflow and more, we encourage you to use the following resources:
 * [Sylius Documentation](https://docs.sylius.com/en/latest/)
 * [Sylius Contribution Guide](https://docs.sylius.com/en/latest/contributing/)
 * [Sylius Online Course](https://sylius.com/online-course/)
