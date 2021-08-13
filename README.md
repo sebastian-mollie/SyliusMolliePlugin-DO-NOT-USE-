@@ -11,7 +11,7 @@ At BitBag we do believe in open source. However, we are able to do it just becau
 
 ***
 
-* [Overwiev](#overview)
+* [Overview](#overview)
 * [Support](#we-are-here-to-help)
 * [Installation](#installation)
   * [Requirements](#requirements)
