@@ -317,6 +317,9 @@ imports:
 
 bitbag_sylius_mollie_plugin:
     resource: "@BitBagSyliusMolliePlugin/Resources/config/routing.yaml"
+    
+_bazinga_jstranslation:
+  resource: "@BazingaJsTranslationBundle/Resources/config/routing/routing.yml"
 ```
 
 8.Add image dir parameter in `config/pacakges/_sylius.yaml`
@@ -435,6 +438,7 @@ winzou_state_machine:
         }
     }
 ```
+
 #
 16. Frontend<br/>
 
@@ -515,6 +519,3 @@ For example in :`templates/bundles/SyliusAdminBundle/_scripts.html.twig `using:
 
 {{ encore_entry_link_tags('mollie-admin-entry', null, 'mollie-admin') }} // these are admin mollie assets (css)
 ```
-
-
-
