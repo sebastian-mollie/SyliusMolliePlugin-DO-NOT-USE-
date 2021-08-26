@@ -1,8 +1,8 @@
 import Shepherd from 'shepherd.js';
 import _get from 'lodash.get';
+import wizardTranslations from './config/wizardTranslations';
 import {steps, stepQuitConfirmation} from './config/steps';
 import shepherdConfig from './config/shepherdConfig';
-import wizardTranslations from './config/wizardTranslations';
 import {clearStorage, stepFactory, Translator} from './helpers';
 
 export default class onboardingWizard {
