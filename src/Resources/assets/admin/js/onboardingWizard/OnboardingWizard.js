@@ -41,6 +41,7 @@ export default class onboardingWizard {
 
         this.tour.addStep({
             ...this.stepQuitConfirmation,
+            title: this.translations.trans(this.stepQuitConfirmation.title),
             buttons: this.stepQuitConfirmation.stepButtons(this, returnStepIndex, this.translations),
         });
 
@@ -99,7 +100,6 @@ export default class onboardingWizard {
             this.tour.on('complete', () => {
                 this.navbarVisibilityHandler(false);
             });
-
             this.tour.start();
 
             this.restartTourListener();
