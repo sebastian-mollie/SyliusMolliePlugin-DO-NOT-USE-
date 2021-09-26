@@ -127,7 +127,6 @@ bitbag_sylius_mollie_plugin:
         contact_bitbag: 'Contact Bitbag'
         contact_mollie: 'Contact Mollie'
         more_info_about_mollie: 'More info on Mollie'
-        payment_name_translations: 'Payment name translations'
     form:
         channel_should_be_unique: 'Mollie payment method is already enabled for {channels} channel. Mollie can only be configured once per channel.'
         enabled_buy_now_button_help: 'The button is shown on the checkout page'
