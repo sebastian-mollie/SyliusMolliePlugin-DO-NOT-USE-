@@ -215,9 +215,6 @@ class MollieGatewayConfig extends AbstractMethod implements ResourceInterface, M
         return new MollieGatewayConfigTranslation();
     }
 
-    /**
-     * @return MollieGatewayConfigTranslationInterface
-     */
     public function getTranslation(?string $locale = null): MollieGatewayConfigTranslationInterface
     {
         /** @var MollieGatewayConfigTranslationInterface $translation */
