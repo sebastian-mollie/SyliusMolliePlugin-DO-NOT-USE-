@@ -72,7 +72,6 @@ final class MollieGatewayConfigType extends AbstractResourceType
             ->add('translations', ResourceTranslationsType::class, [
                 'label' => 'bitbag_sylius_mollie_plugin.ui.payment_name',
                 'entry_type' => MollieGatewayConfigTranslationType::class,
-                'required' => true,
             ])
             ->add('paymentType', ChoiceType::class, [
                 'label' => 'bitbag_sylius_mollie_plugin.ui.payment_type',
