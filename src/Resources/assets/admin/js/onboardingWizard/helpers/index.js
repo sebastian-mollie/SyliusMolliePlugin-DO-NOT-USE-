@@ -9,7 +9,7 @@ export {
     clearStorage,
     handleSubmit,
     checkForExistance,
-    expandDisabled,
+    expandDisabled
 } from './filterMethod';
 
 export {default as stepFactory} from './stepFactory';

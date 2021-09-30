@@ -7,7 +7,7 @@ import {
     saveStep,
     clearStorage,
     checkForExistance,
-    expandDisabled,
+    expandDisabled
 } from '../helpers';
 
 const paymentMethodPaymentApi = 'PAYMENT_API';
@@ -184,6 +184,7 @@ export const steps = [
         showOn: function () {
             expandDisabled('.js-onboardingWizard-paymentName', '[data-payment-method]', '.title');
             currentStepValidator('.js-onboardingWizard-paymentName', '.pushable');
+            
             return checkForExistance(this.attachTo.element);
         },
         id: 'step-payment-title',
