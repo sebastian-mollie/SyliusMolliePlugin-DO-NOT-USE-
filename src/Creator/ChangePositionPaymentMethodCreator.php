@@ -37,7 +37,7 @@ final class ChangePositionPaymentMethodCreator implements ChangePositionPaymentM
         $positions = $this->emptyPositionFilter($request->get('data', []));
 
         foreach ($positions as $position) {
-            $method = $this->mollieGatewayRepository->findOneBy(['methodId' => $position['name']]);
+            $method = $this->mollieGatewayRepository->findOneBy(['methodId' => $position['name'], 'id' => $position['identifier']]);
             if ($method instanceof MollieGatewayConfigInterface && isset($position['id'])) {
                 $method->setPosition((int) $position['id']);
 
