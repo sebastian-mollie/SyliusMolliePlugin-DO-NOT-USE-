@@ -12,10 +12,10 @@ final class PaymentLocaleResolver implements PaymentLocaleResolverInterface
     {
         $orderLocale = $order->getLocaleCode();
 
-        if (false === in_array($orderLocale, MollieGatewayFactoryInterface::LOCALES_AVAILABLE, true)) {
+        if (false === array_key_exists($orderLocale, MollieGatewayFactoryInterface::LOCALES_AVAILABLE_MAP)) {
             return null;
         }
 
-        return $orderLocale;
+        return MollieGatewayFactoryInterface::LOCALES_AVAILABLE_MAP[$orderLocale];
     }
 }
