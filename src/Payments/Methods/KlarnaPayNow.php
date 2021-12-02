@@ -13,7 +13,7 @@ namespace BitBag\SyliusMolliePlugin\Payments\Methods;
 
 use Mollie\Api\Types\PaymentMethod;
 
-final class Klarnapaynow extends AbstractMethod
+final class KlarnaPayNow extends AbstractMethod
 {
     public function getMethodId(): string
     {

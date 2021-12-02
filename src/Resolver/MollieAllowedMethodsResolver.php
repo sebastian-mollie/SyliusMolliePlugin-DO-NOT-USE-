@@ -9,9 +9,6 @@
 
 declare(strict_types=1);
 
-
-
-
 namespace BitBag\SyliusMolliePlugin\Resolver;
 
 use BitBag\SyliusMolliePlugin\Creator\MollieMethodsCreatorInterface;
