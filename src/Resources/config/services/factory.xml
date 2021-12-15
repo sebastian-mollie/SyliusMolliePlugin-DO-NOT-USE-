@@ -26,10 +26,5 @@
                  decorates="bitbag_sylius_mollie_plugin.factory.onboarding_wizard_status">
             <argument type="service" id="bitbag.sylius_mollie_plugin.factory.onboarding_wizard.status_factory.inner"/>
         </service>
-        <service id="bitbag.sylius_mollie_plugin.factory.mollie_subscription_factory"
-                 class="MollieSubscriptionFactory"
-                 decorates="bitbag_sylius_mollie_plugin.factory.mollie_subscription">
-            <argument type="service" id="bitbag.sylius_mollie_plugin.factory.mollie_subscription_factory.inner"/>
-        </service>
     </services>
 </container>

@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace BitBag\SyliusMolliePlugin\Transitions;
 
-final class SubscriptionTransitions
+final class MollieSubscriptionTransitions
 {
     public const GRAPH = 'mollie_subscription';
 
