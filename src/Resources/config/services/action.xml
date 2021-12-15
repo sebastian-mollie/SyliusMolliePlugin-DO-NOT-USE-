@@ -32,7 +32,7 @@
         </service>
         <service id="bitbag_sylius_mollie_plugin.action.notify" class="BitBag\SyliusMolliePlugin\Action\NotifyAction">
             <argument type="service" id="bitbag_sylius_mollie_plugin.get_http_request"/>
-            <argument type="service" id="bitbag_sylius_mollie_plugin.repository.subscription"/>
+            <argument type="service" id="bitbag_sylius_mollie_plugin.repository.mollie_subscription"/>
             <argument type="service" id="bitbag_sylius_mollie_plugin.payum_action.order_set_status"/>
             <argument type="service" id="bitbag_sylius_mollie_plugin.logger.mollie_logger_action"/>
             <tag name="payum.action" factory="mollie" alias="payum.action.notify"/>
@@ -68,15 +68,15 @@
             <tag name="payum.action" factory="mollie_subscription" alias="payum.action.api.create_sepa_mandate"/>
         </service>
         <service id="bitbag_sylius_mollie_plugin.payum_action.api.create_recurring_subscription" class="BitBag\SyliusMolliePlugin\Action\Api\CreateRecurringSubscriptionAction">
-            <argument type="service" id="bitbag_sylius_mollie_plugin.factory.subscription"/>
-            <argument type="service" id="bitbag_sylius_mollie_plugin.manager.subscription"/>
+            <argument type="service" id="bitbag_sylius_mollie_plugin.factory.mollie_subscription"/>
+            <argument type="service" id="bitbag_sylius_mollie_plugin.manager.mollie_subscription"/>
             <argument type="service" id="sm.factory"/>
             <argument type="service" id="sylius.repository.order"/>
             <argument type="service" id="bitbag_sylius_mollie_plugin.logger.mollie_logger_action"/>
             <tag name="payum.action" factory="mollie_subscription" alias="payum.action.api.create_recurring_subscription"/>
         </service>
         <service id="bitbag_sylius_mollie_plugin.payum_action.state_machine.status_recurring_subscription" class="BitBag\SyliusMolliePlugin\Action\StateMachine\StatusRecurringSubscriptionAction">
-            <argument type="service" id="bitbag_sylius_mollie_plugin.manager.subscription"/>
+            <argument type="service" id="bitbag_sylius_mollie_plugin.manager.mollie_subscription"/>
             <argument type="service" id="sm.factory"/>
             <tag name="payum.action" factory="mollie_subscription" alias="payum.action.state_machine.status_recurring_subscription"/>
         </service>
