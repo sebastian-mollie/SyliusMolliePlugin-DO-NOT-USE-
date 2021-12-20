@@ -13,13 +13,12 @@ declare(strict_types=1);
 namespace Tests\BitBag\SyliusMolliePlugin\Entity;
 
 use BitBag\SyliusMolliePlugin\Entity\OrderInterface;
-use BitBag\SyliusMolliePlugin\Entity\OrderTrait;
+use BitBag\SyliusMolliePlugin\Entity\AbandonedEmailOrderTrait;
+use BitBag\SyliusMolliePlugin\Entity\RecurringOrderTrait;
 use Sylius\Component\Core\Model\Order as BaseOrder;
 
 class Order extends BaseOrder implements OrderInterface
 {
-    use OrderTrait;
-
-    /** @var bool */
-    protected $abandonedEmail = false;
+    use AbandonedEmailOrderTrait;
+    use RecurringOrderTrait;
 }
