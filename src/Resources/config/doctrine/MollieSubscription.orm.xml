@@ -17,7 +17,7 @@
         <field name="subscriptionId" nullable="true" type="string"/>
         <field name="customerId" nullable="true" type="string"/>
 
-        <one-to-many field="orders" target-entity="Sylius\Component\Core\Model\Order" mapped-by="subscription"/>
+        <one-to-many field="orders" target-entity="Sylius\Component\Order\Model\OrderInterface" mapped-by="subscription"/>
         <many-to-one field="user" target-entity="Sylius\Component\User\Model\UserInterface">
             <join-column referenced-column-name="id"/>
         </many-to-one>

@@ -23,10 +23,10 @@ final class MollieRecurringMenuListener
         ;
 
         $menuItem
-            ->addChild('mollie_recurring_orders', [
-                'route' => 'bitbag_sylius_mollie_plugin_admin_product_type_index',
+            ->addChild('mollie_subscriptions', [
+                'route' => 'bitbag_sylius_mollie_plugin_admin_mollie_subscription_index',
             ])
-            ->setLabel('bitbag_sylius_mollie_plugin.ui.mollie_recurring_orders')
+            ->setLabel('bitbag_sylius_mollie_plugin.ui.mollie_subscriptions')
             ->setLabelAttribute('icon', 'cart')
         ;
     }

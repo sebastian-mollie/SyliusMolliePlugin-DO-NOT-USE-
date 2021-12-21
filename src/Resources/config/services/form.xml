@@ -63,6 +63,9 @@
         <service id="bitbag_sylius_mollie_plugin.grid.filter.mollie_logger_level" class="BitBag\SyliusMolliePlugin\Grid\Filter\MollieLoggerLevel">
             <tag name="sylius.grid_filter" type="log_level" form_type="BitBag\SyliusMolliePlugin\Form\Type\MollieLoggerLevelFilterType" />
         </service>
+        <service id="bitbag_sylius_mollie_plugin.grid.filter.mollie_subscription_state" class="BitBag\SyliusMolliePlugin\Grid\Filter\MollieSubscriptionState">
+            <tag name="sylius.grid_filter" type="subscription_state" form_type="BitBag\SyliusMolliePlugin\Form\Type\MollieSubscriptionStateGridFilterType" />
+        </service>
         <service id="bitbag_sylius_mollie_plugin.form.type.partial_ship.partial_ship_type" class="BitBag\SyliusMolliePlugin\Form\Type\PartialShip\PartialShipType">
             <argument>%sylius.model.shipment.class%</argument>
             <argument>%bitbag_sylius_mollie_plugin.form.type.partial_shipment.validation_groups%</argument>

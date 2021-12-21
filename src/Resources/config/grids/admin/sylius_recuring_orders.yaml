@@ -1,0 +1,10 @@
+sylius_grid:
+    grids:
+        sylius_admin_order:
+            fields:
+                recurring:
+                    type: twig
+                    label: bitbag_sylius_mollie_plugin.ui.order_recurring
+                    sortable: ~
+                    options:
+                        template: "@BitBagSyliusMolliePlugin/Admin/Order/Grid/Field/recurring.html.twig"
