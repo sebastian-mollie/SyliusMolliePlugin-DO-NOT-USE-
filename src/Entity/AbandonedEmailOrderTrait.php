@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace BitBag\SyliusMolliePlugin\Entity;
 
-trait OrderTrait
+trait AbandonedEmailOrderTrait
 {
     /** @var bool */
     protected $abandonedEmail = false;

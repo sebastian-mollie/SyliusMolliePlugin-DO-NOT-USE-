@@ -30,9 +30,6 @@ interface MollieSubscriptionInterface extends ResourceInterface
     public function getState(): string;
     public function setState(string $state): void;
 
-    public function getIntervalDays(): int;
-    public function setIntervalDays(int $interval): void;
-
     /** @return Collection<int, PaymentInterface> */
     public function getPayments(): Collection;
     public function addPayment(PaymentInterface $payment): void;
@@ -50,6 +47,9 @@ interface MollieSubscriptionInterface extends ResourceInterface
 
     public function getInterval(): int;
     public function setInterval(int $interval): void;
+
+    public function getNumberOfRepetitions(): int;
+    public function setNumberOfRepetitions(int $numberOfRepetitions): void;
 
     public function getCreatedAt(): \DateTime;
 

@@ -19,38 +19,37 @@ use Sylius\Component\Core\Model\OrderInterface as SyliusOrder;
 
 class MollieSubscription implements MollieSubscriptionInterface
 {
-    /** @var int|null */
-    protected $id;
+    protected ?int $id = null;
 
-    /** @var string */
-    protected $state = MollieSubscriptionInterface::STATE_NEW;
+    protected string $state = MollieSubscriptionInterface::STATE_NEW;
 
-    /** @var int */
-    protected $interval = MollieSubscriptionInterface::INTERVAL_DEFAULT;
+    protected int $interval = MollieSubscriptionInterface::INTERVAL_DEFAULT;
+
+    protected int $numberOfRepetitions = 1;
 
     /** @var Collection<int, PaymentInterface> */
-    protected $payments;
+    protected Collection $payments;
 
     /** @var Collection<int, SyliusOrder> */
-    protected $orders;
+    protected Collection $orders;
 
     /** @var Collection<int, MollieSubscriptionProductInterface> */
-    protected $products;
+    protected Collection $products;
 
     /** @var UserInterface */
-    protected $user;
+    protected ?UserInterface $user = null;
 
     /** @var \DateTime */
-    protected $createdAt;
+    protected \DateTime $createdAt;
 
     /** @var \DateTime|null */
-    protected $startedAt;
+    protected ?\DateTime $startedAt = null;
 
     /** @var string|null */
-    protected $subscriptionId;
+    protected ?string $subscriptionId = null;
 
     /** @var string|null */
-    protected $customerId;
+    protected ?string $customerId = null;
 
     public function __construct()
     {
@@ -73,16 +72,6 @@ class MollieSubscription implements MollieSubscriptionInterface
     public function setState(string $state): void
     {
         $this->state = $state;
-    }
-
-    public function getIntervalDays(): int
-    {
-        return $this->interval;
-    }
-
-    public function setIntervalDays(int $interval): void
-    {
-        $this->interval = $interval;
     }
 
     public function getPayments(): Collection
@@ -180,5 +169,15 @@ class MollieSubscription implements MollieSubscriptionInterface
     public function getLastOrder(): ?SyliusOrder
     {
         return $this->orders->last();
+    }
+
+    public function getNumberOfRepetitions(): int
+    {
+        return $this->numberOfRepetitions;
+    }
+
+    public function setNumberOfRepetitions(int $numberOfRepetitions): void
+    {
+        $this->numberOfRepetitions = $numberOfRepetitions;
     }
 }

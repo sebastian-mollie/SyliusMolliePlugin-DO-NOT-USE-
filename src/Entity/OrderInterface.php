@@ -18,4 +18,16 @@ interface OrderInterface extends BaseOrderInterface
     public function isAbandonedEmail(): bool;
 
     public function setAbandonedEmail(bool $abandonedEmail): void;
+
+    public function isRecurring(): bool;
+
+    public function setRecurring(bool $recurring): void;
+
+    public function getRecurringSequenceIndex(): ?int;
+
+    public function setRecurringSequenceIndex(int $recurringSequenceIndex): void;
+
+    public function getSubscription(): ?MollieSubscriptionInterface;
+
+    public function setSubscription(MollieSubscriptionInterface $subscription): void;
 }
