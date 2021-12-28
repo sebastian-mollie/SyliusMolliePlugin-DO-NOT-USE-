@@ -116,8 +116,8 @@ FROM registry.bitbag.shop/bitbag-php-fpm:${PHP_VERSION} AS result_php
 
 RUN apk add --no-cache fcgi;
 
-COPY docker/php/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
-COPY docker/php/docker-healthcheck.sh /usr/local/bin/docker-healthcheck
+COPY .docker/php/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
+COPY .docker/php/docker-healthcheck.sh /usr/local/bin/docker-healthcheck
 
 RUN chmod +x /usr/local/bin/docker-entrypoint
 RUN chmod +x /usr/local/bin/docker-healthcheck
