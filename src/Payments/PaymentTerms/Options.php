@@ -21,6 +21,8 @@ final class Options
 
     public const PAYMENT_API = 'Payments API';
 
+    public const SUBSCRIPTIONS_API = 'Subscriptions API';
+
     public const PERCENTAGE = 'percentage';
 
     public const FIXED_FEE = 'fixed_fee';
@@ -72,6 +74,7 @@ final class Options
     public static function getOnlyOrderAPIMethods(): array
     {
         return [
+            PaymentMethod::KLARNA_PAY_NOW,
             PaymentMethod::KLARNA_PAY_LATER,
             PaymentMethod::KLARNA_SLICE_IT,
             MealVoucher::MEAL_VOUCHERS,
