@@ -12,20 +12,22 @@ declare(strict_types=1);
 namespace BitBag\SyliusMolliePlugin\Entity;
 
 use Doctrine\Common\Collections\Collection;
-use Sylius\Component\Core\Model\PaymentInterface;
-use Sylius\Component\Resource\Model\ResourceInterface;
-use Sylius\Component\User\Model\UserInterface;
 use Sylius\Component\Core\Model\OrderInterface as SyliusOrder;
+use Sylius\Component\Core\Model\OrderItemInterface;
+use Sylius\Component\Core\Model\PaymentInterface;
+use Sylius\Component\Customer\Model\CustomerInterface;
+use Sylius\Component\Resource\Model\ResourceInterface;
 
 interface MollieSubscriptionInterface extends ResourceInterface
 {
     public const STATE_NEW = 'new';
     public const STATE_ACTIVE = 'active';
     public const STATE_PROCESSING = 'processing';
+    public const STATE_PAUSED = 'paused';
     public const STATE_CANCELED = 'canceled';
     public const STATE_COMPLETED = 'completed';
 
-    public const INTERVAL_DEFAULT = 30;
+    public const INTERVAL_DEFAULT = '1 months';
 
     public function getState(): string;
     public function setState(string $state): void;
@@ -38,18 +40,17 @@ interface MollieSubscriptionInterface extends ResourceInterface
     public function getOrders(): Collection;
     public function addOrder(SyliusOrder $order): void;
 
-    public function getUser(): UserInterface;
-    public function setUser(UserInterface $user): void;
+    public function getCustomer(): CustomerInterface;
+    public function setCustomer(CustomerInterface $user): void;
 
-    /** @return Collection<int, MollieSubscriptionProductInterface> */
-    public function getProducts(): Collection;
-    public function addProduct(MollieSubscriptionProductInterface $product): void;
-
-    public function getInterval(): int;
-    public function setInterval(int $interval): void;
+    public function getInterval(): string;
+    public function setInterval(string $interval): void;
 
     public function getNumberOfRepetitions(): int;
     public function setNumberOfRepetitions(int $numberOfRepetitions): void;
+
+    public function getOrderItem(): OrderItemInterface;
+    public function setOrderItem(OrderItemInterface $orderItem): void;
 
     public function getCreatedAt(): \DateTime;
 
@@ -59,8 +60,16 @@ interface MollieSubscriptionInterface extends ResourceInterface
     public function getSubscriptionId(): ?string;
     public function setSubscriptionId(?string $subscriptionId = null): void;
 
+    public function getMandateId(): ?string;
+    public function setMandateId(?string $mandateId = null): void;
+
     public function getCustomerId(): ?string;
     public function setCustomerId(?string $customerId = null): void;
 
     public function getLastOrder(): ?SyliusOrder;
+
+        /** @return Collection<int, MollieSubscriptionScheduleInterface> */
+    public function getSchedules(): Collection;
+    public function addSchedule(MollieSubscriptionScheduleInterface $schedule): void;
+    public function removeSchedule(MollieSubscriptionScheduleInterface $schedule): void;
 }

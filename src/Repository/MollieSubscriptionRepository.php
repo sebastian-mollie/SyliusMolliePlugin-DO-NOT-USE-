@@ -13,6 +13,7 @@ namespace BitBag\SyliusMolliePlugin\Repository;
 
 use BitBag\SyliusMolliePlugin\Entity\MollieSubscriptionInterface;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
+use Sylius\Component\Core\Model\PaymentInterface;
 
 final class MollieSubscriptionRepository extends EntityRepository implements MollieSubscriptionRepositoryInterface
 {
@@ -26,5 +27,14 @@ final class MollieSubscriptionRepository extends EntityRepository implements Mol
 
         return $qb->getQuery()->getOneOrNullResult()
         ;
+    }
+
+    public function findByPayment(PaymentInterface $payment): array
+    {
+        $qb = $this->createQueryBuilder('q');
+        $qb->andWhere(':payment MEMBER OF q.payments');
+        $qb->setParameter('payment', $payment);
+
+        return $qb->getQuery()->getResult();
     }
 }

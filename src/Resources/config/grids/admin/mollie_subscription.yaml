@@ -5,6 +5,15 @@ sylius_grid:
                 name: doctrine/orm
                 options:
                     class: "%bitbag_sylius_mollie_plugin.model.mollie_subscription.class%"
+            actions:
+                item:
+                    show:
+                        type: show
+                        options:
+                            link:
+                                route: bitbag_sylius_mollie_plugin_mollie_subscription_show
+                                parameters:
+                                    id: resource.id
             fields:
                 id:
                     type: string
@@ -22,10 +31,7 @@ sylius_grid:
                     path: .
                     options:
                         template: "@BitBagSyliusMolliePlugin/Admin/MollieSubscription/Grid/Field/orders.html.twig"
-                interval:
-                    type: string
-                    label: bitbag_sylius_mollie_plugin.ui.subscription.fields.interval
-                    sortable: ~
+
                 createdAt:
                     type: datetime
                     label: sylius.ui.created_at

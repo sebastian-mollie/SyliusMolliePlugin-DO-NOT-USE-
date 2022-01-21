@@ -15,14 +15,6 @@ final class MollieRecurringMenuListener
                 ->getChild('mollie');
 
         $menuItem
-            ->addChild('mollie_recurring_payments', [
-                'route' => 'bitbag_sylius_mollie_plugin_admin_product_type_index',
-            ])
-            ->setLabel('bitbag_sylius_mollie_plugin.ui.mollie_recurring_payments')
-            ->setLabelAttribute('icon', 'payment')
-        ;
-
-        $menuItem
             ->addChild('mollie_subscriptions', [
                 'route' => 'bitbag_sylius_mollie_plugin_admin_mollie_subscription_index',
             ])

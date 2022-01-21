@@ -5,19 +5,8 @@ namespace BitBag\SyliusMolliePlugin\Entity;
 
 trait RecurringOrderTrait
 {
-    protected bool $recurring = false;
     protected ?int $recurringSequenceIndex = null;
     protected ?MollieSubscriptionInterface $subscription = null;
-
-    public function isRecurring(): bool
-    {
-        return $this->recurring;
-    }
-
-    public function setRecurring(bool $recurring): void
-    {
-        $this->recurring = $recurring;
-    }
 
     public function getRecurringSequenceIndex(): ?int
     {

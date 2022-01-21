@@ -13,19 +13,25 @@ namespace BitBag\SyliusMolliePlugin\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Sylius\Component\Core\Model\PaymentInterface;
-use Sylius\Component\User\Model\UserInterface;
 use Sylius\Component\Core\Model\OrderInterface as SyliusOrder;
+use Sylius\Component\Core\Model\OrderItemInterface;
+use Sylius\Component\Core\Model\PaymentInterface;
+use Sylius\Component\Customer\Model\CustomerInterface;
 
 class MollieSubscription implements MollieSubscriptionInterface
 {
     protected ?int $id = null;
-
     protected string $state = MollieSubscriptionInterface::STATE_NEW;
-
-    protected int $interval = MollieSubscriptionInterface::INTERVAL_DEFAULT;
-
+    protected string $interval = MollieSubscriptionInterface::INTERVAL_DEFAULT;
     protected int $numberOfRepetitions = 1;
+    protected ?CustomerInterface $customer = null;
+    protected \DateTime $createdAt;
+    protected ?\DateTime $startedAt = null;
+    protected ?string $subscriptionId = null;
+    protected ?string $mandateId = null;
+    protected ?string $customerId = null;
+    protected OrderItemInterface $orderItem;
+    protected Collection $schedules;
 
     /** @var Collection<int, PaymentInterface> */
     protected Collection $payments;
@@ -33,29 +39,11 @@ class MollieSubscription implements MollieSubscriptionInterface
     /** @var Collection<int, SyliusOrder> */
     protected Collection $orders;
 
-    /** @var Collection<int, MollieSubscriptionProductInterface> */
-    protected Collection $products;
-
-    /** @var UserInterface */
-    protected ?UserInterface $user = null;
-
-    /** @var \DateTime */
-    protected \DateTime $createdAt;
-
-    /** @var \DateTime|null */
-    protected ?\DateTime $startedAt = null;
-
-    /** @var string|null */
-    protected ?string $subscriptionId = null;
-
-    /** @var string|null */
-    protected ?string $customerId = null;
-
     public function __construct()
     {
         $this->payments = new ArrayCollection();
         $this->orders = new ArrayCollection();
-        $this->products = new ArrayCollection();
+        $this->schedules = new ArrayCollection();
         $this->createdAt = new \DateTime();
     }
 
@@ -98,35 +86,22 @@ class MollieSubscription implements MollieSubscriptionInterface
         }
     }
 
-    public function getUser(): UserInterface
+    public function getCustomer(): CustomerInterface
     {
-        return $this->user;
+        return $this->customer;
     }
 
-    public function setUser(UserInterface $user): void
+    public function setCustomer(CustomerInterface $customer): void
     {
-        $this->user = $user;
+        $this->customer = $customer;
     }
 
-    public function getProducts(): Collection
-    {
-        return $this->products;
-    }
-
-    public function addProduct(MollieSubscriptionProductInterface $product): void
-    {
-        if (false === $this->products->contains($product)) {
-            $this->products->add($product);
-            $product->setSubscription($this);
-        }
-    }
-
-    public function getInterval(): int
+    public function getInterval(): string
     {
         return $this->interval;
     }
 
-    public function setInterval(int $interval): void
+    public function setInterval(string $interval): void
     {
         $this->interval = $interval;
     }
@@ -179,5 +154,45 @@ class MollieSubscription implements MollieSubscriptionInterface
     public function setNumberOfRepetitions(int $numberOfRepetitions): void
     {
         $this->numberOfRepetitions = $numberOfRepetitions;
+    }
+
+    public function getOrderItem(): OrderItemInterface
+    {
+        return $this->orderItem;
+    }
+
+    public function setOrderItem(OrderItemInterface $orderItem): void
+    {
+        $this->orderItem = $orderItem;
+    }
+
+    public function getMandateId(): ?string
+    {
+        return $this->mandateId;
+    }
+
+    public function setMandateId(?string $mandateId = null): void
+    {
+        $this->mandateId = $mandateId;
+    }
+
+    public function addSchedule(MollieSubscriptionScheduleInterface $schedule): void
+    {
+        if (false === $this->schedules->contains($schedule)) {
+            $this->schedules->add($schedule);
+            $schedule->setMollieSubscription($this);
+        }
+    }
+
+    public function removeSchedule(MollieSubscriptionScheduleInterface $schedule): void
+    {
+        if (true === $this->schedules->contains($schedule)) {
+            $this->schedules->removeElement($schedule);
+        }
+    }
+
+    public function getSchedules(): Collection
+    {
+        return $this->schedules;
     }
 }

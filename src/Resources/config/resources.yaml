@@ -11,5 +11,5 @@ imports:
     - { resource: "@BitBagSyliusMolliePlugin/Resources/config/resources/payment_method.yaml" }
     - { resource: "@BitBagSyliusMolliePlugin/Resources/config/resources/onboarding_wizard_status.yaml" }
     - { resource: "@BitBagSyliusMolliePlugin/Resources/config/resources/mollie_subscription.yaml" }
-    - { resource: "@BitBagSyliusMolliePlugin/Resources/config/resources/mollie_subscription_product.yaml" }
+    - { resource: "@BitBagSyliusMolliePlugin/Resources/config/resources/mollie_subscription_schedule.yaml" }
     - { resource: "@SyliusRefundPlugin/Resources/config/app/config.yml" }

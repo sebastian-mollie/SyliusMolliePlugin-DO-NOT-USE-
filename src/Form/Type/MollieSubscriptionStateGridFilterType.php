@@ -22,6 +22,7 @@ final class MollieSubscriptionStateGridFilterType extends AbstractType
                     MollieSubscriptionInterface::STATE_NEW,
                     MollieSubscriptionInterface::STATE_ACTIVE,
                     MollieSubscriptionInterface::STATE_PROCESSING,
+                    MollieSubscriptionInterface::STATE_PAUSED,
                     MollieSubscriptionInterface::STATE_CANCELED,
                     MollieSubscriptionInterface::STATE_COMPLETED,
                 ],

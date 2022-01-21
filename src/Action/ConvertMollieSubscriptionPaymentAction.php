@@ -13,6 +13,8 @@ namespace BitBag\SyliusMolliePlugin\Action;
 
 use BitBag\SyliusMolliePlugin\Action\Api\BaseApiAwareAction;
 use BitBag\SyliusMolliePlugin\Entity\MollieGatewayConfigInterface;
+use BitBag\SyliusMolliePlugin\Entity\OrderInterface;
+use BitBag\SyliusMolliePlugin\Entity\ProductVariantInterface;
 use BitBag\SyliusMolliePlugin\Helper\ConvertOrderInterface;
 use BitBag\SyliusMolliePlugin\Helper\PaymentDescriptionInterface;
 use BitBag\SyliusMolliePlugin\Payments\PaymentTerms\Options;
@@ -28,12 +30,11 @@ use Payum\Core\Request\Convert;
 use Payum\Core\Request\GetCurrency;
 use Sylius\Bundle\CoreBundle\Context\CustomerContext;
 use Sylius\Component\Core\Model\CustomerInterface;
-use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Model\PaymentInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-final class ConvertPaymentAction extends BaseApiAwareAction implements ActionInterface, GatewayAwareInterface, ApiAwareInterface
+final class ConvertMollieSubscriptionPaymentAction extends BaseApiAwareAction implements ActionInterface, GatewayAwareInterface, ApiAwareInterface
 {
     use GatewayAwareTrait;
 
@@ -62,7 +63,8 @@ final class ConvertPaymentAction extends BaseApiAwareAction implements ActionInt
         ConvertOrderInterface $orderConverter,
         CustomerContext $customerContext,
         PaymentLocaleResolverInterface $paymentLocaleResolver
-    ) {
+    )
+    {
         $this->paymentDescription = $paymentDescription;
         $this->session = $session;
         $this->mollieMethodsRepository = $mollieMethodsRepository;
@@ -81,6 +83,7 @@ final class ConvertPaymentAction extends BaseApiAwareAction implements ActionInt
 
         /** @var OrderInterface $order */
         $order = $payment->getOrder();
+        $order->setRecurringSequenceIndex(0);
 
         /** @var CustomerInterface $customer */
         $customer = $order->getCustomer();
@@ -90,68 +93,61 @@ final class ConvertPaymentAction extends BaseApiAwareAction implements ActionInt
         $divisor = 10 ** $currency->exp;
 
         $amount = number_format(abs($payment->getAmount() / $divisor), 2, '.', '');
-
         $paymentOptions = $payment->getDetails();
 
-        if (isset($paymentOptions['metadata'])) {
-            $paymentMethod = $paymentOptions['metadata']['molliePaymentMethods'];
-            $cartToken = $paymentOptions['metadata']['cartToken'];
-            $selectedIssuer = $paymentMethod === PaymentMethod::IDEAL ? $paymentOptions['metadata']['selected_issuer'] : null;
-        } else {
-            $paymentMethod = $paymentOptions['molliePaymentMethods'];
-            $cartToken = $paymentOptions['cartToken'];
-            $selectedIssuer = $paymentMethod === PaymentMethod::IDEAL ? $paymentOptions['issuers']['id'] : null;
-        }
+        $paymentMethod = $paymentOptions['molliePaymentMethods'];
+        $cartToken = $paymentOptions['cartToken'];
+        $selectedIssuer = $paymentMethod === PaymentMethod::IDEAL ? $paymentOptions['issuers']['id'] : null;
 
         /** @var MollieGatewayConfigInterface $method */
-        $method = $this->mollieMethodsRepository->findOneBy(['methodId' => $paymentMethod]);
+        $method = $this->mollieMethodsRepository->findOneBy(
+            ['methodId' => $paymentMethod, 'gateway' => $payment->getMethod()]
+        );
         $gatewayConfig = $method->getGateway()->getConfig();
 
         $details = [
+            'method' => $method->getMethodId(),
             'amount' => [
                 'value' => "$amount",
                 'currency' => $currency->code,
             ],
             'description' => $this->paymentDescription->getPaymentDescription($payment, $method, $order),
+            'sequenceType' => 'first',
             'metadata' => [
                 'order_id' => $order->getId(),
                 'customer_id' => $customer->getId() ?? null,
                 'molliePaymentMethods' => $paymentMethod ?? null,
                 'cartToken' => $cartToken ?? null,
                 'selected_issuer' => $selectedIssuer ?? null,
+                'methodType' => Options::SUBSCRIPTIONS_API,
+                'items' => [],
             ],
             'full_name' => $customer->getFullName() ?? null,
             'email' => $customer->getEmail() ?? null,
         ];
 
-        if (null !== $this->customerContext->getCustomer() && true === $gatewayConfig['single_click_enabled']) {
-            $this->gateway->execute($mollieCustomer = new CreateCustomer($details));
-            $model = $mollieCustomer->getModel();
-            $details['metadata']['customer_mollie_id'] = $model['customer_mollie_id'];
+        $this->gateway->execute($mollieCustomer = new CreateCustomer($details));
+        $model = $mollieCustomer->getModel();
+        $details['customerId'] = $model['customer_mollie_id'];
+
+        foreach ($order->getItems() as $item) {
+            /** @var ProductVariantInterface $variant */
+            $variant = $item->getVariant();
+            $details['metadata']['items'][] = [
+                'itemId' => $item->getId(),
+                'variant' => $variant->getId(),
+                'interval' => $variant->getInterval(),
+                'times' => $variant->getTimes(),
+                'total' => $item->getTotal(),
+                'currency' => $order->getCurrencyCode(),
+
+            ];
         }
 
-        if (true === $this->mollieApiClient->isRecurringSubscription()) {
-            $config = $this->mollieApiClient->getConfig();
+        $config = $this->mollieApiClient->getConfig();
 
-            $details['times'] = $config['times'];
-            $details['interval'] = $config['interval'];
-        }
-
-        if (false === $this->mollieApiClient->isRecurringSubscription()) {
-            $details['customerId'] = $model['customer_mollie_id'] ?? null;
-            $details['metadata']['methodType'] = Options::PAYMENT_API;
-
-            if (null !== ($paymentLocale = $this->paymentLocaleResolver->resolveFromOrder($order))) {
-                $details['locale'] = $paymentLocale;
-            }
-
-            if (array_search($method->getPaymentType(), Options::getAvailablePaymentType()) === Options::ORDER_API) {
-                unset($details['customerId']);
-
-                $details['metadata']['methodType'] = Options::ORDER_API;
-                $details = $this->orderConverter->convert($order, $details, $divisor, $method);
-            }
-        }
+        $details['times'] = $config['times'];
+        $details['interval'] = $config['interval'];
 
         $request->setResult($details);
     }
@@ -159,9 +155,9 @@ final class ConvertPaymentAction extends BaseApiAwareAction implements ActionInt
     public function supports($request): bool
     {
         return
-            $request instanceof Convert &&
-            $request->getSource() instanceof PaymentInterface &&
-            $request->getTo() === 'array'
-            ;
+            $request instanceof Convert
+            && $request->getSource() instanceof PaymentInterface
+            && $request->getSource()->getOrder() instanceof OrderInterface
+            && $request->getTo() === 'array';
     }
 }
