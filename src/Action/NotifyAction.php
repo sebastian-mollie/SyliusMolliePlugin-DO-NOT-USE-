@@ -12,10 +12,10 @@ declare(strict_types=1);
 namespace BitBag\SyliusMolliePlugin\Action;
 
 use BitBag\SyliusMolliePlugin\Action\Api\BaseApiAwareAction;
-use BitBag\SyliusMolliePlugin\Action\StateMachine\SetStatusOrderAction;
-use BitBag\SyliusMolliePlugin\Entity\MollieSubscriptionInterface;
+use BitBag\SyliusMolliePlugin\Action\StateMachine\SetStatusOrderActionInterface;
+use BitBag\SyliusMolliePlugin\Entity\SubscriptionInterface;
 use BitBag\SyliusMolliePlugin\Logger\MollieLoggerActionInterface;
-use BitBag\SyliusMolliePlugin\Repository\MollieSubscriptionRepositoryInterface;
+use BitBag\SyliusMolliePlugin\Repository\SubscriptionRepositoryInterface;
 use BitBag\SyliusMolliePlugin\Request\StateMachine\StatusRecurringSubscription;
 use Mollie\Api\Exceptions\ApiException;
 use Payum\Core\Action\ActionInterface;
@@ -36,10 +36,10 @@ final class NotifyAction extends BaseApiAwareAction implements ActionInterface, 
     /** @var GetHttpRequest */
     private $getHttpRequest;
 
-    /** @var MollieSubscriptionRepositoryInterface */
+    /** @var SubscriptionRepositoryInterface */
     private $subscriptionRepository;
 
-    /** @var SetStatusOrderAction */
+    /** @var SetStatusOrderActionInterface */
     private $setStatusOrderAction;
 
     /** @var MollieLoggerActionInterface */
@@ -47,8 +47,8 @@ final class NotifyAction extends BaseApiAwareAction implements ActionInterface, 
 
     public function __construct(
         GetHttpRequest $getHttpRequest,
-        MollieSubscriptionRepositoryInterface $subscriptionRepository,
-        SetStatusOrderAction $setStatusOrderAction,
+        SubscriptionRepositoryInterface $subscriptionRepository,
+        SetStatusOrderActionInterface $setStatusOrderAction,
         MollieLoggerActionInterface $loggerAction
     ) {
         $this->getHttpRequest = $getHttpRequest;
@@ -86,7 +86,7 @@ final class NotifyAction extends BaseApiAwareAction implements ActionInterface, 
         }
 
         if (true === isset($details['subscription_mollie_id'])) {
-            /** @var MollieSubscriptionInterface $subscription */
+            /** @var SubscriptionInterface $subscription */
             $subscription = $this->subscriptionRepository->findOneByOrderId($details['metadata']['order_id']);
 
             $this->gateway->execute(new StatusRecurringSubscription($subscription));
