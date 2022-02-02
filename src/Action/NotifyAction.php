@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace BitBag\SyliusMolliePlugin\Action;
 
 use BitBag\SyliusMolliePlugin\Action\Api\BaseApiAwareAction;
-use BitBag\SyliusMolliePlugin\Action\StateMachine\SetStatusOrderAction;
+use BitBag\SyliusMolliePlugin\Action\StateMachine\SetStatusOrderActionInterface;
 use BitBag\SyliusMolliePlugin\Entity\SubscriptionInterface;
 use BitBag\SyliusMolliePlugin\Logger\MollieLoggerActionInterface;
 use BitBag\SyliusMolliePlugin\Repository\SubscriptionRepositoryInterface;
@@ -39,7 +39,7 @@ final class NotifyAction extends BaseApiAwareAction implements ActionInterface, 
     /** @var SubscriptionRepositoryInterface */
     private $subscriptionRepository;
 
-    /** @var SetStatusOrderAction */
+    /** @var SetStatusOrderActionInterface */
     private $setStatusOrderAction;
 
     /** @var MollieLoggerActionInterface */
@@ -48,7 +48,7 @@ final class NotifyAction extends BaseApiAwareAction implements ActionInterface, 
     public function __construct(
         GetHttpRequest $getHttpRequest,
         SubscriptionRepositoryInterface $subscriptionRepository,
-        SetStatusOrderAction $setStatusOrderAction,
+        SetStatusOrderActionInterface $setStatusOrderAction,
         MollieLoggerActionInterface $loggerAction
     ) {
         $this->getHttpRequest = $getHttpRequest;

@@ -72,7 +72,8 @@ final class StatusRecurringSubscriptionActionSpec extends ObjectBehavior
         Subscription $subscriptionApi
     ): void {
         $this->setApi($mollieApiClient);
-        $stateMachine->can(SubscriptionTransitions::TRANSITION_ACTIVATE)->willReturn();
+        $stateMachine->can(SubscriptionTransitions::TRANSITION_ACTIVATE)->willReturn(true);
+        $stateMachine->apply(SubscriptionTransitions::TRANSITION_ACTIVATE)->willReturn(true);
         $subscriptionApi->status = SubscriptionStatus::STATUS_ACTIVE;
         $subscriptionSateMachineFactory->get($subscription, SubscriptionTransitions::GRAPH)->willReturn($stateMachine);
         $subscription->getSubscriptionId()->willReturn('id_1');
