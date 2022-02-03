@@ -80,7 +80,8 @@ final class CreateCreditCardSubscriptionAction extends BaseApiAwareAction implem
             $details['statusError'] = $message;
 
             $message = \sprintf('%s%s', 'bitbag_sylius_mollie_plugin.credit_cart_error.', $details['statusError']);
-            $this->session->getFlashBag()->add('info', $message);
+            $this->session->getFlashBag()->add('info', $message)
+            ;
 
             return;
         } catch (\Exception $e) {
@@ -102,8 +103,13 @@ final class CreateCreditCardSubscriptionAction extends BaseApiAwareAction implem
 
     public function supports($request): bool
     {
-        return
-            $request instanceof CreateCreditCardSubscription &&
-            $request->getModel() instanceof \ArrayAccess;
+        if (
+            false === $request instanceof CreateCreditCardSubscription
+            || false === $request->getModel() instanceof \ArrayAccess) {
+            return false;
+        }
+        $details = ArrayObject::ensureArrayObject($request->getModel());
+
+        return 'first' === ($details['metadata']['sequenceType'] ?? 'first');
     }
 }
