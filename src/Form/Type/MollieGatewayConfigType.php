@@ -32,6 +32,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use function Clue\StreamFilter\fun;
 
 final class MollieGatewayConfigType extends AbstractResourceType
 {

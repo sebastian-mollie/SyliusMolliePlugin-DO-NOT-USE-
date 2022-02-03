@@ -3,7 +3,7 @@ ARG NODE_VERSION=12.13
 ARG NGINX_VERSION=1.16
 
 ########################## PHP ##########################
-FROM registry.bitbag.shop/bitbag-php-fpm:${PHP_VERSION} AS root_php
+FROM bitbag/sylius-php:${PHP_VERSION}-alpine AS root_php
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
@@ -14,6 +14,7 @@ WORKDIR /var/www
 ARG APP_ENV=prod
 
 # copy only specifically what we need
+
 COPY src src/
 COPY tests/Application/Kernel.php tests/Application/Kernel.php
 COPY composer.json ./
@@ -113,7 +114,7 @@ COPY --from=root_php /var/www/tests/Application/public public/
 COPY --from=nodejs /var/www/tests/Application/public public/
 
 ########################## PHP ##########################
-FROM registry.bitbag.shop/bitbag-php-fpm:${PHP_VERSION} AS result_php
+FROM bitbag/sylius-php:${PHP_VERSION}-alpine AS result_php
 
 RUN apk add --no-cache fcgi;
 
