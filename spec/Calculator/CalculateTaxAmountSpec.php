@@ -19,9 +19,10 @@ final class CalculateTaxAmountSpec extends ObjectBehavior
     {
         $this->beConstructedWith($converter);
     }
+
     function it_is_initializable(): void
     {
-        $this->shouldBeAnInstanceOf(CalculateTaxAmount::class);
+        $this->shouldHaveType(CalculateTaxAmount::class);
     }
 
     function it_should_implement_interface(): void
@@ -31,15 +32,9 @@ final class CalculateTaxAmountSpec extends ObjectBehavior
 
     function it_should_calculate(
         IntToStringConverterInterface $converter
-    ): void
-    {
-        $taxRateAmount = 15.5;
-        $amount = 2;
-        $shippingTaxAmount = round($amount - ($amount / (1 + $taxRateAmount)));
+    ): void {
+        $converter->convertIntToString((int) 2,100)->willReturn('0.02');
 
-        $converter->convertIntToString((int) $shippingTaxAmount,10)->willReturn('0.5');
-
-        $this->calculate(15.5,2)->shouldBeString();
-
+        $this->calculate(15.5,2)->shouldReturn('0.02');
     }
 }

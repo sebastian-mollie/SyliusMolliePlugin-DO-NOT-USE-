@@ -15,7 +15,8 @@ namespace spec\BitBag\SyliusMolliePlugin\Action\Api;
 use BitBag\SyliusMolliePlugin\Action\Api\BaseApiAwareAction;
 use BitBag\SyliusMolliePlugin\Action\Api\CancelRecurringSubscriptionAction;
 use BitBag\SyliusMolliePlugin\Client\MollieApiClient;
-use BitBag\SyliusMolliePlugin\Entity\SubscriptionInterface;
+use BitBag\SyliusMolliePlugin\Entity\MollieSubscriptionConfigurationInterface;
+use BitBag\SyliusMolliePlugin\Entity\MollieSubscriptionInterface;
 use BitBag\SyliusMolliePlugin\Logger\MollieLoggerActionInterface;
 use BitBag\SyliusMolliePlugin\Request\Api\CancelRecurringSubscription;
 use Mollie\Api\Endpoints\CustomerEndpoint;
@@ -56,7 +57,7 @@ final class CancelRecurringSubscriptionActionSpec extends ObjectBehavior
     function it_executes(
         CancelRecurringSubscription $request,
         MollieApiClient $mollieApiClient,
-        SubscriptionInterface $subscription,
+        MollieSubscriptionConfigurationInterface  $subscription,
         CustomerEndpoint $customerEndpoint,
         Customer $customer
     ): void {
@@ -67,6 +68,7 @@ final class CancelRecurringSubscriptionActionSpec extends ObjectBehavior
         $subscription->getCustomerId()->willReturn('id_1');
         $request->getModel()->willReturn($subscription);
 
+
         $customer->cancelSubscription('id_1')->shouldBeCalled();
 
         $this->execute($request);
@@ -74,7 +76,7 @@ final class CancelRecurringSubscriptionActionSpec extends ObjectBehavior
 
     function it_supports_cancel_recurring_subscription_request_and_subscription_model(
         CancelRecurringSubscription $request,
-        SubscriptionInterface $subscription
+        MollieSubscriptionInterface $subscription
     ): void {
         $request->getModel()->willReturn($subscription);
 
