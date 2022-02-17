@@ -82,6 +82,7 @@ final class MollieMethodsCreator implements MollieMethodsCreatorInterface
             foreach ($recurringCollection as $recurringEntry) {
                 $baseCollection->append($recurringEntry);
             }
+
             $this->helper->createMethods($baseCollection, $gateway);
         } elseif (MollieGatewayFactory::FACTORY_NAME === $gateway->getFactoryName()) {
             $allMollieMethods = $client->methods->allActive(self::PARAMETERS);

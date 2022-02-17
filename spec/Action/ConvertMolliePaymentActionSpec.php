@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace spec\BitBag\SyliusMolliePlugin\Action;
 
 use BitBag\SyliusMolliePlugin\Action\ConvertMolliePaymentAction;
-use BitBag\SyliusMolliePlugin\Action\ConvertPaymentAction;
 use BitBag\SyliusMolliePlugin\Client\MollieApiClient;
 use BitBag\SyliusMolliePlugin\Entity\GatewayConfigInterface;
 use BitBag\SyliusMolliePlugin\Entity\MollieGatewayConfig;
@@ -87,10 +86,6 @@ final class ConvertMolliePaymentActionSpec extends ObjectBehavior
         $payment->getOrder()->willReturn($order);
         $payment->getAmount()->willReturn(445535);
         $payment->getCurrencyCode()->willReturn('EUR');
-        $payment->getDetails()->willReturn([
-            'molliePaymentMethods'=>'Przelewy24',
-            'cartToken'=>123
-        ]);
 
         $paymentDescriptionProvider->getPaymentDescription($payment, $method, $order)->willReturn('description');
         $request->getSource()->willReturn($payment);
@@ -122,11 +117,12 @@ final class ConvertMolliePaymentActionSpec extends ObjectBehavior
 
         $request->getSource()->willReturn($payment);
 
+
+
         $mollieMethodsRepository->findOneBy(['methodId' => 15])->willReturn($method);
         $method->getPaymentType()->willReturn('payment_type');
         $method->getGateway()->willReturn($gatewayConfig);
         $gatewayConfig->getConfig()->willReturn([]);
-
 
         $this->execute($request);
     }
