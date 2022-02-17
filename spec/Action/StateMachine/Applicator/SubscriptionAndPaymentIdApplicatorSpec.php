@@ -40,6 +40,7 @@ final class SubscriptionAndPaymentIdApplicatorSpec extends ObjectBehavior
             $processingStateMachineTransition
         );
     }
+
     function it_is_initializable(): void
     {
         $this->shouldHaveType(SubscriptionAndPaymentIdApplicator::class);

@@ -37,8 +37,7 @@ final class StateMachineTransitionSpec extends ObjectBehavior
         MollieSubscriptionInterface $subscription,
         FactoryInterface $subscriptionSateMachineFactory,
         StateMachineInterface $stateMachine
-    ): void
-    {
+    ): void {
         $subscriptionSateMachineFactory->get(
             $subscription,
             MollieSubscriptionTransitions::GRAPH
@@ -54,8 +53,7 @@ final class StateMachineTransitionSpec extends ObjectBehavior
         MollieSubscriptionInterface $subscription,
         FactoryInterface $subscriptionSateMachineFactory,
         StateMachineInterface $stateMachine
-    ): void
-    {
+    ): void {
         $subscriptionSateMachineFactory->get(
             $subscription,
             MollieSubscriptionTransitions::GRAPH

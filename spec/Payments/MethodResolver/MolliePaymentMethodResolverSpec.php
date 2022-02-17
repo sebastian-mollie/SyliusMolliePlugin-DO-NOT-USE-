@@ -31,8 +31,7 @@ final class MolliePaymentMethodResolverSpec extends ObjectBehavior
         PaymentMethodRepositoryInterface $paymentMethodRepository,
         MollieFactoryNameResolverInterface $factoryNameResolver,
         MollieMethodFilterInterface $mollieMethodFilter
-    ): void
-    {
+    ): void {
         $this->beConstructedWith(
             $decoratedService,
             $paymentMethodRepository,
@@ -84,8 +83,7 @@ final class MolliePaymentMethodResolverSpec extends ObjectBehavior
         PaymentMethodInterface $paymentMethod,
         GatewayConfigInterface $gatewayConfig,
         MollieMethodFilterInterface $mollieMethodFilter
-    ): void
-    {
+    ): void {
         $subject->getOrder()->willReturn($order);
         $order->getChannel()->willReturn($channel);
 
@@ -120,8 +118,7 @@ final class MolliePaymentMethodResolverSpec extends ObjectBehavior
         PaymentMethodInterface $paymentMethod,
         GatewayConfigInterface $gatewayConfig,
         MollieMethodFilterInterface $mollieMethodFilter
-    ): void
-    {
+    ): void {
         $subject->getOrder()->willReturn($order);
         $order->getChannel()->willReturn($channel);
 
@@ -174,6 +171,5 @@ final class MolliePaymentMethodResolverSpec extends ObjectBehavior
         $order->getChannel()->willReturn(null);
 
         $this->supports($subject)->shouldReturn(false);
-
     }
 }

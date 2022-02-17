@@ -100,7 +100,6 @@ final class CaptureActionSpec extends ObjectBehavior
         $token->getAfterUrl()->willReturn('url');
         $token->getHash()->willReturn('test');
 
-
         $payment = \Mockery::mock('payment');
         $payment->id = 1;
         $payment->shouldReceive('getCheckoutUrl')->andReturn('https://thisisnotanemptyurl.com');
@@ -120,7 +119,6 @@ final class CaptureActionSpec extends ObjectBehavior
             ]);
         $details->offsetExists('metadata')->willReturn(true);
         $details->offsetExists('methodType')->willReturn(true);
-
         $details->offsetExists('subscription_mollie_id')->shouldBeCalled();
         $details->offsetExists('payment_mollie_id')->shouldBeCalled();
         $details->offsetExists('order_mollie_id')->shouldBeCalled();
@@ -152,8 +150,7 @@ final class CaptureActionSpec extends ObjectBehavior
         MollieApiClient $mollieApiClient,
         PaymentEndpoint $paymentEndpoint,
         IdentityInterface $identity
-    ): void
-    {
+    ): void {
         $this->setGateway($gateway);
         $mollieApiClient->isRecurringSubscription()->willReturn(false);
         $this->setApi($mollieApiClient);
@@ -200,7 +197,6 @@ final class CaptureActionSpec extends ObjectBehavior
         ]);
         $details->offsetExists('metadata')->willReturn(true);
         $details->offsetExists('methodType')->willReturn(true);
-
         $details->offsetExists('subscription_mollie_id')->shouldBeCalled();
         $details->offsetExists('payment_mollie_id')->shouldBeCalled();
         $details->offsetExists('order_mollie_id')->shouldBeCalled();
@@ -233,8 +229,7 @@ final class CaptureActionSpec extends ObjectBehavior
         MollieApiClient $mollieApiClient,
         PaymentEndpoint $paymentEndpoint,
         IdentityInterface $identity
-    ): void
-    {
+    ): void {
         $this->setGateway($gateway);
         $mollieApiClient->isRecurringSubscription()->willReturn(false);
         $this->setApi($mollieApiClient);
@@ -260,7 +255,6 @@ final class CaptureActionSpec extends ObjectBehavior
         $token->getAfterUrl()->willReturn('url');
         $token->getHash()->willReturn('test');
 
-
         $payment = \Mockery::mock('payment');
         $payment->id = 1;
         $payment->shouldReceive('getCheckoutUrl')->andReturn('https://thisisnotanemptyurl.com');
@@ -281,7 +275,6 @@ final class CaptureActionSpec extends ObjectBehavior
         ]);
         $details->offsetExists('metadata')->willReturn(true);
         $details->offsetExists('methodType')->willReturn(true);
-
         $details->offsetExists('subscription_mollie_id')->shouldBeCalled();
         $details->offsetExists('payment_mollie_id')->shouldBeCalled();
         $details->offsetExists('order_mollie_id')->shouldBeCalled();

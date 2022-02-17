@@ -54,17 +54,11 @@ final class CancelRecurringSubscriptionProcessorSpec extends ObjectBehavior
     ): void {
         $gatewayConfig->getFactoryName()->willReturn(MollieSubscriptionGatewayFactory::FACTORY_NAME);
         $gatewayConfig->getGatewayName()->willReturn(MollieSubscriptionGatewayFactory::FACTORY_NAME);
-
         $paymentMethod->getGatewayConfig()->willReturn($gatewayConfig);
-
         $payment->getMethod()->willReturn($paymentMethod);
-
         $order->getLastPayment()->willReturn($payment);
-
         $subscription->getOrderItem()->willReturn($order);
-
         $subscription->getLastOrder()->willReturn($order);
-
         $payum->getGateway(MollieSubscriptionGatewayFactory::FACTORY_NAME)->willReturn($gateway);
 
         $gateway->execute(Argument::any())->shouldBeCalled();

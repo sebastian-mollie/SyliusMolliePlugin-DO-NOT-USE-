@@ -23,13 +23,13 @@ final class OrderItemClonerSpec extends ObjectBehavior
     function let(
         FactoryInterface $orderItemFactory,
         OrderItemUnitFactoryInterface $orderItemUnitFactory
-    ): void
-    {
+    ): void {
         $this->beConstructedWith(
             $orderItemFactory,
             $orderItemUnitFactory
         );
     }
+
     function it_is_initializable(): void
     {
         $this->shouldHaveType(OrderItemCloner::class);

@@ -35,6 +35,7 @@ final class SubscriptionAndSyliusPaymentApplicatorSpec extends ObjectBehavior
             $processingStateMachineTransition
         );
     }
+
     function it_is_initializable(): void
     {
         $this->shouldHaveType(SubscriptionAndSyliusPaymentApplicator::class);

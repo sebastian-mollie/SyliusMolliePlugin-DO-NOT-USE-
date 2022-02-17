@@ -117,8 +117,6 @@ final class ConvertMolliePaymentActionSpec extends ObjectBehavior
 
         $request->getSource()->willReturn($payment);
 
-
-
         $mollieMethodsRepository->findOneBy(['methodId' => 15])->willReturn($method);
         $method->getPaymentType()->willReturn('payment_type');
         $method->getGateway()->willReturn($gatewayConfig);

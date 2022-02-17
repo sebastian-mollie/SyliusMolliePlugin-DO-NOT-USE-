@@ -35,8 +35,7 @@ final class ShipmentUnitClonerSpec extends ObjectBehavior
         ShipmentUnitInterface $unit,
         FactoryInterface $unitFactory,
         ShipmentUnitInterface $cloned
-    ): void
-    {
+    ): void {
         $unitFactory->createNew()->willReturn($cloned);
         $cloned->setCreatedAt(new \DateTime());
 

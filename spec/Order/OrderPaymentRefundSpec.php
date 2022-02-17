@@ -63,6 +63,7 @@ final class OrderPaymentRefundSpec extends ObjectBehavior
         $paymentMethod->getGatewayConfig()->willReturn($config);
         $config->getFactoryName()->willReturn('mollie_subscription_test');
     }
+
     function it_is_initializable(): void
     {
         $this->shouldHaveType(OrderPaymentRefund::class);

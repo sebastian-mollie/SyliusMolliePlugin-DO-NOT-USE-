@@ -20,8 +20,7 @@ final class AdjustmentClonerSpec extends ObjectBehavior
         FactoryInterface $adjustmentFactory,
         BaseAdjustmentInterface $adjustment,
         BaseAdjustmentInterface $clonedAdjustment
-    ): void
-    {
+    ): void {
         $this->beConstructedWith($adjustmentFactory);
 
         $adjustmentFactory->createNew()->willReturn($clonedAdjustment);

@@ -72,7 +72,6 @@ final class CancelRecurringSubscriptionActionSpec extends ObjectBehavior
         $customerEndpoint->get('id_1')->willReturn($customer);
         $loggerAction->addLog('Cancel recurring subscription with id:  sub_id_1');
 
-
         $customer->cancelSubscription('sub_id_1')->shouldBeCalled();
 
         $this->execute($request);

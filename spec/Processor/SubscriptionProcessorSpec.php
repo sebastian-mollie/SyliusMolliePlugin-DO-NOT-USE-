@@ -49,6 +49,7 @@ final class SubscriptionProcessorSpec extends ObjectBehavior
             $paymentRegistry
         );
     }
+
     function it_is_initializable(): void
     {
         $this->shouldHaveType(SubscriptionProcessor::class);
@@ -78,8 +79,7 @@ final class SubscriptionProcessorSpec extends ObjectBehavior
         GenericTokenFactoryInterface $tokenFactory,
         TokenInterface $token,
         PaymentMethodInterface $method
-    ): void
-    {
+    ): void {
         $subscription->getOrderItem()->willReturn($orderItem);
         $subscription->getFirstOrder()->willReturn($order, $firstOrder);
         $subscription->getSubscriptionConfiguration()->willReturn($configuration);
@@ -161,8 +161,7 @@ final class SubscriptionProcessorSpec extends ObjectBehavior
         GenericTokenFactoryInterface $tokenFactory,
         TokenInterface $token,
         PaymentMethodInterface $method
-    ): void
-    {
+    ): void {
         $subscription->getOrderItem()->willReturn($orderItem);
         $subscription->getFirstOrder()->willReturn($order, $firstOrder);
         $subscription->getSubscriptionConfiguration()->willReturn($configuration);

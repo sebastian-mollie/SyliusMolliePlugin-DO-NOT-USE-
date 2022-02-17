@@ -68,7 +68,6 @@ final class SubscriptionScheduleGeneratorSpec extends ObjectBehavior
         )->willReturn($schedule);
         $subscription->setStartedAt(Argument::any())->shouldBeCalled();
 
-
         $schedules = [$schedule->getWrappedObject()];
 
         $this->generate($subscription)->shouldReturn($schedules);
