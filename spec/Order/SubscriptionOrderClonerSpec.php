@@ -122,6 +122,7 @@ final class SubscriptionOrderClonerSpec extends ObjectBehavior
         $clonedOrder->setChannel($channel)->shouldBeCalled();
         $clonedOrder->setCheckoutState(OrderCheckoutStates::STATE_COMPLETED)->shouldBeCalled();
         $clonedOrder->setCheckoutCompletedAt(Argument::any())->shouldBeCalled();
+        $clonedOrder->setCreatedAt(Argument::any())->shouldBeCalled();
         $clonedOrder->setCustomer($customer)->shouldBeCalled();
         $clonedOrder->setCurrencyCode('EUR')->shouldBeCalled();
         $clonedOrder->setCustomerIp('127.0.0.0')->shouldBeCalled();

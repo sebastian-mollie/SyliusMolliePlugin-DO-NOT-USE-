@@ -17,6 +17,8 @@ use BitBag\SyliusMolliePlugin\Client\MollieApiClient;
 use BitBag\SyliusMolliePlugin\Payments\PaymentTerms\Options;
 use BitBag\SyliusMolliePlugin\Request\Api\CreateCustomer;
 use BitBag\SyliusMolliePlugin\Request\Api\CreateInternalRecurring;
+use BitBag\SyliusMolliePlugin\Request\Api\CreateOnDemandSubscription;
+use BitBag\SyliusMolliePlugin\Request\Api\CreateOnDemandSubscriptionPayment;
 use BitBag\SyliusMolliePlugin\Request\Api\CreateOrder;
 use BitBag\SyliusMolliePlugin\Request\Api\CreatePayment;
 use BitBag\SyliusMolliePlugin\Request\Api\CreateSubscriptionPayment;
@@ -192,6 +194,7 @@ final class CaptureActionSpec extends ObjectBehavior
         $token->getAfterUrl()->willReturn('url');
         $token->getHash()->willReturn('test');
 
+        $details->offsetGet('sequenceType')->willReturn('first');
         $details->offsetGet('metadata')->willReturn([
             'refund_token' => [
                 'refund_token_hash'
@@ -221,7 +224,7 @@ final class CaptureActionSpec extends ObjectBehavior
 
         $gateway->execute(new CreateCustomer($details->getWrappedObject()))->shouldBeCalled();
         $gateway->execute(new CreateInternalRecurring($details->getWrappedObject()))->shouldBeCalled();
-        $gateway->execute(new CreateSubscriptionPayment($details->getWrappedObject()))->shouldBeCalled();
+        $gateway->execute(new CreateOnDemandSubscription($details->getWrappedObject()))->shouldBeCalled();
 
         $this->execute($request);
     }
@@ -461,7 +464,7 @@ final class CaptureActionSpec extends ObjectBehavior
         ])->shouldBeCalled();
 
         $this->shouldThrow(new InvalidArgumentException('Method klarnapaynow is not allowed to use Payments API'))
-            ->during('execute',[$request->getWrappedObject()]);
+            ->during('execute',[$request]);
     }
 
     function it_supports_only_capture_request_and_array_access(

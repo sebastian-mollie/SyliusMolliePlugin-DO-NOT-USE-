@@ -7,7 +7,7 @@
 
 namespace BitBag\SyliusMolliePlugin\Request\Api;
 
-interface CreateMollieSubscriptionInterface
+interface CreateOnDemandSubscriptionInterface
 {
     /**
      * @return mixed

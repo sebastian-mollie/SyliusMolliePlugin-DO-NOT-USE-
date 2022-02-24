@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints\IsNull;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\Range;
-use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Constraints\Valid;
 
 final class ProductVariantRecurringExtension extends AbstractTypeExtension
 {
@@ -54,20 +54,18 @@ final class ProductVariantRecurringExtension extends AbstractTypeExtension
                 ]
             ])
             ->add('interval', MollieIntervalType::class, [
-                'label' => 'bitbag_sylius_mollie_plugin.form.product_variant.interval',
+                'label' => false,
                 'required' => false,
                 'attr' => [
                     'class' => 'inline fields'
                 ],
                 'constraints' => [
+                    new Valid([
+                        'groups' => ['recurring_product_variant'],
+                    ]),
                     new NotBlank([
                         'message' => 'bitbag_sylius_mollie_plugin.interval.not_blank',
                         'groups' => ['recurring_product_variant'],
-                    ]),
-                    new Regex([
-                        'message' => 'bitbag_sylius_mollie_plugin.interval.invalid',
-                        'groups' => ['recurring_product_variant'],
-                        'pattern' => '/^\d{1,} (months|weeks|days)$/',
                     ]),
                 ],
             ])

@@ -15,9 +15,11 @@ use BitBag\SyliusMolliePlugin\Action\Api\BaseApiAwareAction;
 use BitBag\SyliusMolliePlugin\Payments\PaymentTerms\Options;
 use BitBag\SyliusMolliePlugin\Request\Api\CreateCustomer;
 use BitBag\SyliusMolliePlugin\Request\Api\CreateInternalRecurring;
+use BitBag\SyliusMolliePlugin\Request\Api\CreateOnDemandSubscription;
+use BitBag\SyliusMolliePlugin\Request\Api\CreateOnDemandSubscriptionPayment;
 use BitBag\SyliusMolliePlugin\Request\Api\CreateOrder;
 use BitBag\SyliusMolliePlugin\Request\Api\CreatePayment;
-use BitBag\SyliusMolliePlugin\Request\Api\CreateSubscriptionPayment;
+use Psr\Log\InvalidArgumentException;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\RuntimeException;
@@ -25,7 +27,6 @@ use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Capture;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\TokenInterface;
-use Psr\Log\InvalidArgumentException;
 
 final class CaptureAction extends BaseApiAwareAction implements CaptureActionInterface
 {
@@ -64,18 +65,23 @@ final class CaptureAction extends BaseApiAwareAction implements CaptureActionInt
 
         $details['webhookUrl'] = $notifyToken->getTargetUrl();
         $details['backurl'] = $token->getTargetUrl();
-        if (true === $this->mollieApiClient->isRecurringSubscription()) {
-            $cancelToken = $this->tokenFactory->createToken(
-                $token->getGatewayName(),
-                $token->getDetails(),
-                'bitbag_sylius_mollie_plugin_cancel_subscription_mollie',
-                ['orderId' => $details['metadata']['order_id']]
-            );
 
-            $details['cancel_token'] = $cancelToken->getHash();
-            $this->gateway->execute(new CreateCustomer($details));
-            $this->gateway->execute(new CreateInternalRecurring($details));
-            $this->gateway->execute(new CreateSubscriptionPayment($details));
+        if (true === $this->mollieApiClient->isRecurringSubscription()) {
+            if ('first' === $details['sequenceType']) {
+                $cancelToken = $this->tokenFactory->createToken(
+                    $token->getGatewayName(),
+                    $token->getDetails(),
+                    'bitbag_sylius_mollie_plugin_cancel_subscription_mollie',
+                    ['orderId' => $details['metadata']['order_id']]
+                );
+
+                $details['cancel_token'] = $cancelToken->getHash();
+                $this->gateway->execute(new CreateCustomer($details));
+                $this->gateway->execute(new CreateInternalRecurring($details));
+                $this->gateway->execute(new CreateOnDemandSubscription($details));
+            } elseif ('recurring' === $details['sequenceType']) {
+                $this->gateway->execute(new CreateOnDemandSubscriptionPayment($details));
+            }
         } else {
             $metadata = $details['metadata'];
             $metadata['refund_token'] = $refundToken->getHash();
@@ -92,6 +98,7 @@ final class CaptureAction extends BaseApiAwareAction implements CaptureActionInt
 
                 $this->gateway->execute(new CreatePayment($details));
             }
+
             if (isset($details['metadata']['methodType']) && $details['metadata']['methodType'] === Options::ORDER_API) {
                 $this->gateway->execute(new CreateOrder($details));
             }
