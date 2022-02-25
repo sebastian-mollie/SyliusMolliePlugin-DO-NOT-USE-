@@ -1,9 +1,11 @@
 <?php
+
 /*
     This file was created by developers working at BitBag
     Do you need more information about us and what we do? Visit our   website!
     We are hiring developers from all over the world. Join us and start your new, exciting adventure and become part of us: https://bitbag.io/career
 */
+
 declare(strict_types=1);
 
 namespace spec\BitBag\SyliusMolliePlugin\Order;
@@ -11,12 +13,10 @@ namespace spec\BitBag\SyliusMolliePlugin\Order;
 use BitBag\SyliusMolliePlugin\Order\ShipmentCloner;
 use BitBag\SyliusMolliePlugin\Order\ShipmentClonerInterface;
 use BitBag\SyliusMolliePlugin\Order\ShipmentUnitClonerInterface;
-use Doctrine\Common\Collections\ArrayCollection;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Sylius\Component\Core\Model\ShipmentInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface;
-use Sylius\Component\Shipping\Model\ShipmentUnitInterface;
 use Sylius\Component\Shipping\Model\ShippingMethodInterface;
 
 final class ShipmentClonerSpec extends ObjectBehavior
@@ -30,6 +30,7 @@ final class ShipmentClonerSpec extends ObjectBehavior
             $shipmentUnitCloner
         );
     }
+
     function it_is_initializable(): void
     {
         $this->shouldHaveType(ShipmentCloner::class);
@@ -40,12 +41,10 @@ final class ShipmentClonerSpec extends ObjectBehavior
         $this->shouldImplement(ShipmentClonerInterface::class);
     }
 
-    function it_clones(
+    function it_clones_shipment(
         ShipmentInterface $shipment,
         ShipmentInterface $clonedShipment,
         FactoryInterface $shipmentFactory,
-        ShipmentUnitInterface $unit1,
-        ShipmentUnitInterface $unit2,
         ShippingMethodInterface $method
     ): void {
         $shipmentFactory->createNew()->willReturn($clonedShipment);

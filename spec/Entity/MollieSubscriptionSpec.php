@@ -61,10 +61,8 @@ class MollieSubscriptionSpec extends ObjectBehavior
 
     function it_gets_last_order(
         OrderInterface $order1,
-        OrderInterface $order2,
-        Collection     $orders
-    ): void
-    {
+        OrderInterface $order2
+    ): void {
         $this->addOrder($order1);
         $this->addOrder($order2);
 
@@ -108,8 +106,7 @@ class MollieSubscriptionSpec extends ObjectBehavior
     function it_gets_first_order(
         OrderItemInterface $orderItem,
         MollieOrderInterface $order
-    ): void
-    {
+    ): void {
         $this->setOrderItem($orderItem);
         $orderItem->getOrder()->willReturn($order);
 

@@ -70,7 +70,7 @@ final class NotifyActionSpec extends ObjectBehavior
         $this->shouldHaveType(GatewayAwareInterface::class);
     }
 
-    function it_executes_with_sequence_type(
+    function it_executes_when_sequence_type_is_set(
         Notify $request,
         GatewayInterface $gateway,
         GetHttpRequest $getHttpRequest,
@@ -81,10 +81,10 @@ final class NotifyActionSpec extends ObjectBehavior
         MollieSubscriptionInterface $subscription,
         MollieLoggerActionInterface $loggerAction
     ): void {
-
         $this->setGateway($gateway);
         $this->setApi($mollieApiClient);
         $getHttpRequest->request = ['id' => 'payment_id'];
+
         $request->getModel()->willReturn(new \ArrayObject([
             'sequenceType' => 'test',
             'metadata' => [
@@ -93,7 +93,6 @@ final class NotifyActionSpec extends ObjectBehavior
             'payment_mollie_id' => 'payment_id'
         ]));
         $mollieApiClient->payments = $paymentEndpoint;
-
 
         $paymentEndpoint->get('payment_id')->willReturn($payment);
         $payment->id = 'payment_id';
@@ -109,7 +108,7 @@ final class NotifyActionSpec extends ObjectBehavior
             ->during('execute',[$request]);
     }
 
-    function it_executes_with_sequence_type_and_throw_exception(
+    function it_executes_when_sequence_type_is_set_and_throw_api_exception(
         Notify $request,
         GatewayInterface $gateway,
         GetHttpRequest $getHttpRequest,
@@ -125,16 +124,16 @@ final class NotifyActionSpec extends ObjectBehavior
         ]));
         $mollieApiClient->payments = $paymentEndpoint;
 
-        $e = new \Exception();
+        $e = new \Exception('test_error');
         $paymentEndpoint->get(1)->willThrow($e);
 
         $loggerAction->addNegativeLog(
-            sprintf('Error with get customer from mollie with: %s', $e->getMessage())
+            sprintf('Error with get customer from mollie with: %s', 'test_error')
         )->shouldBeCalled();
         $this->shouldThrow(ApiException::class)->during('execute', [$request]);
     }
 
-    function it_executes_with_order_mollie_id(
+    function it_executes_when_order_mollie_id_is_set(
         Notify $request,
         GatewayInterface $gateway,
         GetHttpRequest $getHttpRequest,
@@ -167,7 +166,7 @@ final class NotifyActionSpec extends ObjectBehavior
             ->during('execute', [$request]);
     }
 
-    function it_executes_with_order_mollie_id_and_throw_exception(
+    function it_executes_with_order_mollie_id_is_set_and_throws_api_exception(
         Notify $request,
         GatewayInterface $gateway,
         GetHttpRequest $getHttpRequest,
@@ -183,12 +182,13 @@ final class NotifyActionSpec extends ObjectBehavior
         ]));
         $mollieApiClient->orders = $orderEndpoint;
 
-        $e = new \Exception();
+        $e = new \Exception('test_error');
         $orderEndpoint->get(1)->willThrow($e);
 
         $loggerAction->addNegativeLog(
-            sprintf('Error with get order from mollie with: %s', $e->getMessage())
+            sprintf('Error with get order from mollie with: %s', 'test_error')
         )->shouldBeCalled();
+
         $this->shouldThrow(ApiException::class)->during('execute', [$request]);
     }
 

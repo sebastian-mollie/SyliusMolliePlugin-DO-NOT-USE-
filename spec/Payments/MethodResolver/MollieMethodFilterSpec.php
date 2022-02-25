@@ -1,9 +1,11 @@
 <?php
+
 /*
     This file was created by developers working at BitBag
     Do you need more information about us and what we do? Visit our   website!
     We are hiring developers from all over the world. Join us and start your new, exciting adventure and become part of us: https://bitbag.io/career
 */
+
 declare(strict_types=1);
 
 namespace spec\BitBag\SyliusMolliePlugin\Payments\MethodResolver;
@@ -28,7 +30,7 @@ final class MollieMethodFilterSpec extends ObjectBehavior
         $this->shouldImplement(MollieMethodFilterInterface::class);
     }
 
-    function it_returns_non_recurrings(
+    function it_returns_non_recurring_method(
         PaymentMethodInterface $method1,
         PaymentMethodInterface $method2,
         GatewayConfigInterface $config1,
@@ -47,7 +49,7 @@ final class MollieMethodFilterSpec extends ObjectBehavior
         $this->nonRecurringFilter($paymentMethods)->shouldReturn([$method2]);
     }
 
-    function it_returns_recurrings(
+    function it_returns_recurring_method(
         PaymentMethodInterface $method1,
         PaymentMethodInterface $method2,
         GatewayConfigInterface $config1,

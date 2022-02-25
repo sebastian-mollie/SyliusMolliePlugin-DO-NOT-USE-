@@ -55,7 +55,7 @@ final class CancelRecurringSubscriptionActionSpec extends ObjectBehavior
         $this->shouldHaveType(BaseApiAwareAction::class);
     }
 
-    function it_executes(
+    function it_executes_cancel_recurring_subscription_action(
         CancelRecurringSubscription $request,
         MollieApiClient $mollieApiClient,
         MollieSubscriptionInterface $subscription,
@@ -66,20 +66,20 @@ final class CancelRecurringSubscriptionActionSpec extends ObjectBehavior
     ): void {
         $mollieApiClient->customers = $customerEndpoint;
         $this->setApi($mollieApiClient);
+
         $request->getModel()->willReturn($subscription);
         $subscription->getSubscriptionConfiguration()->willReturn($configuration);
         $configuration->getCustomerId()->willReturn('id_1');
         $configuration->getSubscriptionId()->willReturn('sub_id_1');
         $customerEndpoint->get('id_1')->willReturn($customer);
-        $loggerAction->addLog('Cancel recurring subscription with id:  sub_id_1');
 
-
+        $loggerAction->addLog('Cancel recurring subscription with id:  sub_id_1')->shouldBeCalled();
         $customer->cancelSubscription('sub_id_1')->shouldBeCalled();
 
         $this->execute($request);
     }
 
-    function it_executes_and_throws_exception(
+    function it_executes_cancel_recurring_subscription_action_and_throws_api_exception(
         CancelRecurringSubscription $request,
         MollieApiClient $mollieApiClient,
         MollieSubscriptionInterface $subscription,
@@ -89,15 +89,18 @@ final class CancelRecurringSubscriptionActionSpec extends ObjectBehavior
     ): void {
         $mollieApiClient->customers = $customerEndpoint;
         $this->setApi($mollieApiClient);
+
         $request->getModel()->willReturn($subscription);
         $subscription->getSubscriptionConfiguration()->willReturn($configuration);
         $configuration->getCustomerId()->willReturn('id_1');
         $configuration->getSubscriptionId()->willReturn('sub_id_1');
-        $e = new \Exception();
+        $e = new \Exception('error_test');
         $customerEndpoint->get('id_1')->willThrow($e);
+
         $loggerAction->addNegativeLog(sprintf(
             'Error with get customer in recurring subscription with: %s',
-            $e->getMessage()))->shouldBeCalled();
+            'error_test'))
+            ->shouldBeCalled();
 
         $this->shouldThrow(ApiException::class)
             ->during('execute', [$request]);

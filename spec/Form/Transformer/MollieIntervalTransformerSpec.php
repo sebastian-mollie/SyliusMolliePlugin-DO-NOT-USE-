@@ -1,9 +1,11 @@
 <?php
+
 /*
     This file was created by developers working at BitBag
     Do you need more information about us and what we do? Visit our   website!
     We are hiring developers from all over the world. Join us and start your new, exciting adventure and become part of us: https://bitbag.io/career
 */
+
 declare(strict_types=1);
 
 namespace spec\BitBag\SyliusMolliePlugin\Form\Transformer;
@@ -24,7 +26,7 @@ final class MollieIntervalTransformerSpec extends ObjectBehavior
         $this->shouldImplement(DataTransformerInterface::class);
     }
 
-    function it_transform_days(): void
+    function it_transforms_days(): void
     {
         $value = '1 days';
         $this->transform($value)->shouldReturn([
@@ -36,7 +38,7 @@ final class MollieIntervalTransformerSpec extends ObjectBehavior
         ]);
     }
 
-    function it_transform_weeks(): void
+    function it_transforms_weeks(): void
     {
         $value = '3 weeks';
         $this->transform($value)->shouldReturn([
@@ -48,7 +50,7 @@ final class MollieIntervalTransformerSpec extends ObjectBehavior
         ]);
     }
 
-    function it_transform_months(): void
+    function it_transforms_months(): void
     {
         $value = '12 months';
         $this->transform($value)->shouldReturn([
@@ -60,7 +62,7 @@ final class MollieIntervalTransformerSpec extends ObjectBehavior
         ]);
     }
 
-    function it_return_empty_array_when_unsupported_format(): void
+    function it_returns_empty_array_when_unsupported_format_was_provided(): void
     {
         $value = 'one months';
         $this->transform($value)->shouldReturn([]);
@@ -75,7 +77,7 @@ final class MollieIntervalTransformerSpec extends ObjectBehavior
         ]);
     }
 
-    function it_reverse_transform(): void
+    function it_reverses_transform(): void
     {
         $value = [
             'amount' => '3',

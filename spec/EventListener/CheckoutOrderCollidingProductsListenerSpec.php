@@ -1,9 +1,11 @@
 <?php
+
 /*
     This file was created by developers working at BitBag
     Do you need more information about us and what we do? Visit our   website!
     We are hiring developers from all over the world. Join us and start your new, exciting adventure and become part of us: https://bitbag.io/career
 */
+
 declare(strict_types=1);
 
 namespace spec\BitBag\SyliusMolliePlugin\EventListener;
@@ -56,9 +58,9 @@ final class CheckoutOrderCollidingProductsListenerSpec extends ObjectBehavior
         $translator->trans('bitbag_sylius_mollie_plugin.order_checkout.colliding_products')
             ->willReturn($message);
 
-        $this->onUpdate($event);
-
         $flashBag->add('error', $message)->shouldBeCalledOnce();
         $event->stop($message,ResourceControllerEvent::TYPE_WARNING)->shouldBeCalledOnce();
+
+        $this->onUpdate($event);
     }
 }

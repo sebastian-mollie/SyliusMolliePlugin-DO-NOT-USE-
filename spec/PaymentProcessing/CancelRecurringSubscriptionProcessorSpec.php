@@ -43,7 +43,7 @@ final class CancelRecurringSubscriptionProcessorSpec extends ObjectBehavior
         $this->shouldHaveType(CancelRecurringSubscriptionProcessorInterface::class);
     }
 
-    function it_processes(
+    function it_processes_cancel_recurring_subscription(
         MollieSubscriptionInterface $subscription,
         OrderInterface $order,
         PaymentInterface $payment,
@@ -72,7 +72,7 @@ final class CancelRecurringSubscriptionProcessorSpec extends ObjectBehavior
         $this->process($subscription);
     }
 
-    function it_processes_with_last_order_null(
+    function it_processes_cancel_recurring_subscription_when_last_order_is_null(
         MollieSubscriptionInterface $subscription,
         GatewayInterface $gateway
     ): void {
@@ -83,7 +83,7 @@ final class CancelRecurringSubscriptionProcessorSpec extends ObjectBehavior
         $this->process($subscription);
     }
 
-    function it_processes_with_last_payment_null(
+    function it_processes_cancel_recurring_subscription_when_last_payment_is_null(
         MollieSubscriptionInterface $subscription,
         OrderInterface $order,
         GatewayInterface $gateway
@@ -96,7 +96,7 @@ final class CancelRecurringSubscriptionProcessorSpec extends ObjectBehavior
         $this->process($subscription);
     }
 
-    function it_processes_with_null_config(
+    function it_processes_cancel_recurring_subscription_with_null_config(
         MollieSubscriptionInterface $subscription,
         OrderInterface $order,
         PaymentInterface $payment,
@@ -113,7 +113,7 @@ final class CancelRecurringSubscriptionProcessorSpec extends ObjectBehavior
         $this->process($subscription);
     }
 
-    function it_processes_with_wrong_factory_name(
+    function it_processes_cancel_recurring_subscription_with_wrong_factory_name(
         MollieSubscriptionInterface $subscription,
         OrderInterface $order,
         PaymentInterface $payment,

@@ -1,100 +1,74 @@
 <?php
 
 /*
- * This file has been created by developers from BitBag.
- * Feel free to contact us once you face any issues or want to start
- * You can find more information about us on https://bitbag.io and write us
- * an email on hello@bitbag.io.
- */
+    This file was created by developers working at BitBag
+    Do you need more information about us and what we do? Visit our   website!
+    We are hiring developers from all over the world. Join us and start your new, exciting adventure and become part of us: https://bitbag.io/career
+*/
 
 declare(strict_types=1);
 
 namespace BitBag\SyliusMolliePlugin\Creator;
 
-use BitBag\SyliusMolliePlugin\Client\MollieApiClient;
 use BitBag\SyliusMolliePlugin\Entity\GatewayConfigInterface;
 use BitBag\SyliusMolliePlugin\Factory\MethodsFactoryInterface;
 use BitBag\SyliusMolliePlugin\Factory\MollieGatewayConfigFactoryInterface;
-use BitBag\SyliusMolliePlugin\Factory\MollieGatewayFactory;
 use BitBag\SyliusMolliePlugin\Factory\MollieSubscriptionGatewayFactory;
-use BitBag\SyliusMolliePlugin\Form\Type\MollieGatewayConfigurationType;
-use BitBag\SyliusMolliePlugin\Logger\MollieLoggerActionInterface;
 use BitBag\SyliusMolliePlugin\Payments\Methods\MethodInterface;
+use BitBag\SyliusMolliePlugin\Resolver\MollieMethodsResolverInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Mollie\Api\Resources\Method;
 use Mollie\Api\Resources\MethodCollection;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 final class MollieMethodsCreator implements MollieMethodsCreatorInterface
 {
+    /** @var MethodsFactoryInterface */
+    private $methodsFactory;
 
-    /** @var MollieLoggerActionInterface */
-    private $loggerAction;
+    /** @var EntityManagerInterface */
+    private $entityManager;
 
-    /** @var MollieApiClient */
-    private $mollieApiClient;
+    /** @var MollieGatewayConfigFactoryInterface */
+    private $factory;
 
-    /** @var RepositoryInterface */
-    private $gatewayConfigRepository;
-
-    /** @var MollieMethodsCreatorHelperInterface */
-    private $helper;
 
     public function __construct(
-        MollieLoggerActionInterface $loggerAction,
-        MollieApiClient $mollieApiClient,
-        RepositoryInterface $gatewayConfigRepository,
-        MollieMethodsCreatorHelperInterface $helper
-    )
-    {
-        $this->loggerAction = $loggerAction;
-        $this->mollieApiClient = $mollieApiClient;
-        $this->gatewayConfigRepository = $gatewayConfigRepository;
-        $this->helper = $helper;
+        MethodsFactoryInterface $methodsFactory,
+        EntityManagerInterface $entityManager,
+        MollieGatewayConfigFactoryInterface $factory
+    ){
+        $this->methodsFactory = $methodsFactory;
+        $this->entityManager = $entityManager;
+        $this->factory = $factory;
     }
 
-    public function create(): void
+    public function createMethods(MethodCollection $allMollieMethods, GatewayConfigInterface $gateway): void
     {
-        /** @var GatewayConfigInterface $gateway */
-        $gateways = $this->gatewayConfigRepository->findBy([
-            'factoryName' => [
-                MollieGatewayFactory::FACTORY_NAME,
-            ],
-        ]);
-        foreach ($gateways as $gateway) {
-            $this->createForGateway($gateway);
-        }
-    }
+        $methods = $this->methodsFactory->createNew();
 
-    public function createForGateway(GatewayConfigInterface $gateway): void
-    {
-        $config = $gateway->getConfig();
-        $environment = true === $config['environment'] ?
-            MollieGatewayConfigurationType::API_KEY_LIVE :
-            MollieGatewayConfigurationType::API_KEY_TEST;
-        $recurring = array_key_exists('times', $config) && array_key_exists('interval', $config);
-        $client = $this->mollieApiClient->setApiKey($config[$environment]);
-        $client->setIsRecurringSubscription($recurring);
-
-        if (MollieSubscriptionGatewayFactory::FACTORY_NAME === $gateway->getFactoryName()) {
-            $baseCollection = $client->methods->allActive(self::PARAMETERS);
-            $recurringCollection = $client->methods->allActive(self::PARAMETERS_RECURRING);
-            foreach ($recurringCollection as $recurringEntry) {
-                $baseCollection->append($recurringEntry);
+        foreach ($allMollieMethods as $mollieMethod) {
+            if (in_array($mollieMethod->id, MollieMethodsResolverInterface::UNSUPPORTED_METHODS)) {
+                continue;
             }
 
-            $this->helper->createMethods($baseCollection, $gateway);
-        } elseif (MollieGatewayFactory::FACTORY_NAME === $gateway->getFactoryName()) {
-            $allMollieMethods = $client->methods->allActive(self::PARAMETERS);
-            $this->helper->createMethods($allMollieMethods, $gateway);
-        } else {
-            $this->loggerAction->addLog(sprintf('Unable to download methods for "%s"', $gateway->getGatewayName()));
+            if (
+                MollieSubscriptionGatewayFactory::FACTORY_NAME === $gateway->getFactoryName() &&
+                (
+                    false === in_array($mollieMethod->id, MollieMethodsResolverInterface::RECURRING_PAYMENT_SUPPORTED_METHODS) &&
+                    false === in_array($mollieMethod->id, MollieMethodsResolverInterface::RECURRING_PAYMENT_INITIAL_METHODS)
+                )
+            ) {
+                continue;
+            }
 
-            return;
+            $methods->add($mollieMethod);
         }
 
-        $this->loggerAction->addLog(sprintf('Downloaded all methods from mollie API'));
+        /** @var MethodInterface $method */
+        foreach ($methods->getAllEnabled() as $key => $method) {
+            $gatewayConfig = $this->factory->create($method, $gateway, $key);
+
+            $this->entityManager->persist($gatewayConfig);
+            $this->entityManager->flush();
+        }
     }
-
-
 }

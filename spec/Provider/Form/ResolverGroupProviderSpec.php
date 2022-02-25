@@ -25,7 +25,7 @@ final class ResolverGroupProviderSpec extends ObjectBehavior
         $this->shouldImplement(ResolverGroupProviderInterface::class);
     }
 
-    function it_provides_when_recurring(
+    function it_provides_when_product_variant_is_recurring(
         FormInterface $form,
         ProductVariantInterface $data
     ): void {
@@ -38,7 +38,7 @@ final class ResolverGroupProviderSpec extends ObjectBehavior
         ]);
     }
 
-    function it_provides_when_non_recurring(
+    function it_provides_when_product_variant_is_not_recurring(
         FormInterface $form,
         ProductVariantInterface $data
     ): void {
@@ -51,7 +51,7 @@ final class ResolverGroupProviderSpec extends ObjectBehavior
         ]);
     }
 
-    function it_provides_when_wrong_type(
+    function it_provides_when_wrong_type_provided(
         FormInterface $form,
         CustomerInterface $data
     ): void {
@@ -62,7 +62,7 @@ final class ResolverGroupProviderSpec extends ObjectBehavior
         ]);
     }
 
-    function it_provides_when_null_data(
+    function it_provides_when_null_data_provided(
         FormInterface $form
     ): void {
         $form->getData()->willReturn(null);

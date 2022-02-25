@@ -1,9 +1,11 @@
 <?php
+
 /*
     This file was created by developers working at BitBag
     Do you need more information about us and what we do? Visit our   website!
     We are hiring developers from all over the world. Join us and start your new, exciting adventure and become part of us: https://bitbag.io/career
 */
+
 declare(strict_types=1);
 
 namespace spec\BitBag\SyliusMolliePlugin\Logger;
@@ -45,7 +47,7 @@ final class MollieLoggerActionSpec extends ObjectBehavior
         $this->shouldImplement(MollieLoggerActionInterface::class);
     }
 
-    function it_add_log_when_log_everything_is_set(
+    function it_adds_log_when_log_everything_is_set(
         MollieLoggerFactoryInterface $loggerFactory,
         MollieLoggerInterface $logger,
         RepositoryInterface $repository,
@@ -71,7 +73,7 @@ final class MollieLoggerActionSpec extends ObjectBehavior
         $repository->add($logger)->shouldBeCalledOnce();
     }
 
-    function it_add_log_when_log_errors_is_set(
+    function it_adds_log_when_log_errors_is_set(
         MollieLoggerFactoryInterface $loggerFactory,
         MollieLoggerInterface $logger,
         RepositoryInterface $repository,
@@ -87,11 +89,12 @@ final class MollieLoggerActionSpec extends ObjectBehavior
         $config->getConfig()->willReturn([
             'loggerLevel' => 1
         ]);
-        $this->addLog($message, $logLevel, $errorCode);
         $repository->add($logger)->shouldBeCalledOnce();
+
+        $this->addLog($message, $logLevel, $errorCode);
     }
 
-    function it_cannot_add_log(
+    function it_cannot_adds_log(
         MollieLoggerFactoryInterface $loggerFactory,
         MollieLoggerInterface $logger,
         RepositoryInterface $repository,
@@ -107,7 +110,7 @@ final class MollieLoggerActionSpec extends ObjectBehavior
         $repository->add($logger)->shouldNotBeCalled();
     }
 
-    function it_add_negative_log_when_log_everything_is_set(
+    function it_adds_negative_log_when_log_everything_is_set(
         MollieLoggerFactoryInterface $loggerFactory,
         MollieLoggerInterface $logger,
         RepositoryInterface $repository,
@@ -133,7 +136,7 @@ final class MollieLoggerActionSpec extends ObjectBehavior
         $repository->add($logger)->shouldBeCalledOnce();
     }
 
-    function it_add_negative_log_when_log_errors_is_set(
+    function it_adds_negative_log_when_log_errors_is_set(
         MollieLoggerFactoryInterface $loggerFactory,
         MollieLoggerInterface $logger,
         RepositoryInterface $repository,
@@ -153,7 +156,7 @@ final class MollieLoggerActionSpec extends ObjectBehavior
         $repository->add($logger)->shouldBeCalledOnce();
     }
 
-    function it_cannot_add_negative_log(
+    function it_cannot_adds_negative_log(
         MollieLoggerFactoryInterface $loggerFactory,
         MollieLoggerInterface $logger,
         RepositoryInterface $repository,

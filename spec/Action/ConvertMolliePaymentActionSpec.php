@@ -70,7 +70,7 @@ final class ConvertMolliePaymentActionSpec extends ObjectBehavior
         $this->shouldHaveType(ActionInterface::class);
     }
 
-    function it_executes_with_metadata_and_single_click_enabled(
+    function it_executes_when_metadata_and_single_click_are_enabled(
         Convert $request,
         PaymentInterface $payment,
         OrderInterface $order,
@@ -88,15 +88,20 @@ final class ConvertMolliePaymentActionSpec extends ObjectBehavior
         $mollieApiClient->isRecurringSubscription()->willReturn(false);
         $this->setApi($mollieApiClient);
         $this->setGateway($gateway);
+
         $currency = new GetCurrency('EUR');
         $gateway->execute($currency)->shouldBeCalled();
+
         $customerContext->getCustomer()->willReturn($customer);
+
         $customer->getFullName()->willReturn('Jan Kowalski');
         $customer->getEmail()->willReturn('shop@example.com');
         $customer->getId()->willReturn(1);
+
         $order->getId()->willReturn(1);
         $order->getLocaleCode()->willReturn('pl_PL');
         $order->getCustomer()->willReturn($customer);
+
         $payment->getOrder()->willReturn($order);
         $payment->getAmount()->willReturn(445535);
         $payment->getCurrencyCode()->willReturn('EUR');
@@ -139,6 +144,7 @@ final class ConvertMolliePaymentActionSpec extends ObjectBehavior
             'email' => 'shop@example.com'
         ];
         $apiCustomerFactory->createNew($details)->willReturn($mollieCustomer);
+
         $gateway->execute($mollieCustomer)->shouldBeCalled();
         $mollieCustomer->getModel()->willReturn(new ArrayObject(
             [
@@ -165,10 +171,11 @@ final class ConvertMolliePaymentActionSpec extends ObjectBehavior
             'email' => 'shop@example.com',
             'customerId' => 15,
         ])->shouldBeCalled();
+
         $this->execute($request);
     }
 
-    function it_executes_with_no_metadata_and_no_recurring(
+    function it_executes_with_no_metadata_and_recurring_subscription_set_to_false(
         Convert $request,
         PaymentInterface $payment,
         OrderInterface $order,
@@ -230,7 +237,7 @@ final class ConvertMolliePaymentActionSpec extends ObjectBehavior
         $this->execute($request);
     }
 
-    function it_executes_with_no_metadata_and_no_recurring_and_with_locale(
+    function it_executes_with_no_metadata_and_recurring_subscription_set_to_false_but_with_payment_locale(
         Convert $request,
         PaymentInterface $payment,
         OrderInterface $order,
@@ -272,6 +279,7 @@ final class ConvertMolliePaymentActionSpec extends ObjectBehavior
         $method->getGateway()->willReturn($gatewayConfig);
         $gatewayConfig->getConfig()->willReturn([]);
         $paymentLocaleResolver->resolveFromOrder($order)->willReturn('payment_locale');
+
         $request->setResult([
             'amount' => [
                 'value' => '445535.00',
@@ -295,7 +303,7 @@ final class ConvertMolliePaymentActionSpec extends ObjectBehavior
         $this->execute($request);
     }
 
-    function it_executes_with_no_metadata_and_no_recurring_and_with_locale_and_set_order_api(
+    function it_executes_with_no_metadata_and_recurring_subscription_set_to_false_but_with_payment_locale_and_order_api(
         Convert $request,
         PaymentInterface $payment,
         OrderInterface $order,
@@ -322,9 +330,11 @@ final class ConvertMolliePaymentActionSpec extends ObjectBehavior
         $currency = new GetCurrency('EUR');
         $gateway->execute($currency)->shouldBeCalled();
         $divisor = 1;
+
         $customer->getFullName()->willReturn('Jan Kowalski');
         $customer->getEmail()->willReturn('shop@example.com');
         $customer->getId()->willReturn(1);
+
         $payment->getOrder()->willReturn($order);
         $payment->getAmount()->willReturn(445535);
         $payment->getCurrencyCode()->willReturn('EUR');
@@ -341,7 +351,6 @@ final class ConvertMolliePaymentActionSpec extends ObjectBehavior
         $paymentDescriptionProvider->getPaymentDescription($payment, $method, $order)->willReturn('description');
         $request->getSource()->willReturn($payment);
         $request->getTo()->willReturn('array');
-
 
         $request->getSource()->willReturn($payment);
 
@@ -371,7 +380,7 @@ final class ConvertMolliePaymentActionSpec extends ObjectBehavior
         $this->execute($request);
     }
 
-    function it_supports_only_convert_request_payment_source_and_array_to(
+    function it_supports_only_convert_request_with_get_source_as_instance_of_payment_interface_and_get_to_equals_array(
         Convert $request,
         PaymentInterface $payment
     ): void {

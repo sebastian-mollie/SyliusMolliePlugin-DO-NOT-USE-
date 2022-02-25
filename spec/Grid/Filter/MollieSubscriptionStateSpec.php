@@ -1,9 +1,11 @@
 <?php
+
 /*
     This file was created by developers working at BitBag
     Do you need more information about us and what we do? Visit our   website!
     We are hiring developers from all over the world. Join us and start your new, exciting adventure and become part of us: https://bitbag.io/career
 */
+
 declare(strict_types=1);
 
 namespace spec\BitBag\SyliusMolliePlugin\Grid\Filter;
@@ -50,7 +52,7 @@ final class MollieSubscriptionStateSpec extends ObjectBehavior
         $source->restrict($builder->getWrappedObject()->in('not state', $data['not state']))->shouldNotBeCalled();
     }
 
-    function it_returnes_when_array_key_has_empty_value(
+    function it_returns_when_array_key_has_empty_value(
         DataSourceInterface $source,
         ExpressionBuilderInterface $builder
     ): void {

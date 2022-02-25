@@ -1,9 +1,11 @@
 <?php
+
 /*
     This file was created by developers working at BitBag
     Do you need more information about us and what we do? Visit our   website!
     We are hiring developers from all over the world. Join us and start your new, exciting adventure and become part of us: https://bitbag.io/career
 */
+
 declare(strict_types=1);
 
 namespace spec\BitBag\SyliusMolliePlugin\Processor;
@@ -29,7 +31,6 @@ use Sylius\Component\Core\Model\PaymentInterface as SyliusCorePayment;
 use Sylius\Component\Payment\Model\PaymentInterface;
 use Sylius\Component\Payment\Model\PaymentMethodInterface;
 
-
 final class SubscriptionProcessorSpec extends ObjectBehavior
 {
     function let(
@@ -49,6 +50,7 @@ final class SubscriptionProcessorSpec extends ObjectBehavior
             $paymentRegistry
         );
     }
+
     function it_is_initializable(): void
     {
         $this->shouldHaveType(SubscriptionProcessor::class);
@@ -59,7 +61,7 @@ final class SubscriptionProcessorSpec extends ObjectBehavior
         $this->shouldImplement(SubscriptionProcessorInterface::class);
     }
 
-    function it_process_next_payment(
+    function it_processes_next_payment(
         MollieSubscriptionInterface $subscription,
         OrderItemInterface $orderItem,
         OrderInterface $order,
@@ -78,8 +80,7 @@ final class SubscriptionProcessorSpec extends ObjectBehavior
         GenericTokenFactoryInterface $tokenFactory,
         TokenInterface $token,
         PaymentMethodInterface $method
-    ): void
-    {
+    ): void {
         $subscription->getOrderItem()->willReturn($orderItem);
         $subscription->getFirstOrder()->willReturn($order, $firstOrder);
         $subscription->getSubscriptionConfiguration()->willReturn($configuration);
@@ -142,7 +143,7 @@ final class SubscriptionProcessorSpec extends ObjectBehavior
         $this->processNextPayment($subscription);
     }
 
-    function it_process_next_subscription_payment(
+    function it_processes_next_subscription_payment(
         MollieSubscriptionInterface $subscription,
         OrderItemInterface $orderItem,
         OrderInterface $order,
@@ -161,8 +162,7 @@ final class SubscriptionProcessorSpec extends ObjectBehavior
         GenericTokenFactoryInterface $tokenFactory,
         TokenInterface $token,
         PaymentMethodInterface $method
-    ): void
-    {
+    ): void {
         $subscription->getOrderItem()->willReturn($orderItem);
         $subscription->getFirstOrder()->willReturn($order, $firstOrder);
         $subscription->getSubscriptionConfiguration()->willReturn($configuration);

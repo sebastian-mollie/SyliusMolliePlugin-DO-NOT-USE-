@@ -80,7 +80,7 @@ final class StatusActionSpec extends ObjectBehavior
         $this->shouldHaveType(GatewayAwareInterface::class);
     }
 
-    function it_executes_with_unset_details(
+    function it_marks_when_details_are_unset(
         GetStatusInterface $request,
         PaymentInterface $payment,
         MollieLoggerActionInterface $loggerAction
@@ -95,11 +95,10 @@ final class StatusActionSpec extends ObjectBehavior
         $this->execute($request);
     }
 
-    function it_executes_with_status_error(
+    function it_marks_when_status_equals_error(
         GetStatusInterface $request,
         PaymentInterface $payment
     ): void {
-
         $details = [
             'payment_mollie_id',
             'subscription_mollie_id',
@@ -115,16 +114,13 @@ final class StatusActionSpec extends ObjectBehavior
         $this->execute($request);
     }
 
-    function it_executes_with_subscription_mollie_id_throws_exception(
+    function it_tries_to_mark_and_throws_api_exception(
         GetStatusInterface $request,
         PaymentInterface $payment,
         CustomerEndpoint $customerEndpoint,
         MollieApiClient $mollieApiClient,
-        Customer $customer,
-        Subscription $subscription,
         MollieLoggerActionInterface $loggerAction
     ): void {
-
         $details = [
             'payment_mollie_id',
             'subscription_mollie_id' => 1,
@@ -145,7 +141,7 @@ final class StatusActionSpec extends ObjectBehavior
         $this->shouldThrow(ApiException::class)->during('execute', [$request]);
     }
 
-    function it_executes_with_subscription_mollie_id_status_canceled(
+    function it_marks_when_subscription_mollie_id_is_set_and_status_equals_canceled(
         GetStatusInterface $request,
         PaymentInterface $payment,
         CustomerEndpoint $customerEndpoint,
@@ -154,7 +150,6 @@ final class StatusActionSpec extends ObjectBehavior
         Subscription $subscription,
         MollieLoggerActionInterface $loggerAction
     ): void {
-
         $details = [
             'payment_mollie_id',
             'subscription_mollie_id' => 1,
@@ -177,7 +172,7 @@ final class StatusActionSpec extends ObjectBehavior
         $this->execute($request);
     }
 
-    function it_executes_with_subscription_mollie_id_status_active(
+    function it_marks_when_subscription_mollie_id_is_set_and_status_equals_active(
         GetStatusInterface $request,
         PaymentInterface $payment,
         CustomerEndpoint $customerEndpoint,
@@ -186,7 +181,6 @@ final class StatusActionSpec extends ObjectBehavior
         Subscription $subscription,
         MollieLoggerActionInterface $loggerAction
     ): void {
-
         $details = [
             'payment_mollie_id',
             'subscription_mollie_id' => 1,
@@ -209,7 +203,7 @@ final class StatusActionSpec extends ObjectBehavior
         $this->execute($request);
     }
 
-    function it_executes_with_subscription_mollie_id_status_pending(
+    function it_marks_when_subscription_mollie_id_is_set_and_status_equals_pending(
         GetStatusInterface $request,
         PaymentInterface $payment,
         CustomerEndpoint $customerEndpoint,
@@ -218,7 +212,6 @@ final class StatusActionSpec extends ObjectBehavior
         Subscription $subscription,
         MollieLoggerActionInterface $loggerAction
     ): void {
-
         $details = [
             'payment_mollie_id',
             'subscription_mollie_id' => 1,
@@ -241,7 +234,7 @@ final class StatusActionSpec extends ObjectBehavior
         $this->execute($request);
     }
 
-    function it_executes_with_subscription_mollie_id_status_completed(
+    function it_marks_when_subscription_mollie_id_is_set_and_status_equals_completed(
         GetStatusInterface $request,
         PaymentInterface $payment,
         CustomerEndpoint $customerEndpoint,
@@ -250,7 +243,6 @@ final class StatusActionSpec extends ObjectBehavior
         Subscription $subscription,
         MollieLoggerActionInterface $loggerAction
     ): void {
-
         $details = [
             'payment_mollie_id',
             'subscription_mollie_id' => 1,
@@ -273,7 +265,7 @@ final class StatusActionSpec extends ObjectBehavior
         $this->execute($request);
     }
 
-    function it_executes_with_subscription_mollie_id_status_suspended(
+    function it_marks_when_subscription_mollie_id_is_set_and_status_equals_suspended(
         GetStatusInterface $request,
         PaymentInterface $payment,
         CustomerEndpoint $customerEndpoint,
@@ -282,7 +274,6 @@ final class StatusActionSpec extends ObjectBehavior
         Subscription $subscription,
         MollieLoggerActionInterface $loggerAction
     ): void {
-
         $details = [
             'payment_mollie_id',
             'subscription_mollie_id' => 1,
@@ -305,7 +296,7 @@ final class StatusActionSpec extends ObjectBehavior
         $this->execute($request);
     }
 
-    function it_executes_with_subscription_mollie_id_status_unknown(
+    function it_marks_when_subscription_mollie_id_is_set_and_status_equals_unknown(
         GetStatusInterface $request,
         PaymentInterface $payment,
         CustomerEndpoint $customerEndpoint,
@@ -314,7 +305,6 @@ final class StatusActionSpec extends ObjectBehavior
         Subscription $subscription,
         MollieLoggerActionInterface $loggerAction
     ): void {
-
         $details = [
             'payment_mollie_id',
             'subscription_mollie_id' => 1,
@@ -337,7 +327,7 @@ final class StatusActionSpec extends ObjectBehavior
         $this->execute($request);
     }
 
-    function it_executes_without_subscription_mollie_id_and_order_id_and_with_payment_with_refund(
+    function it_marks_when_subscription_mollie_id_and_order_id_are_unset_and_with_refund_set_to_true(
         GetStatusInterface $request,
         PaymentInterface $payment,
         PaymentEndpoint $paymentEndpoint,
@@ -366,14 +356,13 @@ final class StatusActionSpec extends ObjectBehavior
         $this->execute($request);
     }
 
-    function it_executes_without_subscription_mollie_id_and_order_id_and_with_payment_with_no_refund(
+    function it_marks_when_subscription_mollie_id_and_order_id_are_unset_and_with_refund_set_to_false(
         GetStatusInterface $request,
         PaymentInterface $payment,
         PaymentEndpoint $paymentEndpoint,
         MollieApiClient $mollieApiClient,
         Payment $molliePayment,
-        MollieLoggerActionInterface $loggerAction,
-        PaymentRefundInterface $paymentRefund
+        MollieLoggerActionInterface $loggerAction
     ): void {
         $details = [
             'payment_mollie_id' => 2,
@@ -397,7 +386,7 @@ final class StatusActionSpec extends ObjectBehavior
         $this->execute($request);
     }
 
-    function it_executes_without_subscription_mollie_id_and_with_order_id_with_no_refund(
+    function it_marks_when_subscription_mollie_id_and_refund_are_set_to_false_and_with_order_id_set_to_true(
         GetStatusInterface $request,
         PaymentInterface $corePayment,
         Payment $payment,
@@ -445,7 +434,7 @@ final class StatusActionSpec extends ObjectBehavior
         $this->execute($request);
     }
 
-    function it_executes_without_subscription_mollie_id_and_with_order_id_with_refund(
+    function it_marks_when_subscription_mollie_id_is_set_to_false_and_refund_with_order_id_are_set_to_true(
         GetStatusInterface $request,
         PaymentInterface $corePayment,
         Payment $payment,

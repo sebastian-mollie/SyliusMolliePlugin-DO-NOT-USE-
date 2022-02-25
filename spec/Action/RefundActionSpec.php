@@ -59,7 +59,7 @@ final class RefundActionSpec extends ObjectBehavior
         $this->shouldHaveType(GatewayAwareInterface::class);
     }
 
-    function it_executes_and_create_refund(
+    function it_creates_refund(
         Refund $request,
         ArrayObject $arrayObject,
         MollieLoggerActionInterface $loggerAction
@@ -67,31 +67,12 @@ final class RefundActionSpec extends ObjectBehavior
         $request->getModel()->willReturn($arrayObject);
         $arrayObject->offsetGet('created_in_mollie')->willReturn(true);
 
-        $this->execute($request);
-
         $loggerAction->addLog('Received refund created in Mollie dashboard')->shouldBeCalled();
-    }
 
-    function it_executes_and_refund_received(
-        Refund $request,
-        MollieApiClient $mollieApiClient,
-        ArrayObject $details,
-        MollieLoggerActionInterface $loggerAction,
-        PaymentInterface $payment,
-        Payment $molliePayment,
-        PaymentEndpoint $paymentEndpoint,
-        ConvertRefundDataInterface $convertOrderRefundData
-    ): void {
-        $this->setApi($mollieApiClient);
-        $request->getModel()->willReturn($details);
-
-        $details->offsetGet('created_in_mollie')->willReturn(true);
-
-        $loggerAction->addLog('Received refund created in Mollie dashboard')->shouldBeCalled();
         $this->execute($request);
     }
 
-    function it_executes_and_refund_action_with_payment_id(
+    function it_refunds_action_when_payment_id_is_set(
         Refund $request,
         MollieApiClient $mollieApiClient,
         ArrayObject $details,
@@ -116,12 +97,14 @@ final class RefundActionSpec extends ObjectBehavior
         $molliePayment->id = '4';
         $molliePayment->amountRemaining = 5;
         $molliePayment->canBeRefunded()->willReturn(true);
+
         $molliePayment->refund(['amount' => ['5']])->shouldBeCalled();
         $loggerAction->addLog(sprintf('Refund action with payment id %s', $molliePayment->id))->shouldBeCalled();
+
         $this->execute($request);
     }
 
-    function it_executes_and_cannot_refund(
+    function it_cannot_refunds(
         Refund $request,
         MollieApiClient $mollieApiClient,
         ArrayObject $details,
@@ -146,20 +129,20 @@ final class RefundActionSpec extends ObjectBehavior
         $molliePayment->id = '4';
         $molliePayment->amountRemaining = 5;
         $molliePayment->canBeRefunded()->willReturn(false);
+
         $loggerAction->addNegativeLog(sprintf('Payment %s can not be refunded.', $molliePayment->id))->shouldBeCalled();
+
         $this->shouldThrow(new UpdateHandlingException(sprintf('Payment %s can not be refunded.', $molliePayment->id)))
             ->during('execute',[$request]);
     }
 
-    function it_executes_with_api_exception(
+    function it_tries_to_refund_and_throws_api_exception(
         Refund $request,
         MollieApiClient $mollieApiClient,
         ArrayObject $details,
         MollieLoggerActionInterface $loggerAction,
         PaymentInterface $payment,
-        Payment $molliePayment,
-        PaymentEndpoint $paymentEndpoint,
-        ConvertRefundDataInterface $convertOrderRefundData
+        PaymentEndpoint $paymentEndpoint
     ): void {
         $this->setApi($mollieApiClient);
         $request->getModel()->willReturn($details);

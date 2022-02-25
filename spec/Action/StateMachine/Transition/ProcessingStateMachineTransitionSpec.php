@@ -1,9 +1,11 @@
 <?php
+
 /*
     This file was created by developers working at BitBag
     Do you need more information about us and what we do? Visit our   website!
     We are hiring developers from all over the world. Join us and start your new, exciting adventure and become part of us: https://bitbag.io/career
 */
+
 declare(strict_types=1);
 
 namespace spec\BitBag\SyliusMolliePlugin\Action\StateMachine\Transition;
@@ -33,12 +35,11 @@ final class ProcessingStateMachineTransitionSpec extends ObjectBehavior
         $this->shouldImplement(ProcessingStateMachineTransitionInterface::class);
     }
 
-    function it_applies(
+    function it_applies_transition(
         MollieSubscriptionInterface $subscription,
         FactoryInterface $subscriptionSateMachineFactory,
         StateMachineInterface $stateMachine
-    ): void
-    {
+    ): void {
         $subscriptionSateMachineFactory->get(
             $subscription,
             MollieSubscriptionProcessingTransitions::GRAPH
@@ -50,12 +51,11 @@ final class ProcessingStateMachineTransitionSpec extends ObjectBehavior
         $this->apply($subscription,MollieSubscriptionProcessingTransitions::TRANSITION_PROCESS);
     }
 
-    function it_cannot_applies(
+    function it_cannot_applies_transition(
         MollieSubscriptionInterface $subscription,
         FactoryInterface $subscriptionSateMachineFactory,
         StateMachineInterface $stateMachine
-    ): void
-    {
+    ): void {
         $subscriptionSateMachineFactory->get(
             $subscription,
             MollieSubscriptionProcessingTransitions::GRAPH

@@ -75,7 +75,7 @@ final class StatusRecurringSubscriptionActionSpec extends ObjectBehavior
         $this->shouldHaveType(BaseApiAwareAction::class);
     }
 
-    function it_executes_and_aborts(
+    function it_applies_abort_tranistion(
         StatusRecurringSubscription $request,
         MollieSubscriptionInterface $subscription,
         EntityManagerInterface $subscriptionManager,
@@ -101,7 +101,7 @@ final class StatusRecurringSubscriptionActionSpec extends ObjectBehavior
         $this->execute($request);
     }
 
-    function it_executes_with_payment_id_not_null(
+    function it_executes_when_payment_id_is_not_null(
         StatusRecurringSubscription $request,
         MollieSubscriptionInterface $subscription,
         EntityManagerInterface $subscriptionManager,
@@ -129,7 +129,7 @@ final class StatusRecurringSubscriptionActionSpec extends ObjectBehavior
         $this->execute($request);
     }
 
-    function it_executes_with_sylius_payment_not_null(
+    function it_executes_when_sylius_payment_is_not_null(
         StatusRecurringSubscription $request,
         MollieSubscriptionInterface $subscription,
         EntityManagerInterface $subscriptionManager,

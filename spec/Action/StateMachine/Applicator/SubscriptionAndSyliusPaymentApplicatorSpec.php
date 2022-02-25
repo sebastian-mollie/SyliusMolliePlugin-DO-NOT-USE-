@@ -1,9 +1,11 @@
 <?php
+
 /*
     This file was created by developers working at BitBag
     Do you need more information about us and what we do? Visit our   website!
     We are hiring developers from all over the world. Join us and start your new, exciting adventure and become part of us: https://bitbag.io/career
 */
+
 declare(strict_types=1);
 
 namespace spec\BitBag\SyliusMolliePlugin\Action\StateMachine\Applicator;
@@ -35,6 +37,7 @@ final class SubscriptionAndSyliusPaymentApplicatorSpec extends ObjectBehavior
             $processingStateMachineTransition
         );
     }
+
     function it_is_initializable(): void
     {
         $this->shouldHaveType(SubscriptionAndSyliusPaymentApplicator::class);
@@ -45,7 +48,7 @@ final class SubscriptionAndSyliusPaymentApplicatorSpec extends ObjectBehavior
         $this->shouldImplement(SubscriptionAndSyliusPaymentApplicatorInterface::class);
     }
 
-    function it_executes_state_new(
+    function it_applies_transition_when_status_is_new(
         MollieSubscriptionInterface $subscription,
         PaymentInterface $payment,
         PaymentStateMachineTransitionInterface $paymentStateMachineTransition,
@@ -64,7 +67,7 @@ final class SubscriptionAndSyliusPaymentApplicatorSpec extends ObjectBehavior
         $this->execute($subscription, $payment);
     }
 
-    function it_executes_state_processing(
+    function it_applies_transition_when_status_is_processing(
         MollieSubscriptionInterface $subscription,
         PaymentInterface $payment,
         PaymentStateMachineTransitionInterface $paymentStateMachineTransition,
@@ -83,7 +86,7 @@ final class SubscriptionAndSyliusPaymentApplicatorSpec extends ObjectBehavior
         $this->execute($subscription, $payment);
     }
 
-    function it_executes_state_authorized(
+    function it_applies_transition_when_status_is_authorized(
         MollieSubscriptionInterface $subscription,
         PaymentInterface $payment,
         PaymentStateMachineTransitionInterface $paymentStateMachineTransition,
@@ -102,7 +105,7 @@ final class SubscriptionAndSyliusPaymentApplicatorSpec extends ObjectBehavior
         $this->execute($subscription, $payment);
     }
 
-    function it_executes_state_cart(
+    function it_applies_transition_when_status_is_cart(
         MollieSubscriptionInterface $subscription,
         PaymentInterface $payment,
         PaymentStateMachineTransitionInterface $paymentStateMachineTransition,
@@ -121,7 +124,7 @@ final class SubscriptionAndSyliusPaymentApplicatorSpec extends ObjectBehavior
         $this->execute($subscription, $payment);
     }
 
-    function it_executes_state_completed(
+    function it_applies_transition_when_status_is_completed(
         MollieSubscriptionInterface $subscription,
         PaymentInterface $payment,
         PaymentStateMachineTransitionInterface $paymentStateMachineTransition,
@@ -147,7 +150,7 @@ final class SubscriptionAndSyliusPaymentApplicatorSpec extends ObjectBehavior
         $this->execute($subscription, $payment);
     }
 
-    function it_executes_and_fail(
+    function it_applies_transition_when_status_is_paid(
         MollieSubscriptionInterface $subscription,
         PaymentInterface $payment,
         PaymentStateMachineTransitionInterface $paymentStateMachineTransition

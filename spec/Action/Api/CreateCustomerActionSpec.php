@@ -58,7 +58,7 @@ final class CreateCustomerActionSpec extends ObjectBehavior
         $this->shouldHaveType(BaseApiAwareAction::class);
     }
 
-    function it_executes(
+    function it_executes_create_customer_action(
         CreateCustomer $request,
         MollieApiClient $mollieApiClient,
         CustomerEndpoint $customerEndpoint,
@@ -86,7 +86,7 @@ final class CreateCustomerActionSpec extends ObjectBehavior
         $this->execute($request);
     }
 
-    function it_executes_with_null_customer(
+    function it_executes_create_customer_action_when_customer_is_null(
         CreateCustomer $request,
         MollieApiClient $mollieApiClient,
         CustomerEndpoint $customerEndpoint,
@@ -109,6 +109,7 @@ final class CreateCustomerActionSpec extends ObjectBehavior
         $customer->setProfileId('id_1');
 
         $mollieCustomerRepository->findOneBy(["email" => "shop@example.com"])->willReturn(null);
+
         $mollieCustomerRepository->add($customer)->shouldBeCalled();
         $loggerAction->addLog(sprintf('Create customer action with id:  %s', 'id_1'))->shouldBeCalled();
         $arrayObject->offsetSet('customer_mollie_id', 'id_1')->shouldBeCalled();
@@ -116,14 +117,13 @@ final class CreateCustomerActionSpec extends ObjectBehavior
         $this->execute($request);
     }
 
-    function it_executes_with_exception(
+    function it_executes_create_customer_action_and_throws_api_exception(
         CreateCustomer $request,
         MollieApiClient $mollieApiClient,
         CustomerEndpoint $customerEndpoint,
         Customer $customerMollie,
         ArrayObject $arrayObject,
-        MollieLoggerActionInterface $loggerAction,
-        RepositoryInterface $mollieCustomerRepository
+        MollieLoggerActionInterface $loggerAction
     ): void {
         $mollieApiClient->customers = $customerEndpoint;
         $this->setApi($mollieApiClient);
@@ -136,10 +136,10 @@ final class CreateCustomerActionSpec extends ObjectBehavior
         $customer = new MollieCustomer();
         $customer->setEmail('shop@example.com');
         $customer->setProfileId('id_1');
-        $e = new \Exception();
+        $e = new \Exception('test_error');
         $customerEndpoint->create(['name' => 'Jan Kowalski', 'email' => 'shop@example.com'])->willThrow($e);
 
-        $loggerAction->addNegativeLog(sprintf('Error with create customer:  %s', $e->getMessage()))->shouldBeCalled();
+        $loggerAction->addNegativeLog(sprintf('Error with create customer:  %s', 'test_error'))->shouldBeCalled();
 
         $this->shouldThrow(ApiException::class)
             ->during('execute', [$request]);

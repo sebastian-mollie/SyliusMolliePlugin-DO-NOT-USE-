@@ -43,11 +43,9 @@ final class CurrencyValidatorSpec extends ObjectBehavior
         $this->shouldHaveType(ConstraintValidator::class);
     }
 
-    function it_validates(
+    function it_validates_currency(
         PaymentMethodInterface $paymentMethod,
-        GatewayConfigInterface $gatewayConfig,
-        ChannelInterface $channel,
-        CurrencyInterface $currency
+        GatewayConfigInterface $gatewayConfig
     ): void {
         $currencyConstraint = new Currency();
         $gatewayConfig->getFactoryName()->willReturn(MollieGatewayFactory::FACTORY_NAME);
@@ -56,7 +54,7 @@ final class CurrencyValidatorSpec extends ObjectBehavior
         $this->validate($paymentMethod, $currencyConstraint);
     }
 
-    function it_validates_with_null_base_currency(
+    function it_validates_currency_with_null_base_currency(
         PaymentMethodInterface $paymentMethod,
         GatewayConfigInterface $gatewayConfig,
         ChannelInterface $channel,
@@ -83,7 +81,7 @@ final class CurrencyValidatorSpec extends ObjectBehavior
         $this->validate($paymentMethod, $constraint);
     }
 
-    function it_validates_with_unsupported_currency(
+    function it_validates_currency_with_unsupported_currency(
         PaymentMethodInterface $paymentMethod,
         GatewayConfigInterface $gatewayConfig,
         ChannelInterface $channel,
@@ -112,7 +110,7 @@ final class CurrencyValidatorSpec extends ObjectBehavior
         $this->validate($paymentMethod, $constraint);
     }
 
-    function it_validates_with_supported_currency(
+    function it_validates_currency_with_supported_currency(
         PaymentMethodInterface $paymentMethod,
         GatewayConfigInterface $gatewayConfig,
         ChannelInterface $channel,
@@ -135,7 +133,7 @@ final class CurrencyValidatorSpec extends ObjectBehavior
         $this->validate($paymentMethod, $constraint);
     }
 
-    function it_validates_with_null_gateway_config(
+    function it_validates_currency_with_null_gateway_config(
         PaymentMethodInterface $paymentMethod,
         GatewayConfigInterface $gatewayConfig,
         ExecutionContextInterface $context,
@@ -149,7 +147,7 @@ final class CurrencyValidatorSpec extends ObjectBehavior
         $this->validate($paymentMethod, $currencyConstraint);
     }
 
-    function it_validates_with_gateway_config_factory_name_else_than_mollie_subscription(
+    function it_validates_currency_with_gateway_config_factory_name_else_than_mollie_subscription(
         PaymentMethodInterface $paymentMethod,
         GatewayConfigInterface $gatewayConfig,
         ExecutionContextInterface $context,

@@ -1,9 +1,11 @@
 <?php
+
 /*
     This file was created by developers working at BitBag
     Do you need more information about us and what we do? Visit our   website!
     We are hiring developers from all over the world. Join us and start your new, exciting adventure and become part of us: https://bitbag.io/career
 */
+
 declare(strict_types=1);
 
 namespace spec\BitBag\SyliusMolliePlugin\Order;
@@ -50,6 +52,7 @@ final class SubscriptionOrderClonerSpec extends ObjectBehavior
             $shipmentCloner
         );
     }
+
     function it_is_initializable(): void
     {
         $this->shouldHaveType(SubscriptionOrderCloner::class);
@@ -60,7 +63,7 @@ final class SubscriptionOrderClonerSpec extends ObjectBehavior
         $this->shouldImplement(SubscriptionOrderClonerInterface::class);
     }
 
-    function it_clones(
+    function it_clones_subscription_order(
         OrderInterface $order,
         OrderInterface $clonedOrder,
         OrderInterface $rootOrder,
@@ -149,10 +152,10 @@ final class SubscriptionOrderClonerSpec extends ObjectBehavior
         $adjustmentCloner->clone($adjustment->getWrappedObject())->willReturn($clonedOrderAdjustment);
         $clonedOrder->addAdjustment($clonedOrderAdjustment);
         $clonedOrder->isShippingRequired()->willReturn(false);
+
         $clonedOrder->recalculateAdjustmentsTotal()->shouldBeCalled();
         $clonedOrder->recalculateItemsTotal()->shouldBeCalled();
 
         $this->clone($subscription, $order, $orderItem)->shouldReturn($clonedOrder);
-
     }
 }

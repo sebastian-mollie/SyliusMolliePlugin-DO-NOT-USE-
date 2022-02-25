@@ -66,7 +66,7 @@ final class CaptureActionSpec extends ObjectBehavior
         $this->shouldHaveType(GatewayAwareInterface::class);
     }
 
-    function it_executes_with_null_factory(
+    function it_executes_when_factory_is_null(
         Capture $request,
         ArrayObject $details,
         TokenInterface $token,
@@ -77,16 +77,17 @@ final class CaptureActionSpec extends ObjectBehavior
         $this->setGateway($gateway);
         $mollieApiClient->isRecurringSubscription()->willReturn(true);
         $this->setApi($mollieApiClient);
+        $this->setGenericTokenFactory();
+
         $request->getToken()->willReturn($token);
         $token->getGatewayName()->willReturn('test');
         $token->getDetails()->willReturn($identity);
         $request->getModel()->willReturn($details);
 
-        $this->setGenericTokenFactory();
         $this->shouldThrow( new RuntimeException())->during('execute',[$request]);
     }
 
-    function it_executes_with_subscription_mollie_id_true(
+    function it_executes_when_subscription_mollie_id_is_true(
         Capture $request,
         ArrayObject $details,
         PaymentInterface $payment,
@@ -155,7 +156,7 @@ final class CaptureActionSpec extends ObjectBehavior
         $this->execute($request);
     }
 
-    function it_executes_with_recurring_subscription(
+    function it_executes_when_recurring_subscription_is_true(
         Capture $request,
         ArrayObject $details,
         PaymentInterface $payment,
@@ -229,7 +230,7 @@ final class CaptureActionSpec extends ObjectBehavior
         $this->execute($request);
     }
 
-    function it_executes_order_api(
+    function it_executes_with_method_type_equals_order_api(
         Capture $request,
         ArrayObject $details,
         PaymentInterface $payment,
@@ -267,7 +268,6 @@ final class CaptureActionSpec extends ObjectBehavior
         $token->getTargetUrl()->willReturn('url');
         $token->getAfterUrl()->willReturn('url');
         $token->getHash()->willReturn('test');
-
 
         $payment = \Mockery::mock('payment');
         $payment->id = 1;
@@ -297,9 +297,7 @@ final class CaptureActionSpec extends ObjectBehavior
         $details->offsetSet('webhookUrl', 'url')->shouldBeCalled();
         $details->offsetSet('backurl', 'url')->shouldBeCalled();
         $details->offsetSet('metadata', [
-            'refund_token' =>
-                'refund_token_hash'
-            ,
+            'refund_token' => 'refund_token_hash',
             'methodType' => Options::ORDER_API
         ])->shouldBeCalled();
         $gateway->execute(new CreateOrder($details->getWrappedObject()))->shouldBeCalledOnce();
@@ -307,7 +305,7 @@ final class CaptureActionSpec extends ObjectBehavior
         $this->execute($request);
     }
 
-    function it_executes_payment_api(
+    function it_executes_with_method_type_equals_payment_api(
         Capture $request,
         ArrayObject $details,
         PaymentInterface $payment,
@@ -345,7 +343,6 @@ final class CaptureActionSpec extends ObjectBehavior
         $token->getTargetUrl()->willReturn('url');
         $token->getAfterUrl()->willReturn('url');
         $token->getHash()->willReturn('test');
-
 
         $payment = \Mockery::mock('payment');
         $payment->id = 1;
@@ -376,9 +373,7 @@ final class CaptureActionSpec extends ObjectBehavior
         $details->offsetSet('webhookUrl', 'url')->shouldBeCalled();
         $details->offsetSet('backurl', 'url')->shouldBeCalled();
         $details->offsetSet('metadata', [
-            'refund_token' =>
-                'refund_token_hash'
-            ,
+            'refund_token' => 'refund_token_hash',
             'methodType' => Options::PAYMENT_API,
             'molliePaymentMethods' => 'not_klarna_scenario'
         ])->shouldBeCalled();
@@ -387,7 +382,7 @@ final class CaptureActionSpec extends ObjectBehavior
         $this->execute($request);
     }
 
-    function it_executes_payment_api_with_klarna_scenario(
+    function it_executes_with_method_type_equals_payment_api_and_with_klarna_payment_method(
         Capture $request,
         ArrayObject $details,
         PaymentInterface $payment,
@@ -425,7 +420,6 @@ final class CaptureActionSpec extends ObjectBehavior
         $token->getTargetUrl()->willReturn('url');
         $token->getAfterUrl()->willReturn('url');
         $token->getHash()->willReturn('test');
-
 
         $payment = \Mockery::mock('payment');
         $payment->id = 1;
@@ -456,9 +450,7 @@ final class CaptureActionSpec extends ObjectBehavior
         $details->offsetSet('webhookUrl', 'url')->shouldBeCalled();
         $details->offsetSet('backurl', 'url')->shouldBeCalled();
         $details->offsetSet('metadata', [
-            'refund_token' =>
-                'refund_token_hash'
-            ,
+            'refund_token' => 'refund_token_hash',
             'methodType' => Options::PAYMENT_API,
             'molliePaymentMethods' => 'klarnapaynow',
         ])->shouldBeCalled();

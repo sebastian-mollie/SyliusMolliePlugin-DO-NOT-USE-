@@ -1,16 +1,17 @@
 <?php
+
 /*
     This file was created by developers working at BitBag
     Do you need more information about us and what we do? Visit our   website!
     We are hiring developers from all over the world. Join us and start your new, exciting adventure and become part of us: https://bitbag.io/career
 */
+
 declare(strict_types=1);
 
 namespace spec\BitBag\SyliusMolliePlugin\Generator;
 
 use BitBag\SyliusMolliePlugin\Entity\MollieSubscriptionConfigurationInterface;
 use BitBag\SyliusMolliePlugin\Entity\MollieSubscriptionInterface;
-use BitBag\SyliusMolliePlugin\Entity\MollieSubscriptionSchedule;
 use BitBag\SyliusMolliePlugin\Entity\MollieSubscriptionScheduleInterface;
 use BitBag\SyliusMolliePlugin\Factory\DatePeriodFactoryInterface;
 use BitBag\SyliusMolliePlugin\Factory\MollieSubscriptionScheduleFactoryInterface;
@@ -30,6 +31,7 @@ final class SubscriptionScheduleGeneratorSpec extends ObjectBehavior
             $scheduleFactory
         );
     }
+
     function it_is_initializable(): void
     {
         $this->shouldHaveType(SubscriptionScheduleGenerator::class);
@@ -40,7 +42,7 @@ final class SubscriptionScheduleGeneratorSpec extends ObjectBehavior
         $this->shouldImplement(SubscriptionScheduleGeneratorInterface::class);
     }
 
-    function it_generates(
+    function it_generates_subscription_schedule(
         MollieSubscriptionInterface $subscription,
         MollieSubscriptionConfigurationInterface $configuration,
         DatePeriodFactoryInterface $datePeriodFactory,
@@ -66,9 +68,8 @@ final class SubscriptionScheduleGeneratorSpec extends ObjectBehavior
            0,
             Argument::any()
         )->willReturn($schedule);
+
         $subscription->setStartedAt(Argument::any())->shouldBeCalled();
-
-
         $schedules = [$schedule->getWrappedObject()];
 
         $this->generate($subscription)->shouldReturn($schedules);

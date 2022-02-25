@@ -1,9 +1,11 @@
 <?php
+
 /*
     This file was created by developers working at BitBag
     Do you need more information about us and what we do? Visit our   website!
     We are hiring developers from all over the world. Join us and start your new, exciting adventure and become part of us: https://bitbag.io/career
 */
+
 declare(strict_types=1);
 
 namespace spec\BitBag\SyliusMolliePlugin\Action\StateMachine\Applicator;
@@ -40,6 +42,7 @@ final class SubscriptionAndPaymentIdApplicatorSpec extends ObjectBehavior
             $processingStateMachineTransition
         );
     }
+
     function it_is_initializable(): void
     {
         $this->shouldHaveType(SubscriptionAndPaymentIdApplicator::class);
@@ -50,7 +53,7 @@ final class SubscriptionAndPaymentIdApplicatorSpec extends ObjectBehavior
         $this->shouldImplement(SubscriptionAndPaymentIdApplicatorInterface::class);
     }
 
-    function it_executes_status_open(
+    function it_applies_transition_when_status_is_open(
         MollieSubscriptionInterface $subscription,
         MollieSubscriptionConfigurationInterface $configuration,
         MollieApiClient $mollieApiClient,
@@ -84,7 +87,7 @@ final class SubscriptionAndPaymentIdApplicatorSpec extends ObjectBehavior
         $this->execute($subscription, 'id_1');
     }
 
-    function it_executes_status_pending(
+    function it_applies_transition_when_status_is_pending(
         MollieSubscriptionInterface $subscription,
         MollieSubscriptionConfigurationInterface $configuration,
         MollieApiClient $mollieApiClient,
@@ -118,7 +121,7 @@ final class SubscriptionAndPaymentIdApplicatorSpec extends ObjectBehavior
         $this->execute($subscription, 'id_1');
     }
 
-    function it_executes_status_authorized(
+    function it_applies_transition_when_status_is_authorized(
         MollieSubscriptionInterface $subscription,
         MollieSubscriptionConfigurationInterface $configuration,
         MollieApiClient $mollieApiClient,
@@ -152,7 +155,7 @@ final class SubscriptionAndPaymentIdApplicatorSpec extends ObjectBehavior
         $this->execute($subscription, 'id_1');
     }
 
-    function it_executes_status_paid(
+    function it_applies_transition_when_status_is_paid(
         MollieSubscriptionInterface $subscription,
         MollieSubscriptionConfigurationInterface $configuration,
         MollieApiClient $mollieApiClient,
@@ -193,7 +196,7 @@ final class SubscriptionAndPaymentIdApplicatorSpec extends ObjectBehavior
         $this->execute($subscription, 'id_1');
     }
 
-    function it_executes_and_fail(
+    function it_applies_transition_when_status_is_failure(
         MollieSubscriptionInterface $subscription,
         MollieSubscriptionConfigurationInterface $configuration,
         MollieApiClient $mollieApiClient,

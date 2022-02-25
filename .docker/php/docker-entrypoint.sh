@@ -37,9 +37,7 @@ if [ "$1" = 'php-fpm' ] || [ "$1" = 'bin/console' ]; then
     done
 
     php bin/console doctrine:database:create --if-not-exists;
-
-    php bin/console doctrine:migrations:migrate -n;
-
+    php bin/console doctrine:schema:update -f;
 fi
 
 exec docker-php-entrypoint "$@"

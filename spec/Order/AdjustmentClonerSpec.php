@@ -1,9 +1,11 @@
 <?php
+
 /*
     This file was created by developers working at BitBag
     Do you need more information about us and what we do? Visit our   website!
     We are hiring developers from all over the world. Join us and start your new, exciting adventure and become part of us: https://bitbag.io/career
 */
+
 declare(strict_types=1);
 
 namespace spec\BitBag\SyliusMolliePlugin\Order;
@@ -20,8 +22,7 @@ final class AdjustmentClonerSpec extends ObjectBehavior
         FactoryInterface $adjustmentFactory,
         BaseAdjustmentInterface $adjustment,
         BaseAdjustmentInterface $clonedAdjustment
-    ): void
-    {
+    ): void {
         $this->beConstructedWith($adjustmentFactory);
 
         $adjustmentFactory->createNew()->willReturn($clonedAdjustment);
@@ -54,7 +55,7 @@ final class AdjustmentClonerSpec extends ObjectBehavior
         $this->shouldImplement(AdjustmentClonerInterface::class);
     }
 
-    function it_clones_when_it_is_locked(
+    function it_clones_adjustment_when_it_is_locked(
         BaseAdjustmentInterface $adjustment,
         BaseAdjustmentInterface $clonedAdjustment
     ): void {
@@ -65,7 +66,7 @@ final class AdjustmentClonerSpec extends ObjectBehavior
         $this->clone($adjustment)->shouldReturn($clonedAdjustment);
     }
 
-    function it_clones_when_it_is_unlocked(
+    function it_clones_adjustment_when_it_is_unlocked(
         BaseAdjustmentInterface $adjustment,
         BaseAdjustmentInterface $clonedAdjustment
     ): void {
@@ -75,5 +76,4 @@ final class AdjustmentClonerSpec extends ObjectBehavior
 
         $this->clone($adjustment)->shouldReturn($clonedAdjustment);
     }
-
 }

@@ -1,9 +1,11 @@
 <?php
+
 /*
     This file was created by developers working at BitBag
     Do you need more information about us and what we do? Visit our   website!
     We are hiring developers from all over the world. Join us and start your new, exciting adventure and become part of us: https://bitbag.io/career
 */
+
 declare(strict_types=1);
 
 namespace spec\BitBag\SyliusMolliePlugin\Order;
@@ -64,6 +66,7 @@ final class OrderPaymentRefundSpec extends ObjectBehavior
         $paymentMethod->getGatewayConfig()->willReturn($config);
         $config->getFactoryName()->willReturn('mollie_subscription_test');
     }
+
     function it_is_initializable(): void
     {
         $this->shouldHaveType(OrderPaymentRefund::class);
@@ -74,7 +77,7 @@ final class OrderPaymentRefundSpec extends ObjectBehavior
         $this->shouldImplement(OrderPaymentRefundInterface::class);
     }
 
-    function it_refunds_when_token_not_null_and_order_mollie_id_was_found(
+    function it_refunds_order_payment_when_token_is_not_null_and_order_mollie_id_was_found(
         UnitsRefunded $units,
         PaymentInterface $payment,
         Payum $payum,
@@ -108,12 +111,12 @@ final class OrderPaymentRefundSpec extends ObjectBehavior
         $token->getGatewayName()->willReturn('test_gateway');
         $payum->getGateway('test_gateway')->willReturn($gateway);
 
-        $this->refund($units);
         $gateway->execute(new RefundOrder($token->getWrappedObject()))->shouldBeCalledOnce();
 
+        $this->refund($units);
     }
 
-    function it_refunds_when_token_not_null_and_order_mollie_id_was_not_found(
+    function it_refunds_order_payment_when_token_is_not_null_and_order_mollie_id_was_not_found(
         UnitsRefunded $units,
         PaymentInterface $payment,
         Payum $payum,
@@ -146,11 +149,12 @@ final class OrderPaymentRefundSpec extends ObjectBehavior
         $token->getGatewayName()->willReturn('test_gateway');
         $payum->getGateway('test_gateway')->willReturn($gateway);
 
-        $this->refund($units);
         $gateway->execute(new RefundAction($token->getWrappedObject()))->shouldBeCalledOnce();
+
+        $this->refund($units);
     }
 
-    function it_not_refunds_when_token_null(
+    function it_not_refunds_order_payment_when_token_is_null(
         UnitsRefunded $units,
         PaymentInterface $payment,
         Payum $payum,
@@ -184,16 +188,16 @@ final class OrderPaymentRefundSpec extends ObjectBehavior
         $token->getGatewayName()->willReturn('test_gateway');
         $payum->getGateway('test_gateway')->willReturn($gateway);
 
-        $this->shouldThrow(BadRequestHttpException::class)->during('refund',[$units]);
         $loggerAction->addNegativeLog(sprintf('A token with hash `%s` could not be found.', $hash))->shouldBeCalledOnce();
+
+        $this->shouldThrow(BadRequestHttpException::class)->during('refund',[$units]);
     }
 
-    function it_refunds_when_payment_null(
+    function it_refunds_order_payment_when_payment_is_null(
         RepositoryInterface $orderRepository,
         OrderInterface $order,
         MollieLoggerActionInterface $loggerAction,
-        UnitsRefunded $units,
-        PaymentInterface $payment
+        UnitsRefunded $units
     ): void {
         $orderRepository->findOneBy(['number' => '#0000001'])->willReturn($order);
 
@@ -206,7 +210,7 @@ final class OrderPaymentRefundSpec extends ObjectBehavior
         $this->shouldThrow(NotFoundHttpException::class)->during('refund',[$units]);
     }
 
-    function it_refunds_when_factory_name_not_in_array(
+    function it_refunds_order_payment_when_factory_name_is_not_in_array(
         GatewayConfigInterface $config,
         PaymentInterface $payment
     ): void {
