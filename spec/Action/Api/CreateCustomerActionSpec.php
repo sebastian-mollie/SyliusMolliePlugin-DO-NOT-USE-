@@ -64,7 +64,6 @@ final class CreateCustomerActionSpec extends ObjectBehavior
         CustomerEndpoint $customerEndpoint,
         Customer $customerMollie,
         MollieCustomerInterface $customer,
-        ArrayObject $arrayObject,
         MollieLoggerActionInterface $loggerAction,
         RepositoryInterface $mollieCustomerRepository
     ): void {
@@ -72,16 +71,18 @@ final class CreateCustomerActionSpec extends ObjectBehavior
         $this->setApi($mollieApiClient);
 
         $customerMollie->id = 'id_1';
-        $arrayObject->offsetGet('fullName')->willReturn('Jan Kowalski');
-        $arrayObject->offsetGet('email')->willReturn('shop@example.com');
-        $request->getModel()->willReturn($arrayObject);
+        $details = new ArrayObject([
+            'fullName' => 'Jan Kowalski',
+            'email' => 'shop@example.com',
+            'customer_mollie_id' => 'id_11',
+        ]);
+        $request->getModel()->willReturn($details);
 
         $mollieCustomerRepository->findOneBy(['email' => 'shop@example.com'])->willReturn($customer);
         $customerEndpoint->create(['name' => 'Jan Kowalski', 'email' => 'shop@example.com'])->willReturn($customerMollie);
         $customer->getProfileId()->willReturn('id_11');
 
         $loggerAction->addLog(sprintf('Create customer action with id:  %s', 'id_11'))->shouldBeCalled();
-        $arrayObject->offsetSet('customer_mollie_id', 'id_11')->shouldBeCalled();
 
         $this->execute($request);
     }
@@ -91,7 +92,6 @@ final class CreateCustomerActionSpec extends ObjectBehavior
         MollieApiClient $mollieApiClient,
         CustomerEndpoint $customerEndpoint,
         Customer $customerMollie,
-        ArrayObject $arrayObject,
         MollieLoggerActionInterface $loggerAction,
         RepositoryInterface $mollieCustomerRepository
     ): void {
@@ -99,9 +99,13 @@ final class CreateCustomerActionSpec extends ObjectBehavior
         $this->setApi($mollieApiClient);
 
         $customerMollie->id = 'id_1';
-        $arrayObject->offsetGet('fullName')->willReturn('Jan Kowalski');
-        $arrayObject->offsetGet('email')->willReturn('shop@example.com');
-        $request->getModel()->willReturn($arrayObject);
+        $details = new ArrayObject([
+            'fullName' => 'Jan Kowalski',
+            'email' => 'shop@example.com',
+            'customer_mollie_id' => 'id_11',
+        ]);
+
+        $request->getModel()->willReturn($details);
 
         $customerEndpoint->create(['name' => 'Jan Kowalski', 'email' => 'shop@example.com'])->willReturn($customerMollie);
         $customer = new MollieCustomer();
@@ -112,7 +116,6 @@ final class CreateCustomerActionSpec extends ObjectBehavior
 
         $mollieCustomerRepository->add($customer)->shouldBeCalled();
         $loggerAction->addLog(sprintf('Create customer action with id:  %s', 'id_1'))->shouldBeCalled();
-        $arrayObject->offsetSet('customer_mollie_id', 'id_1')->shouldBeCalled();
 
         $this->execute($request);
     }
@@ -122,16 +125,17 @@ final class CreateCustomerActionSpec extends ObjectBehavior
         MollieApiClient $mollieApiClient,
         CustomerEndpoint $customerEndpoint,
         Customer $customerMollie,
-        ArrayObject $arrayObject,
         MollieLoggerActionInterface $loggerAction
     ): void {
         $mollieApiClient->customers = $customerEndpoint;
         $this->setApi($mollieApiClient);
 
         $customerMollie->id = 'id_1';
-        $arrayObject->offsetGet('fullName')->willReturn('Jan Kowalski');
-        $arrayObject->offsetGet('email')->willReturn('shop@example.com');
-        $request->getModel()->willReturn($arrayObject);
+        $details = new ArrayObject([
+            'fullName' => 'Jan Kowalski',
+            'email' => 'shop@example.com',
+        ]);
+        $request->getModel()->willReturn($details);
 
         $customer = new MollieCustomer();
         $customer->setEmail('shop@example.com');

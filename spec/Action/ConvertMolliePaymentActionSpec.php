@@ -16,7 +16,6 @@ use ArrayObject;
 use BitBag\SyliusMolliePlugin\Action\ConvertMolliePaymentAction;
 use BitBag\SyliusMolliePlugin\Client\MollieApiClient;
 use BitBag\SyliusMolliePlugin\Entity\GatewayConfigInterface;
-use BitBag\SyliusMolliePlugin\Entity\MollieGatewayConfig;
 use BitBag\SyliusMolliePlugin\Entity\MollieGatewayConfigInterface;
 use BitBag\SyliusMolliePlugin\Factory\ApiCustomerFactoryInterface;
 use BitBag\SyliusMolliePlugin\Helper\ConvertOrderInterface;
@@ -29,14 +28,12 @@ use Payum\Core\Request\Convert;
 use Payum\Core\Request\GetCurrency;
 use PhpSpec\ObjectBehavior;
 use BitBag\SyliusMolliePlugin\Helper\PaymentDescriptionInterface;
-use Prophecy\Argument;
 use Sylius\Component\Core\Model\CustomerInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Model\PaymentInterface;
 use Sylius\Component\Customer\Context\CustomerContextInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Tests\BitBag\SyliusMolliePlugin\Entity\GatewayConfig;
 
 final class ConvertMolliePaymentActionSpec extends ObjectBehavior
 {

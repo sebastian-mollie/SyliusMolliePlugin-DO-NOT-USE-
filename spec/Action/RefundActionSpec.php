@@ -61,11 +61,11 @@ final class RefundActionSpec extends ObjectBehavior
 
     function it_creates_refund(
         Refund $request,
-        ArrayObject $arrayObject,
         MollieLoggerActionInterface $loggerAction
     ): void {
-        $request->getModel()->willReturn($arrayObject);
-        $arrayObject->offsetGet('created_in_mollie')->willReturn(true);
+        $request->getModel()->willReturn(new ArrayObject([
+            'created_in_mollie' => true,
+        ]));
 
         $loggerAction->addLog('Received refund created in Mollie dashboard')->shouldBeCalled();
 
@@ -75,7 +75,6 @@ final class RefundActionSpec extends ObjectBehavior
     function it_refunds_action_when_payment_id_is_set(
         Refund $request,
         MollieApiClient $mollieApiClient,
-        ArrayObject $details,
         MollieLoggerActionInterface $loggerAction,
         PaymentInterface $payment,
         Payment $molliePayment,
@@ -83,14 +82,19 @@ final class RefundActionSpec extends ObjectBehavior
         ConvertRefundDataInterface $convertOrderRefundData
     ): void {
         $this->setApi($mollieApiClient);
-        $request->getModel()->willReturn($details);
         $request->getFirstModel()->willReturn($payment);
         $mollieApiClient->payments = $paymentEndpoint;
         $payment->getCurrencyCode()->willReturn('EUR');
+        $request->getModel()->willReturn(new ArrayObject([
+            'payment_mollie_id' => 4,
+            'created_in_mollie' => null,
+            'metadata' => [
+                'refund' => [
+                    'test_refund'
+                ]
+            ]
+        ]));
 
-        $details->offsetGet('payment_mollie_id')->willReturn(4);
-        $details->offsetGet('created_in_mollie')->willReturn(null);
-        $details->offsetGet('metadata')->willReturn(['refund' => ['test_refund']]);
         $paymentEndpoint->get(4)->willReturn($molliePayment);
         $convertOrderRefundData->convert(['test_refund'],'EUR')->willReturn(['5']);
 
@@ -107,7 +111,6 @@ final class RefundActionSpec extends ObjectBehavior
     function it_cannot_refunds(
         Refund $request,
         MollieApiClient $mollieApiClient,
-        ArrayObject $details,
         MollieLoggerActionInterface $loggerAction,
         PaymentInterface $payment,
         Payment $molliePayment,
@@ -115,14 +118,19 @@ final class RefundActionSpec extends ObjectBehavior
         ConvertRefundDataInterface $convertOrderRefundData
     ): void {
         $this->setApi($mollieApiClient);
-        $request->getModel()->willReturn($details);
         $request->getFirstModel()->willReturn($payment);
         $mollieApiClient->payments = $paymentEndpoint;
         $payment->getCurrencyCode()->willReturn('EUR');
+        $request->getModel()->willReturn(new ArrayObject([
+            'payment_mollie_id' => 4,
+            'created_in_mollie' => null,
+            'metadata' => [
+                'refund' => [
+                    'test_refund'
+                ]
+            ]
+        ]));
 
-        $details->offsetGet('payment_mollie_id')->willReturn(4);
-        $details->offsetGet('created_in_mollie')->willReturn(null);
-        $details->offsetGet('metadata')->willReturn(['refund' => ['test_refund']]);
         $paymentEndpoint->get(4)->willReturn($molliePayment);
         $convertOrderRefundData->convert(['test_refund'],'EUR')->willReturn(['5']);
 
@@ -139,20 +147,24 @@ final class RefundActionSpec extends ObjectBehavior
     function it_tries_to_refund_and_throws_api_exception(
         Refund $request,
         MollieApiClient $mollieApiClient,
-        ArrayObject $details,
         MollieLoggerActionInterface $loggerAction,
         PaymentInterface $payment,
         PaymentEndpoint $paymentEndpoint
     ): void {
         $this->setApi($mollieApiClient);
-        $request->getModel()->willReturn($details);
         $request->getFirstModel()->willReturn($payment);
         $mollieApiClient->payments = $paymentEndpoint;
         $payment->getCurrencyCode()->willReturn('EUR');
 
-        $details->offsetGet('payment_mollie_id')->willReturn(4);
-        $details->offsetGet('created_in_mollie')->willReturn(null);
-        $details->offsetGet('metadata')->willReturn(['refund' => ['test_refund']]);
+        $request->getModel()->willReturn(new ArrayObject([
+            'payment_mollie_id' => 4,
+            'created_in_mollie' => null,
+            'metadata' => [
+                'refund' => [
+                    'test_refund'
+                ]
+            ]
+        ]));
         $e = new ApiException;
         $paymentEndpoint->get(4)->willThrow($e);
 
