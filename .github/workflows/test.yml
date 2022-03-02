@@ -1,12 +1,7 @@
 name: Test application
 
 on:
-    push:
-        branches:
-            - master
-    pull_request:
-        branches:
-            - master
+    push: ~
     schedule:
         -   cron: "0 1 * * 6" # Run at 1am every Saturday
 
