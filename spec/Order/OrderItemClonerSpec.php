@@ -61,20 +61,20 @@ final class OrderItemClonerSpec extends ObjectBehavior
         $orderItem->getVersion()->willReturn(3);
         $orderItem->isImmutable()->willReturn(true);
 
-        $clonedOrderItem->setOrder($order);
-        $clonedOrderItem->setProductName('test_product_name');
-        $clonedOrderItem->setUnitPrice(59);
-        $clonedOrderItem->setVariant($variant);
-        $clonedOrderItem->setVariantName('test_variant_name');
-        $clonedOrderItem->setVersion(3);
-        $clonedOrderItem->setImmutable(true);
+        $clonedOrderItem->setOrder($order)->shouldBeCalled();
+        $clonedOrderItem->setProductName('test_product_name')->shouldBeCalled();
+        $clonedOrderItem->setUnitPrice(59)->shouldBeCalled();
+        $clonedOrderItem->setVariant($variant)->shouldBeCalled();
+        $clonedOrderItem->setVariantName('test_variant_name')->shouldBeCalled();
+        $clonedOrderItem->setVersion(3)->shouldBeCalled();
+        $clonedOrderItem->setImmutable(true)->shouldBeCalled();
 
         $orderItemUnitFactory->createForItem($clonedOrderItem)->willReturn($clonedUnit);
 
-        $clonedOrderItem->addUnit($clonedUnit);
+        $clonedOrderItem->addUnit($clonedUnit)->shouldBeCalled();
 
-        $clonedOrderItem->recalculateUnitsTotal();
-        $clonedOrderItem->recalculateAdjustmentsTotal();
+        $clonedOrderItem->recalculateUnitsTotal()->shouldBeCalled();
+        $clonedOrderItem->recalculateAdjustmentsTotal()->shouldBeCalled();
 
         $this->clone($orderItem, $order)->shouldReturn($clonedOrderItem);
     }
