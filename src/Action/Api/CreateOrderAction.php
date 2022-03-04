@@ -45,7 +45,7 @@ final class CreateOrderAction extends BaseApiAwareAction implements ActionInterf
 
         $issuer = $details['metadata']['selected_issuer'] ?? null;
         $customerId = $details['metadata']['customer_mollie_id'] ?? null;
-        $method = $details['metadata']['molliePaymentMethods'] ?: '';
+        $method = $details['metadata']['molliePaymentMethods'] ?? '';
 
         if (null !== $method) {
             /** @var MollieGatewayConfigInterface $paymentMethod */
