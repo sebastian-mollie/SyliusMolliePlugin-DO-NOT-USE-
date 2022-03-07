@@ -19,6 +19,7 @@ use Sylius\Component\Order\Model\OrderItemUnitInterface;
 use Sylius\Component\Core\Model\ProductVariantInterface;
 use Sylius\Component\Order\Factory\OrderItemUnitFactoryInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface;
+use Sylius\Component\Resource\Model\VersionedInterface;
 
 final class OrderItemClonerSpec extends ObjectBehavior
 {
@@ -58,15 +59,22 @@ final class OrderItemClonerSpec extends ObjectBehavior
         $orderItem->getUnitPrice()->willReturn(59);
         $orderItem->getVariant()->willReturn($variant);
         $orderItem->getVariantName()->willReturn('test_variant_name');
-        $orderItem->getVersion()->willReturn(3);
+
+        if (OrderItemCloner::class instanceof VersionedInterface) {
+            $orderItem->getVersion()->willReturn(3);
+        }
+
         $orderItem->isImmutable()->willReturn(true);
 
         $clonedOrderItem->setOrder($order)->shouldBeCalled();
         $clonedOrderItem->setProductName('test_product_name')->shouldBeCalled();
         $clonedOrderItem->setUnitPrice(59)->shouldBeCalled();
+
+        if (OrderItemCloner::class instanceof VersionedInterface) {
+            $clonedOrderItem->setVersion(3)->shouldBeCalled();
+        }
         $clonedOrderItem->setVariant($variant)->shouldBeCalled();
         $clonedOrderItem->setVariantName('test_variant_name')->shouldBeCalled();
-        $clonedOrderItem->setVersion(3)->shouldBeCalled();
         $clonedOrderItem->setImmutable(true)->shouldBeCalled();
 
         $orderItemUnitFactory->createForItem($clonedOrderItem)->willReturn($clonedUnit);
