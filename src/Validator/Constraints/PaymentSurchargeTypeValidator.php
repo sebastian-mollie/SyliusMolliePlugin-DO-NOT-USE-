@@ -50,6 +50,9 @@ final class PaymentSurchargeTypeValidator extends ConstraintValidator
 
     private function createNegativeResponse(Constraint $constraint, string $filedName): void
     {
+        if (!property_exists($constraint, 'message')) {
+            throw new \InvalidArgumentException();
+        }
         $this->context->buildViolation($constraint->message)->atPath($filedName)->addViolation();
     }
 }

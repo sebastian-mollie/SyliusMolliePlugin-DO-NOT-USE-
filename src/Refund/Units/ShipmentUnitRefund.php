@@ -24,7 +24,7 @@ final class ShipmentUnitRefund implements ShipmentUnitRefundInterface
         $refundedShipment = $order->getAdjustments('shipping')->first();
 
         $totalRefunded = 0;
-        if (!empty($orderItemUnitRefund)) {
+        if (0 < count($orderItemUnitRefund)) {
             /** @var OrderItemUnitRefund $item */
             foreach ($orderItemUnitRefund as $item) {
                 $totalRefunded += $item->total();

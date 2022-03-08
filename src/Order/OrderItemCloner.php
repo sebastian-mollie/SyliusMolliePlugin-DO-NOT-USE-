@@ -36,7 +36,8 @@ final class OrderItemCloner implements OrderItemClonerInterface
         $clonedOrderItem->setVariant($orderItem->getVariant());
         $clonedOrderItem->setVariantName($orderItem->getVariantName());
 
-        if (OrderItemCloner::class instanceof VersionedInterface) {
+        /** @phpstan-ignore-next-line  */
+        if ($clonedOrderItem instanceof VersionedInterface) {
             $clonedOrderItem->setVersion($orderItem->getVersion());
         }
 

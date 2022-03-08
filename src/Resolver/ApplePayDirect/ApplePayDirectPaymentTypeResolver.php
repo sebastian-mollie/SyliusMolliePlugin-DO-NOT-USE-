@@ -15,6 +15,7 @@ use BitBag\SyliusMolliePlugin\Entity\MollieGatewayConfigInterface;
 use BitBag\SyliusMolliePlugin\Entity\OrderInterface;
 use BitBag\SyliusMolliePlugin\Payments\Methods\AbstractMethod;
 use Sylius\Component\Core\Model\PaymentInterface;
+use Webmozart\Assert\Assert;
 
 final class ApplePayDirectPaymentTypeResolver implements ApplePayDirectPaymentTypeResolverInterface
 {
@@ -38,8 +39,12 @@ final class ApplePayDirectPaymentTypeResolver implements ApplePayDirectPaymentTy
         array $applePayDirectToken
     ): void {
         $details = [];
+        /** @var OrderInterface $order */
         $order = $payment->getOrder();
 
+        if (null === $payment->getAmount()) {
+            return;
+        }
         $amount = number_format(abs($payment->getAmount() / 100), 2, '.', '');
 
         $details['amount'] = [

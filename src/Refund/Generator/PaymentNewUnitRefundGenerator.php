@@ -22,7 +22,8 @@ final class PaymentNewUnitRefundGenerator implements PaymentNewUnitRefundGenerat
         $units = $order->getItemUnits();
 
         foreach ($units as $unit) {
-            if ($partialRefundItem = $partialRefundItems->findById($unit->getId())) {
+            $partialRefundItem = $partialRefundItems->findById($unit->getId()) ?? null;
+            if (isset($partialRefundItem)) {
                 $partialRefundItem->setAmountTotal($unit->getTotal());
 
                 continue;

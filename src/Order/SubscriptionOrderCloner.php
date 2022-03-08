@@ -14,6 +14,7 @@ use Sylius\Component\Core\OrderShippingStates;
 use Sylius\Component\Order\Model\OrderInterface as SyliusOrderInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface;
 use Sylius\Component\Resource\Generator\RandomnessGeneratorInterface;
+use Webmozart\Assert\Assert;
 
 final class SubscriptionOrderCloner implements SubscriptionOrderClonerInterface
 {
@@ -50,6 +51,8 @@ final class SubscriptionOrderCloner implements SubscriptionOrderClonerInterface
         $clonedOrder = $this->orderFactory->createNew();
         $ordersCount = $subscription->getOrders()->count();
         $orderNumberSequence = $ordersCount + 1;
+
+        Assert::notNull($rootOrder);
         $clonedOrder->setNumber(
             sprintf('%s-%d-%d', $rootOrder->getNumber(), $subscription->getId(), $orderNumberSequence)
         );
@@ -67,6 +70,9 @@ final class SubscriptionOrderCloner implements SubscriptionOrderClonerInterface
         $clonedOrder->setLocaleCode($order->getLocaleCode());
         $clonedOrder->setPaymentState(OrderPaymentStates::STATE_AWAITING_PAYMENT);
         $clonedOrder->setPromotionCoupon($order->getPromotionCoupon());
+
+        Assert::notNull($order->getShippingAddress());
+        Assert::notNull($order->getBillingAddress());
         $clonedOrder->setShippingAddress(clone $order->getShippingAddress());
         $clonedOrder->setBillingAddress(clone $order->getBillingAddress());
         $clonedOrder->setShippingState(OrderShippingStates::STATE_READY);
@@ -75,6 +81,7 @@ final class SubscriptionOrderCloner implements SubscriptionOrderClonerInterface
         $clonedItem = $this->orderItemCloner->clone($orderItem, $clonedOrder);
         $clonedOrder->addItem($clonedItem);
 
+        /** @var AdjustmentInterface $adjustment */
         foreach ($order->getAdjustments() as $adjustment) {
             if (\Sylius\Component\Core\Model\AdjustmentInterface::SHIPPING_ADJUSTMENT === $adjustment->getType()) {
                 continue;
@@ -93,6 +100,7 @@ final class SubscriptionOrderCloner implements SubscriptionOrderClonerInterface
                     $clonedShipment->addUnit($unit);
                 }
 
+                /** @var AdjustmentInterface $adjustment */
                 foreach ($shipment->getAdjustments() as $adjustment) {
                     /** @var AdjustmentInterface $clonedAdjustment */
                     $clonedAdjustment = $this->adjustmentCloner->clone($adjustment);

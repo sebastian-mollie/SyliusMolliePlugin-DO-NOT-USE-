@@ -13,6 +13,7 @@ namespace BitBag\SyliusMolliePlugin\Resolver;
 
 use BitBag\SyliusMolliePlugin\Entity\MollieGatewayConfigInterface;
 use BitBag\SyliusMolliePlugin\Entity\MollieGatewayConfigTranslationInterface;
+use Webmozart\Assert\Assert;
 
 final class MollieCountriesRestrictionResolver implements MollieCountriesRestrictionResolverInterface
 {
@@ -39,7 +40,7 @@ final class MollieCountriesRestrictionResolver implements MollieCountriesRestric
     private function allowCountryLevel(MollieGatewayConfigInterface $paymentMethod, array $methods, string $countryCode): array
     {
         if (is_array($paymentMethod->getCountryLevelAllowed()) &&
-            in_array($countryCode, $paymentMethod->getCountryLevelAllowed())) {
+            in_array($countryCode, $paymentMethod->getCountryLevelAllowed(),true)) {
             return $this->setData($methods, $paymentMethod);
         }
 
@@ -49,7 +50,7 @@ final class MollieCountriesRestrictionResolver implements MollieCountriesRestric
     private function excludeCountryLevel(MollieGatewayConfigInterface $paymentMethod, array $methods, string $countryCode): array
     {
         if (is_array($paymentMethod->getCountryLevelExcluded()) &&
-            in_array($countryCode, $paymentMethod->getCountryLevelExcluded())) {
+            in_array($countryCode, $paymentMethod->getCountryLevelExcluded(),true)) {
             return $methods;
         }
 
@@ -63,8 +64,13 @@ final class MollieCountriesRestrictionResolver implements MollieCountriesRestric
         $methods['data'][$translation->getName() ?? $paymentMethod->getName()] = $paymentMethod->getMethodId();
         $methods['image'][$paymentMethod->getMethodId()] = $this->imageResolver->resolve($paymentMethod);
         $methods['issuers'][$paymentMethod->getMethodId()] = $paymentMethod->getIssuers();
-        $methods['paymentFee'][$paymentMethod->getMethodId()] = $paymentMethod->getPaymentSurchargeFee()->getType()
-            ? $paymentMethod->getPaymentSurchargeFee() : [];
+
+        Assert::notNull($paymentMethod->getPaymentSurchargeFee());
+        if ('string' === gettype($paymentMethod->getPaymentSurchargeFee()->getType())){
+           $methods['paymentFee'][$paymentMethod->getMethodId()] = $paymentMethod->getPaymentSurchargeFee();
+        } else {
+           $methods['paymentFee'][$paymentMethod->getMethodId()] = [];
+        }
 
         return $methods;
     }

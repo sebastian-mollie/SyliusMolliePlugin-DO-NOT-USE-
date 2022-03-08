@@ -14,6 +14,7 @@ namespace BitBag\SyliusMolliePlugin\Validator\Constraints;
 use BitBag\SyliusMolliePlugin\Factory\MollieSubscriptionGatewayFactory;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Core\Model\PaymentMethodInterface;
+use Sylius\Component\Currency\Model\CurrencyInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Webmozart\Assert\Assert;
@@ -39,12 +40,24 @@ final class CurrencyValidator extends ConstraintValidator
 
         /** @var ChannelInterface $channel */
         foreach ($paymentMethod->getChannels() as $channel) {
+
+            /** @var CurrencyInterface $baseChannelCurrency */
+            $baseChannelCurrency = $channel->getBaseCurrency();
+            $currencyCode = $baseChannelCurrency->getCode();
+
+            if (null === $currencyCode){
+                return;
+            }
+
             if (
-                null === $channel->getBaseCurrency() ||
-                false === in_array(strtoupper($channel->getBaseCurrency()->getCode()), MollieSubscriptionGatewayFactory::CURRENCIES_AVAILABLE)
+                false === in_array(strtoupper($currencyCode),
+                    MollieSubscriptionGatewayFactory::CURRENCIES_AVAILABLE,
+                true
+                )
             ) {
                 $message = $constraint->message ?? null;
 
+                Assert::notNull($message);
                 $this->context->buildViolation($message, [
                     '{{ currencies }}' => implode(', ', MollieSubscriptionGatewayFactory::CURRENCIES_AVAILABLE),
                 ])->atPath('channels')->addViolation();

@@ -18,6 +18,7 @@ use Sylius\Component\Core\Model\PaymentMethodInterface;
 use Sylius\Component\Payment\Model\PaymentInterface;
 use BitBag\SyliusMolliePlugin\Repository\PaymentMethodRepositoryInterface;
 use Sylius\Component\Payment\Resolver\PaymentMethodsResolverInterface;
+use Webmozart\Assert\Assert;
 
 final class MolliePaymentMethodResolver implements PaymentMethodsResolverInterface
 {
@@ -47,6 +48,7 @@ final class MolliePaymentMethodResolver implements PaymentMethodsResolverInterfa
         $channel = $order->getChannel();
         $factoryName = $this->factoryNameResolver->resolve($order);
 
+        Assert::notNull($channel);
         $method = $this->paymentMethodRepository->findOneByChannelAndGatewayFactoryName(
             $channel,
             $factoryName
@@ -57,11 +59,11 @@ final class MolliePaymentMethodResolver implements PaymentMethodsResolverInterfa
         }
         $parentMethods = $this->decoratedService->getSupportedMethods($subject);
 
-        if (true === $order instanceof OrderInterface && false === $order->hasRecurringContents()) {
+        if (false === $order->hasRecurringContents()) {
             $parentMethods = $this->mollieMethodFilter->nonRecurringFilter($parentMethods);
         }
 
-        if (true === $order instanceof OrderInterface && true === $order->hasRecurringContents()) {
+        if (true === $order->hasRecurringContents()) {
             $parentMethods = $this->mollieMethodFilter->recurringFilter($parentMethods);
         }
 
@@ -78,6 +80,7 @@ final class MolliePaymentMethodResolver implements PaymentMethodsResolverInterfa
             return false;
         }
 
+        Assert::notNull($subject->getOrder());
         return $order->hasRecurringContents() || $order->hasNonRecurringContents()
             && null !== $subject->getOrder()->getChannel();
     }

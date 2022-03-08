@@ -41,7 +41,7 @@ class MollieSubscriptionSchedule implements MollieSubscriptionScheduleInterface
         $this->scheduledDate = $scheduledDate;
     }
 
-    public function setFulfilledDate(?\DateTime $fulfilledDate): void
+    public function setFulfilledDate(?\DateTimeInterface $fulfilledDate): void
     {
         $this->fulfilledDate = $fulfilledDate;
     }

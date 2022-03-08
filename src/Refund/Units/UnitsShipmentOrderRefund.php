@@ -36,6 +36,10 @@ final class UnitsShipmentOrderRefund implements UnitsShipmentOrderRefundInterfac
         }
 
         foreach ($order->lines as $line) {
+            if (!property_exists($line, 'type') ||
+                !property_exists($line, 'quantityRefunded')) {
+                throw new \InvalidArgumentException();
+            }
             if ($line->type === ConvertOrderInterface::SHIPPING_TYPE && $line->quantityRefunded > 0) {
                 /** @var Adjustment $refundedShipment */
                 $refundedShipment = $syliusOrder->getAdjustments('shipping')->first();

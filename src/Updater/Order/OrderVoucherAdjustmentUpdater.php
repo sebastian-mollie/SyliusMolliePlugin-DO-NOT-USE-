@@ -45,7 +45,6 @@ final class OrderVoucherAdjustmentUpdater implements OrderVoucherAdjustmentUpdat
 
         /** @var OrderInterface $order */
         $order = $this->orderRepository->find($orderId);
-        Assert::isInstanceOf($order, OrderInterface::class);
 
         if (isset($molliePayment->details->vouchers)) {
             foreach ($molliePayment->details->vouchers as $voucher) {

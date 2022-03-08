@@ -24,7 +24,9 @@ use Sylius\Component\Core\Model\OrderItem;
 use Sylius\Component\Core\Model\ShipmentInterface;
 use Sylius\Component\Customer\Model\CustomerInterface;
 use Sylius\Component\Order\Model\Adjustment;
+use Sylius\Component\Taxation\Model\TaxableInterface;
 use Sylius\Component\Taxation\Resolver\TaxRateResolverInterface;
+use Webmozart\Assert\Assert;
 
 final class ConvertOrder implements ConvertOrderInterface
 {
@@ -75,6 +77,8 @@ final class ConvertOrder implements ConvertOrderInterface
         $this->order = $order;
 
         $customer = $order->getCustomer();
+
+        Assert::notNull($customer);
         $amount = $this->intToStringConverter->convertIntToString($order->getTotal(), $divisor);
 
         $details['amount']['value'] = $amount;
@@ -91,6 +95,7 @@ final class ConvertOrder implements ConvertOrderInterface
     {
         $shippingAddress = $this->order->getShippingAddress();
 
+        Assert::notNull($shippingAddress);
         return [
             'streetAndNumber' => $shippingAddress->getStreet(),
             'postalCode' => $shippingAddress->getPostcode(),
@@ -106,6 +111,7 @@ final class ConvertOrder implements ConvertOrderInterface
     {
         $billingAddress = $this->order->getBillingAddress();
 
+        Assert::notNull($billingAddress);
         return [
             'streetAndNumber' => $billingAddress->getStreet(),
             'postalCode' => $billingAddress->getPostcode(),
@@ -120,8 +126,11 @@ final class ConvertOrder implements ConvertOrderInterface
     private function createLines(int $divisor, MollieGatewayConfigInterface $method): array
     {
         $details = [];
+
+        Assert::notNull($this->order->getChannel());
         $this->order->getChannel()->getDefaultTaxZone();
 
+        /** @var OrderItem $item */
         foreach ($this->order->getItems() as $item) {
             $details[] = [
                 'category' => $this->mealVoucherResolver->resolve($method, $item),
@@ -153,8 +162,9 @@ final class ConvertOrder implements ConvertOrderInterface
             ];
         }
 
+        /** @var Adjustment $adjustment */
         foreach ($this->order->getAdjustments() as $adjustment) {
-            if (array_search($adjustment->getType(), Options::getAvailablePaymentSurchargeFeeType())) {
+            if (array_search($adjustment->getType(), Options::getAvailablePaymentSurchargeFeeType(),true)) {
                 $details[] = $this->createAdjustments($adjustment, $divisor);
             }
         }
@@ -188,10 +198,10 @@ final class ConvertOrder implements ConvertOrderInterface
     {
         $details = [];
 
-        /** @var ShipmentInterface $shipment */
+        /** @var ?ShipmentInterface $shipment */
         $shipment = $this->order->getShipments()->first();
 
-        if (false !== $shipment) {
+        if (null !== $shipment) {
             $details[] = [
                 'type' => self::SHIPPING_TYPE,
                 'name' => self::SHIPPING_FEE,
@@ -227,8 +237,12 @@ final class ConvertOrder implements ConvertOrderInterface
 
     private function getUnitPriceWithTax(OrderItem $item): int
     {
+
+        Assert::notNull($this->order->getBillingAddress());
         $zone = $this->zoneMatcher->match($this->order->getBillingAddress());
-        $taxRate = $this->taxRateResolver->resolve($item->getVariant(), [self::TAX_RATE_CRITERIA_ZONE => $zone]);
+        /** @var TaxableInterface $taxableVariant */
+        $taxableVariant = $item->getVariant();
+        $taxRate = $this->taxRateResolver->resolve($taxableVariant, [self::TAX_RATE_CRITERIA_ZONE => $zone]);
 
         if ($taxRate === null) {
             return $item->getUnitPrice();

@@ -25,6 +25,7 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Sylius\RefundPlugin\Event\UnitsRefunded;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Webmozart\Assert\Assert;
 
 final class OrderPaymentRefund implements OrderPaymentRefundInterface
 {
@@ -62,6 +63,7 @@ final class OrderPaymentRefund implements OrderPaymentRefundInterface
         /** @var PaymentMethodInterface $paymentMethod */
         $paymentMethod = $payment->getMethod();
 
+        Assert::notNull($paymentMethod->getGatewayConfig());
         $factoryName = $paymentMethod->getGatewayConfig()->getFactoryName() ?? null;
 
         if (true === in_array($factoryName, [MollieGatewayFactory::FACTORY_NAME, MollieSubscriptionGatewayFactory::FACTORY_NAME], true)) {
@@ -79,7 +81,7 @@ final class OrderPaymentRefund implements OrderPaymentRefundInterface
         /** @var TokenInterface|null $token */
         $token = $this->payum->getTokenStorage()->find($hash);
 
-        if (null === $token || !$token instanceof TokenInterface) {
+        if (null === $token) {
             $this->loggerAction->addNegativeLog(sprintf('A token with hash `%s` could not be found.', $hash));
 
             throw new BadRequestHttpException(sprintf('A token with hash `%s` could not be found.', $hash));

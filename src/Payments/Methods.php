@@ -11,8 +11,10 @@ declare(strict_types=1);
 
 namespace BitBag\SyliusMolliePlugin\Payments;
 
+use BitBag\SyliusMolliePlugin\Payments\Methods\AbstractMethod;
 use BitBag\SyliusMolliePlugin\Payments\Methods\MethodInterface;
 use Mollie\Api\Resources\Method;
+use Webmozart\Assert\Assert;
 
 final class Methods implements MethodsInterface
 {
@@ -21,7 +23,6 @@ final class Methods implements MethodsInterface
 
     public function add(Method $mollieMethod): void
     {
-        /** @var MethodInterface $payment */
         foreach (self::GATEWAYS as $gateway) {
             $payment = new $gateway();
 
@@ -30,7 +31,7 @@ final class Methods implements MethodsInterface
                 $payment->setMinimumAmount((array) $mollieMethod->minimumAmount);
                 $payment->setMaximumAmount((array) $mollieMethod->maximumAmount);
                 $payment->setImage((array) $mollieMethod->image);
-                $payment->setIssuers((array) $mollieMethod->issuers);
+                $payment->setIssuers($mollieMethod->issuers);
 
                 $this->methods[] = $payment;
             }
@@ -40,10 +41,13 @@ final class Methods implements MethodsInterface
     public function getAllEnabled(): array
     {
         $methods = [];
-
         /** @var MethodInterface $method */
         foreach ($this->methods as $method) {
-            $methods[] = $method->isEnabled() ?: $method;
+            if (true === $method->isEnabled()) {
+                $methods[] = $method->isEnabled();
+            } else {
+                $methods[] = $method;
+            }
         }
 
         return $methods;

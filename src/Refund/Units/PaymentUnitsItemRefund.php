@@ -45,6 +45,7 @@ final class PaymentUnitsItemRefund implements PaymentUnitsItemRefundInterface
         $partialRefundItems = $this->paymentNewUnitRefundGenerator->generate($order, $partialRefundItems);
         $partialRefundItems = $this->paymentRefundCalculator->calculate($partialRefundItems, $totalToRefund);
 
+        $unitsToRefund = [];
         /** @var PartialRefundItem $partialRefundItem */
         foreach ($partialRefundItems->getPartialRefundItems() as $partialRefundItem) {
             if ($partialRefundItem->getAmountToRefund() > 0) {

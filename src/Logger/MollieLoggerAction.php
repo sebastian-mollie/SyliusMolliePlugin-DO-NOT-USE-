@@ -65,7 +65,7 @@ final class MollieLoggerAction implements MollieLoggerActionInterface
 
     private function canSaveLog(int $logLevel): bool
     {
-        /** @var GatewayConfigInterface $gatewayConfig */
+        /** @var ?GatewayConfigInterface $gatewayConfig */
         $gatewayConfig = $this->gatewayRepository->findOneBy(['factoryName' => $this->mollieFactoryNameResolver->resolve()]);
 
         if (null === $gatewayConfig) {

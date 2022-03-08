@@ -16,6 +16,7 @@ use BitBag\SyliusMolliePlugin\Order\AdjustmentInterface;
 use BitBag\SyliusMolliePlugin\Payments\PaymentTerms\Options;
 use Sylius\Component\Order\Factory\AdjustmentFactoryInterface;
 use Sylius\Component\Order\Model\OrderInterface;
+use Webmozart\Assert\Assert;
 
 final class Percentage implements SurchargeTypeInterface
 {
@@ -29,11 +30,17 @@ final class Percentage implements SurchargeTypeInterface
 
     public function calculate(OrderInterface $order, MollieGatewayConfig $paymentMethod): OrderInterface
     {
-        $limit = $paymentMethod->getPaymentSurchargeFee()->getSurchargeLimit() * 100;
-        $percentage = $paymentMethod->getPaymentSurchargeFee()->getPercentage();
+        $paymentSurchargeFee = $paymentMethod->getPaymentSurchargeFee();
+
+        Assert::notNull($paymentSurchargeFee);
+        Assert::notNull($paymentSurchargeFee->getSurchargeLimit());
+        $limit = $paymentSurchargeFee->getSurchargeLimit() * 100;
+        $percentage = $paymentSurchargeFee->getPercentage();
+
+        Assert::notNull($percentage);
         $amount = ($order->getItemsTotal() / 100) * $percentage;
 
-        if ($order->getAdjustments(AdjustmentInterface::PERCENTAGE_ADJUSTMENT)) {
+        if (false === $order->getAdjustments(AdjustmentInterface::PERCENTAGE_ADJUSTMENT)->isEmpty()) {
             $order->removeAdjustments(AdjustmentInterface::PERCENTAGE_ADJUSTMENT);
         }
 
@@ -53,6 +60,6 @@ final class Percentage implements SurchargeTypeInterface
 
     public function canCalculate(string $type): bool
     {
-        return array_search($type, Options::getAvailablePaymentSurchargeFeeType()) === Options::PERCENTAGE;
+        return array_search($type, Options::getAvailablePaymentSurchargeFeeType(),true) === Options::PERCENTAGE;
     }
 }

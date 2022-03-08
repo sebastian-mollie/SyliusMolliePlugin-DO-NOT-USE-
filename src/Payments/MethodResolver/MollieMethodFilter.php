@@ -13,6 +13,7 @@ namespace BitBag\SyliusMolliePlugin\Payments\MethodResolver;
 use BitBag\SyliusMolliePlugin\Factory\MollieGatewayFactory;
 use BitBag\SyliusMolliePlugin\Factory\MollieSubscriptionGatewayFactory;
 use Sylius\Component\Core\Model\PaymentMethodInterface;
+use Webmozart\Assert\Assert;
 
 final class MollieMethodFilter implements MollieMethodFilterInterface
 {
@@ -23,7 +24,8 @@ final class MollieMethodFilter implements MollieMethodFilterInterface
         /** @var PaymentMethodInterface $method */
         foreach ($paymentMethods as $method)
         {
-           if ($method->getGatewayConfig()->getFactoryName() !== MollieSubscriptionGatewayFactory::FACTORY_NAME)
+            Assert::notNull($method->getGatewayConfig());
+            if ($method->getGatewayConfig()->getFactoryName() !== MollieSubscriptionGatewayFactory::FACTORY_NAME)
             {
                 $filteredMethods[] = $method;
             }
@@ -39,6 +41,7 @@ final class MollieMethodFilter implements MollieMethodFilterInterface
         /** @var PaymentMethodInterface $method */
         foreach ($paymentMethods as $method)
         {
+            Assert::notNull($method->getGatewayConfig());
             if ($method->getGatewayConfig()->getFactoryName() !== MollieGatewayFactory::FACTORY_NAME)
             {
                 $filteredMethods[] = $method;

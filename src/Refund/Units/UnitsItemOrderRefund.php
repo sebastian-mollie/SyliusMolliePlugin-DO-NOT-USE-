@@ -33,7 +33,6 @@ final class UnitsItemOrderRefund implements UnitsItemOrderRefundInterface
         $units = $order->getItemUnits();
 
         $unitsToRefund = [];
-        /** @var PartialRefundItem $item */
         foreach ($units as $unit) {
             if (true === $this->hasUnitRefunded($order, $unit->getId())) {
                 continue;
@@ -64,6 +63,7 @@ final class UnitsItemOrderRefund implements UnitsItemOrderRefundInterface
     {
         $units = $order->getItemUnits();
 
+        $refundedUnits = [];
         foreach ($units as $unit) {
             if ($itemId === $unit->getOrderItem()->getId()) {
                 $refundedUnits[] = $this->refundUnitsRepository->findOneBy([

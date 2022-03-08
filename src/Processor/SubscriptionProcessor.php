@@ -68,6 +68,7 @@ final class SubscriptionProcessor implements SubscriptionProcessorInterface
     private function process(MollieSubscriptionInterface $subscription): PaymentInterface
     {
         $order = $subscription->getFirstOrder();
+        Assert::notNull($order);
         $orderItem = $subscription->getOrderItem();
         $clonedOrder = $this->orderCloner->clone(
             $subscription,
@@ -102,13 +103,16 @@ final class SubscriptionProcessor implements SubscriptionProcessorInterface
         OrderItemInterface $orderItem
     ): SyliusCorePayment
     {
+        Assert::notNull($clonedOrder->getCurrencyCode());
         /** @var SyliusCorePayment $payment */
         $payment = $this->paymentFactory->createWithAmountAndCurrencyCode(
             $clonedOrder->getTotal(),
             $clonedOrder->getCurrencyCode()
         );
         $firstOrder = $subscription->getFirstOrder();
+        Assert::notNull($firstOrder);
         $lastPayment = $firstOrder->getLastPayment(PaymentInterface::STATE_COMPLETED);
+        Assert::notNull($lastPayment);
         $lastPaymentDetails = $lastPayment->getDetails();
 
         Assert::keyExists($lastPaymentDetails, 'metadata');

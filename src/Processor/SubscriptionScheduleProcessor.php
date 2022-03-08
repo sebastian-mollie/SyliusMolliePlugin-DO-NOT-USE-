@@ -10,6 +10,7 @@ use BitBag\SyliusMolliePlugin\Transitions\MollieSubscriptionTransitions;
 use SM\Factory\Factory;
 use Sylius\Component\Core\Model\PaymentInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Webmozart\Assert\Assert;
 
 final class SubscriptionScheduleProcessor implements SubscriptionScheduleProcessorInterface
 {
@@ -30,9 +31,12 @@ final class SubscriptionScheduleProcessor implements SubscriptionScheduleProcess
         $payment = $subscription->getLastPayment();
 
         if (null !== $payment) {
+            /** @var OrderInterface $order */
             $order = $payment->getOrder();
+            Assert::notNull($order->getRecurringSequenceIndex());
             $schedule = $subscription->getScheduleByIndex($order->getRecurringSequenceIndex());
 
+            Assert::notNull($schedule);
             if (false === $schedule->isFulfilled()) {
                 $schedule->setFulfilledDate($payment->getUpdatedAt());
             }

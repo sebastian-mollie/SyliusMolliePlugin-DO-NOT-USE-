@@ -51,10 +51,10 @@ final class TaxShipmentResolver implements TaxShipmentResolverInterface
             throw new \LogicException('Order should have at least one shipment.');
         }
 
+        /** @var ShipmentInterface $shipment */
+        /** @var ShippingMethodInterface $method */
         $method = $shipment->getMethod();
 
-        /** @var ShippingMethodInterface $method */
-        Assert::isInstanceOf($method, ShippingMethodInterface::class);
 
         return $method;
     }

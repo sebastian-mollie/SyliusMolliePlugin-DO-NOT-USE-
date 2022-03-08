@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace BitBag\SyliusMolliePlugin\Menu;
 
 use Sylius\Bundle\UiBundle\Menu\Event\MenuBuilderEvent;
+use Webmozart\Assert\Assert;
 
 final class MollieRecurringMenuListener
 {
@@ -13,6 +14,10 @@ final class MollieRecurringMenuListener
         $menuItem =
             $menu
                 ->getChild('mollie');
+
+        if (null === $menuItem) {
+            return;
+        }
 
         $menuItem
             ->addChild('mollie_subscriptions', [

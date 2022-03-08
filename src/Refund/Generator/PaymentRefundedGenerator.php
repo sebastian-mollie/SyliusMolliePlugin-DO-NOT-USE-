@@ -41,7 +41,8 @@ final class PaymentRefundedGenerator implements PaymentRefundedGeneratorInterfac
         foreach ($refundedUnits as $refundedUnit) {
             $partialRefundItem = new PartialRefundItem();
 
-            if ($partialRefund = $partialRefundItems->findById($refundedUnit->getRefundedUnitId())) {
+            $partialRefund = $partialRefundItems->findById($refundedUnit->getRefundedUnitId()) ?? null;
+            if (isset($partialRefund)) {
                 $partialRefund->setAmountRefunded($refundedUnit->getAmount());
 
                 continue;

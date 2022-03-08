@@ -18,6 +18,8 @@ use BitBag\SyliusMolliePlugin\Factory\MollieGatewayFactory;
 use BitBag\SyliusMolliePlugin\Factory\MollieSubscriptionGatewayFactory;
 use BitBag\SyliusMolliePlugin\Form\Type\MollieGatewayConfigurationType;
 use BitBag\SyliusMolliePlugin\Logger\MollieLoggerActionInterface;
+use Mollie\Api\Resources\BaseCollection;
+use Mollie\Api\Resources\MethodCollection;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 final class MollieMethodsResolver implements MollieMethodsResolverInterface
@@ -50,12 +52,12 @@ final class MollieMethodsResolver implements MollieMethodsResolverInterface
 
     public function create(): void
     {
-        /** @var GatewayConfigInterface $gateway */
         $gateways = $this->gatewayConfigRepository->findBy([
             'factoryName' => [
                 MollieGatewayFactory::FACTORY_NAME,
             ],
         ]);
+        /** @var GatewayConfigInterface $gateway */
         foreach ($gateways as $gateway) {
             $this->createForGateway($gateway);
         }
@@ -68,10 +70,13 @@ final class MollieMethodsResolver implements MollieMethodsResolverInterface
             MollieGatewayConfigurationType::API_KEY_LIVE :
             MollieGatewayConfigurationType::API_KEY_TEST;
         $recurring = array_key_exists('times', $config) && array_key_exists('interval', $config);
+
+        /** @var MollieApiClient $client */
         $client = $this->mollieApiClient->setApiKey($config[$environment]);
         $client->setIsRecurringSubscription($recurring);
 
         if (MollieSubscriptionGatewayFactory::FACTORY_NAME === $gateway->getFactoryName()) {
+            /** @var MethodCollection $baseCollection */
             $baseCollection = $client->methods->allActive(self::PARAMETERS);
             $recurringCollection = $client->methods->allActive(self::PARAMETERS_RECURRING);
             foreach ($recurringCollection as $recurringEntry) {
@@ -80,6 +85,7 @@ final class MollieMethodsResolver implements MollieMethodsResolverInterface
 
             $this->mollieMethodsCreator->createMethods($baseCollection, $gateway);
         } elseif (MollieGatewayFactory::FACTORY_NAME === $gateway->getFactoryName()) {
+            /** @var MethodCollection $allMollieMethods */
             $allMollieMethods = $client->methods->allActive(self::PARAMETERS);
             $this->mollieMethodsCreator->createMethods($allMollieMethods, $gateway);
         } else {
