@@ -7,8 +7,10 @@ use BitBag\SyliusMolliePlugin\Entity\MollieSubscriptionInterface;
 use BitBag\SyliusMolliePlugin\Entity\OrderInterface;
 use BitBag\SyliusMolliePlugin\Entity\ProductVariantInterface;
 use Sylius\Component\Core\Model\OrderItemInterface;
+use Sylius\Component\Core\Model\PaymentInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Webmozart\Assert\Assert;
 
 final class MollieSubscriptionFactory implements MollieSubscriptionFactoryInterface
 {
@@ -36,9 +38,11 @@ final class MollieSubscriptionFactory implements MollieSubscriptionFactoryInterf
     {
         $subscriptionTemplate = $this->createNew();
 
+        Assert::notNull($order->getCustomer());
         $subscriptionTemplate->setCustomer($order->getCustomer());
         $subscriptionTemplate->addOrder($order);
 
+        /** @var PaymentInterface $payment */
         foreach ($order->getPayments() as $payment) {
             $subscriptionTemplate->addPayment($payment);
         }
@@ -64,6 +68,9 @@ final class MollieSubscriptionFactory implements MollieSubscriptionFactoryInterf
 
         $subscriptionTemplate = $this->createFromFirstOrder($order);
         $configuration = $subscriptionTemplate->getSubscriptionConfiguration();
+
+        Assert::notNull($variant->getInterval());
+        Assert::notNull($variant->getTimes());
         $configuration->setInterval($variant->getInterval());
         $configuration->setNumberOfRepetitions($variant->getTimes());
         $configuration->setPaymentDetailsConfiguration($paymentConfiguration);

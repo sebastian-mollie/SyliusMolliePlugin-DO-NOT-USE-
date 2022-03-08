@@ -8,7 +8,7 @@ class MollieSubscriptionSchedule implements MollieSubscriptionScheduleInterface
     protected ?int $id = null;
     protected MollieSubscriptionInterface $mollieSubscription;
     protected \DateTime $scheduledDate;
-    protected ?\DateTime $fulfilledDate = null;
+    protected ?\DateTimeInterface $fulfilledDate = null;
     protected int $scheduleIndex = 0;
 
     public function getId(): ?int
@@ -26,7 +26,7 @@ class MollieSubscriptionSchedule implements MollieSubscriptionScheduleInterface
         return $this->scheduledDate;
     }
 
-    public function getFulfilledDate(): ?\DateTime
+    public function getFulfilledDate(): ?\DateTimeInterface
     {
         return $this->fulfilledDate;
     }

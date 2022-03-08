@@ -60,7 +60,7 @@ final class OrderItemClonerSpec extends ObjectBehavior
         $orderItem->getVariant()->willReturn($variant);
         $orderItem->getVariantName()->willReturn('test_variant_name');
 
-        if (OrderItemCloner::class instanceof VersionedInterface) {
+        if ($clonedOrderItem->getWrappedObject() instanceof VersionedInterface) {
             $orderItem->getVersion()->willReturn(3);
         }
 
@@ -70,7 +70,7 @@ final class OrderItemClonerSpec extends ObjectBehavior
         $clonedOrderItem->setProductName('test_product_name')->shouldBeCalled();
         $clonedOrderItem->setUnitPrice(59)->shouldBeCalled();
 
-        if (OrderItemCloner::class instanceof VersionedInterface) {
+        if ($clonedOrderItem->getWrappedObject() instanceof VersionedInterface) {
             $clonedOrderItem->setVersion(3)->shouldBeCalled();
         }
         $clonedOrderItem->setVariant($variant)->shouldBeCalled();

@@ -11,9 +11,9 @@ declare(strict_types=1);
 
 namespace BitBag\SyliusMolliePlugin\Factory;
 
+use BitBag\SyliusMolliePlugin\Entity\GatewayConfigInterface;
 use BitBag\SyliusMolliePlugin\Entity\MollieGatewayConfigInterface;
 use BitBag\SyliusMolliePlugin\Payments\Methods\MethodInterface;
-use Sylius\Bundle\PayumBundle\Model\GatewayConfigInterface;
 
 interface MollieGatewayConfigFactoryInterface
 {

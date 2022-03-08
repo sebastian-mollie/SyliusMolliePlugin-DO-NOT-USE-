@@ -51,7 +51,7 @@ class MollieSubscriptionConfiguration implements MollieSubscriptionConfiguration
         return $this->customerId;
     }
 
-    public function getInterval(): string
+    public function getInterval(): ?string
     {
         return $this->interval;
     }

@@ -46,15 +46,15 @@ final class MollieMethodsCreator implements MollieMethodsCreatorInterface
         $methods = $this->methodsFactory->createNew();
 
         foreach ($allMollieMethods as $mollieMethod) {
-            if (in_array($mollieMethod->id, MollieMethodsResolverInterface::UNSUPPORTED_METHODS)) {
+            if (in_array($mollieMethod->id, MollieMethodsResolverInterface::UNSUPPORTED_METHODS, true)) {
                 continue;
             }
 
             if (
                 MollieSubscriptionGatewayFactory::FACTORY_NAME === $gateway->getFactoryName() &&
                 (
-                    false === in_array($mollieMethod->id, MollieMethodsResolverInterface::RECURRING_PAYMENT_SUPPORTED_METHODS) &&
-                    false === in_array($mollieMethod->id, MollieMethodsResolverInterface::RECURRING_PAYMENT_INITIAL_METHODS)
+                    false === in_array($mollieMethod->id, MollieMethodsResolverInterface::RECURRING_PAYMENT_SUPPORTED_METHODS, true) &&
+                    false === in_array($mollieMethod->id, MollieMethodsResolverInterface::RECURRING_PAYMENT_INITIAL_METHODS, true)
                 )
             ) {
                 continue;

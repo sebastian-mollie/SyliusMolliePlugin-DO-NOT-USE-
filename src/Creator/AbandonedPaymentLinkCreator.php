@@ -20,8 +20,9 @@ use BitBag\SyliusMolliePlugin\Repository\OrderRepositoryInterface;
 use BitBag\SyliusMolliePlugin\Repository\PaymentMethodRepositoryInterface;
 use BitBag\SyliusMolliePlugin\Resolver\PaymentlinkResolverInterface;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
+use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Core\Model\PaymentInterface;
-use Sylius\Component\Payment\Model\PaymentMethodInterface;
+use Sylius\Component\Core\Model\PaymentMethodInterface;
 
 final class AbandonedPaymentLinkCreator implements AbandonedPaymentLinkCreatorInterface
 {
@@ -56,8 +57,10 @@ final class AbandonedPaymentLinkCreator implements AbandonedPaymentLinkCreatorIn
 
     public function create(): void
     {
+        /** @var ChannelInterface $channel */
+        $channel = $this->channelContext->getChannel();
         $paymentMethod = $this->paymentMethodRepository->findOneByChannelAndGatewayFactoryName(
-            $this->channelContext->getChannel(),
+            $channel,
             MollieGatewayFactory::FACTORY_NAME
         );
 
@@ -65,7 +68,7 @@ final class AbandonedPaymentLinkCreator implements AbandonedPaymentLinkCreatorIn
             return;
         }
 
-        /** @var GatewayConfigInterface $gateway */
+        /** @var ?GatewayConfigInterface $gateway */
         $gateway = $paymentMethod->getGatewayConfig();
 
         if (null === $gateway) {

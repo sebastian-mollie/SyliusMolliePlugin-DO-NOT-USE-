@@ -14,6 +14,9 @@ namespace BitBag\SyliusMolliePlugin\Creator;
 use BitBag\SyliusMolliePlugin\Client\MollieApiClient;
 use BitBag\SyliusMolliePlugin\DTO\ApiKeyTest;
 use BitBag\SyliusMolliePlugin\Form\Type\MollieGatewayConfigurationType;
+use BitBag\SyliusMolliePlugin\Resolver\MollieMethodsResolver;
+use BitBag\SyliusMolliePlugin\Resolver\MollieMethodsResolverInterface;
+use Mollie\Api\Resources\MethodCollection;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ApiKeysTestCreator implements ApiKeysTestCreatorInterface
@@ -39,7 +42,7 @@ final class ApiKeysTestCreator implements ApiKeysTestCreatorInterface
             $key ? true : false,
         );
 
-        if (null === $key || empty(trim($key))) {
+        if (null === $key || '' === (trim($key))) {
             $apiKeyTest->setStatus(self::ERROR_STATUS);
             $apiKeyTest->setMessage($this->translator->trans('bitbag_sylius_mollie_plugin.ui.inser_you_key_first'));
 
@@ -68,7 +71,8 @@ final class ApiKeysTestCreator implements ApiKeysTestCreatorInterface
         try {
             $client = $this->mollieApiClient->setApiKey($apiKey);
 
-            $methods = $client->methods->allActive(MollieMethodsCreatorInterface::PARAMETERS);
+            /** @var MethodCollection $methods */
+            $methods = $client->methods->allActive(MollieMethodsResolverInterface::PARAMETERS);
             $apiKeyTest->setMethods($methods);
 
             return $apiKeyTest;

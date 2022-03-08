@@ -54,33 +54,6 @@ final class CurrencyValidatorSpec extends ObjectBehavior
         $this->validate($paymentMethod, $currencyConstraint);
     }
 
-    function it_validates_currency_with_null_base_currency(
-        PaymentMethodInterface $paymentMethod,
-        GatewayConfigInterface $gatewayConfig,
-        ChannelInterface $channel,
-        ExecutionContextInterface $context,
-        ConstraintViolationBuilderInterface $builder
-    ): void {
-        $constraint = new Currency();
-        $gatewayConfig->getFactoryName()->willReturn(MollieSubscriptionGatewayFactory::FACTORY_NAME);
-        $paymentMethod->getGatewayConfig()->willReturn($gatewayConfig);
-        $paymentMethod->getChannels()->willReturn(new ArrayCollection(
-            [$channel->getWrappedObject()]
-        ));
-
-        $channel->getBaseCurrency()->willReturn(null);
-
-        $constraint->message = 'test';
-        $message = $constraint->message;
-        $context->buildViolation($message, [
-            '{{ currencies }}' => implode(', ', MollieSubscriptionGatewayFactory::CURRENCIES_AVAILABLE),
-        ])->willReturn($builder);
-        $builder->atPath('channels')->willReturn($builder);
-        $builder->addViolation()->shouldBeCalled();
-
-        $this->validate($paymentMethod, $constraint);
-    }
-
     function it_validates_currency_with_unsupported_currency(
         PaymentMethodInterface $paymentMethod,
         GatewayConfigInterface $gatewayConfig,

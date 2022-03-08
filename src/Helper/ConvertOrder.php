@@ -164,7 +164,7 @@ final class ConvertOrder implements ConvertOrderInterface
 
         /** @var Adjustment $adjustment */
         foreach ($this->order->getAdjustments() as $adjustment) {
-            if (array_search($adjustment->getType(), Options::getAvailablePaymentSurchargeFeeType(),true)) {
+            if (false !== array_search($adjustment->getType(), Options::getAvailablePaymentSurchargeFeeType(),true)) {
                 $details[] = $this->createAdjustments($adjustment, $divisor);
             }
         }

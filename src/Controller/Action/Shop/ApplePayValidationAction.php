@@ -18,6 +18,7 @@ use Mollie\Api\Exceptions\ApiException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Webmozart\Assert\Assert;
 
 final class ApplePayValidationAction
 {
@@ -48,11 +49,12 @@ final class ApplePayValidationAction
 
         $validateUrl = $request->get('validationUrl');
 
-        if (empty($validateUrl)) {
+        if (null === $validateUrl) {
             return new JsonResponse(null, Response::HTTP_NOT_FOUND);
         }
 
         $url = $request->getHost();
+        /** @var string[] $domain */
         $domain = parse_url($url);
 
         try {

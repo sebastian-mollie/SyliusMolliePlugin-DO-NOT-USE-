@@ -86,7 +86,7 @@ class MollieSubscription implements MollieSubscriptionInterface
         }
     }
 
-    public function getCustomer(): CustomerInterface
+    public function getCustomer(): ?CustomerInterface
     {
         return $this->customer;
     }
@@ -113,6 +113,10 @@ class MollieSubscription implements MollieSubscriptionInterface
 
     public function getLastOrder(): ?SyliusOrder
     {
+        if ($this->orders->isEmpty()) {
+            return null;
+        }
+
         return $this->orders->last();
     }
 
@@ -182,7 +186,7 @@ class MollieSubscription implements MollieSubscriptionInterface
         $this->recentFailedPaymentsCount++;
     }
 
-    public function resetFailedPaymentCount()
+    public function resetFailedPaymentCount(): void
     {
         $this->recentFailedPaymentsCount = 0;
     }
@@ -204,6 +208,10 @@ class MollieSubscription implements MollieSubscriptionInterface
 
     public function getLastPayment(): ?PaymentInterface
     {
+        if ($this->payments->isEmpty()) {
+            return null;
+        }
+
         return $this->payments->last();
     }
 }

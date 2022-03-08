@@ -22,7 +22,7 @@ final class MollieIntervalType extends AbstractType
         $this->transformer = $transformer;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('amount', NumberType::class, [
             'error_bubbling' => false,
@@ -43,7 +43,7 @@ final class MollieIntervalType extends AbstractType
             ),
             'label' => false,
             'error_bubbling' => false,
-            'choice_label' => function (string $value) {
+            'choice_label' => function (string $value): string {
                 return sprintf(
                     'bitbag_sylius_mollie_plugin.form.product_variant.interval_configuration.steps.%s',
                     $value

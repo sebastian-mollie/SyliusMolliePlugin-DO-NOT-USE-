@@ -23,7 +23,7 @@ interface MollieSubscriptionConfigurationInterface
 
     public function getCustomerId(): ?string;
 
-    public function getInterval(): string;
+    public function getInterval(): ?string;
 
     public function setHostName(string $hostName): void;
 

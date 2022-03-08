@@ -26,7 +26,10 @@ final class MollieLoggerFactory implements MollieLoggerFactoryInterface
 
     public function createNew(): MollieLoggerInterface
     {
-        return $this->factory->createNew();
+        /** @var MollieLoggerInterface $loggerFactory */
+        $loggerFactory = $this->factory->createNew();
+
+        return $loggerFactory;
     }
 
     public function create(string $message, int $logLevel, int $errorCode): MollieLoggerInterface

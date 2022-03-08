@@ -128,7 +128,7 @@ final class MollieGatewayConfigType extends AbstractResourceType
                 'label' => 'bitbag_sylius_mollie_plugin.ui.debug_level_log',
                 'choices' => Options::getDebugLevels(),
             ])
-            ->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            ->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event): void {
                 /** @var MollieGatewayConfigInterface $object */
                 $object = $event->getData();
                 $form = $event->getForm();
@@ -157,13 +157,13 @@ final class MollieGatewayConfigType extends AbstractResourceType
                     $translation->setName($object->getName());
                 }
             })
-            ->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event){
+            ->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event): void{
                 $form = $event->getForm();
                 /** @var MollieGatewayConfigInterface $object */
                 $object = $form->getData();
                 $data = $event->getData();
 
-                if (in_array($object->getMethodId(), Options::getOnlyOrderAPIMethods())) {
+                if (in_array($object->getMethodId(), Options::getOnlyOrderAPIMethods(), true)) {
                     $form->remove('paymentType');
                     $form->add('paymentType', ChoiceType::class, [
                         'label' => 'bitbag_sylius_mollie_plugin.ui.payment_type',
@@ -178,12 +178,12 @@ final class MollieGatewayConfigType extends AbstractResourceType
 
                 $event->setData($data);
             })
-            ->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
+            ->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event): void {
                 /** @var MollieGatewayConfigInterface $object */
                 $object = $event->getForm()->getData();
                 $data = $event->getData();
 
-                if (in_array($object->getMethodId(), Options::getOnlyOrderAPIMethods())) {
+                if (in_array($object->getMethodId(), Options::getOnlyOrderAPIMethods(), true)) {
                     $data['paymentType'] = AbstractMethod::ORDER_API;
                 }
 

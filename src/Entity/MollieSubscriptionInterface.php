@@ -53,7 +53,7 @@ interface MollieSubscriptionInterface extends ResourceInterface
 
     public function addOrder(SyliusOrder $order): void;
 
-    public function getCustomer(): CustomerInterface;
+    public function getCustomer(): ?CustomerInterface;
 
     public function setCustomer(CustomerInterface $user): void;
 
@@ -90,7 +90,7 @@ interface MollieSubscriptionInterface extends ResourceInterface
 
     public function incrementFailedPaymentCounter(): void;
 
-    public function resetFailedPaymentCount();
+    public function resetFailedPaymentCount(): void;
 
     public function getSubscriptionConfiguration(): MollieSubscriptionConfigurationInterface;
 
