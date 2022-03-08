@@ -49,8 +49,12 @@ final class CreatePaymentAction extends BaseApiAwareAction
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
         try {
+            if(!isset($details['metadata']['molliePaymentMethods']))
+            {
+                $details['metadata']['molliePaymentMethods'] = '';
+            }
             $paymentDetails = [
-                'method' => $details['metadata']['molliePaymentMethods'] ?: '',
+                'method' => $details['metadata']['molliePaymentMethods'],
                 'issuer' => $details['metadata']['selected_issuer'] ?? null,
                 'cardToken' => $details['metadata']['cartToken'],
                 'amount' => $details['amount'],
@@ -71,7 +75,7 @@ final class CreatePaymentAction extends BaseApiAwareAction
             $message = $this->guzzleNegativeResponseParser->parse($e);
             $this->loggerAction->addNegativeLog(sprintf('Error with create payment with: %s', $e->getMessage()));
 
-            if (empty($message)) {
+            if ('' === $message) {
                 throw new ApiException(sprintf('Error with create payment with: %s', $e->getMessage()));
             }
 

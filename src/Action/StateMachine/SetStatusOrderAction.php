@@ -44,7 +44,7 @@ final class SetStatusOrderAction implements SetStatusOrderActionInterface
 
     public function execute(Order $order): void
     {
-        if (!$order->orderNumber) {
+        if (null === $order->orderNumber) {
             return;
         }
         /** @var OrderInterface $orderSylius */
@@ -108,7 +108,13 @@ final class SetStatusOrderAction implements SetStatusOrderActionInterface
         // check if in mollie and sylius is the same shipped items
         $shippableQuantity = 0;
         foreach ($order->lines as $line) {
+            if (!property_exists($line, 'type')) {
+                throw new \InvalidArgumentException();
+            }
             if ($line->type === 'physical') {
+                if (!property_exists($line, 'shippableQuantity')) {
+                    throw new \InvalidArgumentException();
+                }
                 $shippableQuantity += $line->shippableQuantity;
             }
         }

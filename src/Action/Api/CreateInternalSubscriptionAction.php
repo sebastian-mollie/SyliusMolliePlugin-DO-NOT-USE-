@@ -42,7 +42,6 @@ final class CreateInternalSubscriptionAction extends BaseApiAwareAction implemen
         /** @var OrderInterface $rootOrder */
         $rootOrder = $this->orderRepository->find($model['metadata']['order_id']);
 
-        /** @var OrderInterface $rootOrder */
         foreach ($rootOrder->getRecurringItems() as $item) {
             $subscription = $this->subscriptionFactory->createFromFirstOrderWithOrderItemAndPaymentConfiguration(
                 $rootOrder,

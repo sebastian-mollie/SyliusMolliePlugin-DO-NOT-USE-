@@ -20,6 +20,7 @@ use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Reply\HttpRedirect;
+use Webmozart\Assert\Assert;
 
 final class CreateOrderAction extends BaseApiAwareAction implements ActionInterface
 {
@@ -87,6 +88,8 @@ final class CreateOrderAction extends BaseApiAwareAction implements ActionInterf
         $details['order_mollie_id'] = $order->id;
 
         $this->loggerAction->addLog(sprintf('Create new order in mollie with id: %s', $order->id));
+
+        Assert::notNull($order->getCheckoutUrl());
 
         throw new HttpRedirect($order->getCheckoutUrl());
     }

@@ -339,7 +339,7 @@ final class StatusActionSpec extends ObjectBehavior
         $details = [
             'payment_mollie_id' => 2,
             'customer_mollie_id' => 1,
-            'statusError',
+            'statusError'
         ];
         $payment->getDetails()->willReturn($details);
         $payment->getId()->willReturn(1);

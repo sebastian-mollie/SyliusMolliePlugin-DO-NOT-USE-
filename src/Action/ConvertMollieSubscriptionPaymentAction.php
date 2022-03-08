@@ -34,6 +34,7 @@ use Sylius\Component\Core\Model\PaymentInterface;
 use Sylius\Component\Payment\Model\PaymentMethodInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Webmozart\Assert\Assert;
 
 final class ConvertMollieSubscriptionPaymentAction extends BaseApiAwareAction implements ActionInterface, GatewayAwareInterface, ApiAwareInterface
 {
@@ -74,7 +75,7 @@ final class ConvertMollieSubscriptionPaymentAction extends BaseApiAwareAction im
         $this->paymentLocaleResolver = $paymentLocaleResolver;
     }
 
-    /** @param Convert $request */
+    /** @param Convert|mixed $request */
     public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
@@ -91,10 +92,12 @@ final class ConvertMollieSubscriptionPaymentAction extends BaseApiAwareAction im
         /** @var CustomerInterface $customer */
         $customer = $order->getCustomer();
 
+        Assert::notNull($payment->getCurrencyCode());
         $this->gateway->execute($currency = new GetCurrency($payment->getCurrencyCode()));
 
         $divisor = 10 ** $currency->exp;
 
+        Assert::notNull($payment->getAmount());
         $amount = number_format(abs($payment->getAmount() / $divisor), 2, '.', '');
         $paymentOptions = $payment->getDetails();
 

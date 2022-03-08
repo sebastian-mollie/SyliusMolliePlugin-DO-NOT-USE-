@@ -40,7 +40,7 @@ final class CaptureAction extends BaseApiAwareAction implements CaptureActionInt
         $this->tokenFactory = $genericTokenFactory;
     }
 
-    /** @param Capture $request */
+    /** @param Capture|mixed $request */
     public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
@@ -88,7 +88,7 @@ final class CaptureAction extends BaseApiAwareAction implements CaptureActionInt
             $details['metadata'] = $metadata;
 
             if (isset($details['metadata']['methodType']) && $details['metadata']['methodType'] === Options::PAYMENT_API) {
-                if (in_array($details['metadata']['molliePaymentMethods'], Options::getOnlyOrderAPIMethods())) {
+                if (in_array($details['metadata']['molliePaymentMethods'], Options::getOnlyOrderAPIMethods(), true)) {
                     throw new InvalidArgumentException( sprintf(
                         'Method %s is not allowed to use %s',
                         $details['metadata']['molliePaymentMethods'],

@@ -33,6 +33,7 @@ use Sylius\Component\Core\Model\PaymentInterface;
 use Sylius\Component\Customer\Context\CustomerContextInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Webmozart\Assert\Assert;
 
 final class ConvertMolliePaymentAction extends BaseApiAwareAction implements ActionInterface, GatewayAwareInterface, ApiAwareInterface
 {
@@ -50,7 +51,7 @@ final class ConvertMolliePaymentAction extends BaseApiAwareAction implements Act
     /** @var ConvertOrderInterface */
     private $orderConverter;
 
-    /** @var CustomerContext */
+    /** @var CustomerContextInterface */
     private $customerContext;
 
     /** @var PaymentLocaleResolverInterface */
@@ -77,7 +78,7 @@ final class ConvertMolliePaymentAction extends BaseApiAwareAction implements Act
         $this->apiCustomerFactory = $apiCustomerFactory;
     }
 
-    /** @param Convert $request */
+    /** @param Convert|mixed $request */
     public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
@@ -91,10 +92,12 @@ final class ConvertMolliePaymentAction extends BaseApiAwareAction implements Act
         /** @var CustomerInterface $customer */
         $customer = $order->getCustomer();
 
+        Assert::notNull($payment->getCurrencyCode());
         $this->gateway->execute($currency = new GetCurrency($payment->getCurrencyCode()));
 
         $divisor = 10 ** $currency->exp;
 
+        Assert::notNull($payment->getAmount());
         $amount = number_format(abs($payment->getAmount() / $divisor), 2, '.', '');
 
         $paymentOptions = $payment->getDetails();
@@ -144,7 +147,7 @@ final class ConvertMolliePaymentAction extends BaseApiAwareAction implements Act
                 $details['locale'] = $paymentLocale;
             }
 
-            if (array_search($method->getPaymentType(), Options::getAvailablePaymentType()) === Options::ORDER_API) {
+            if (array_search($method->getPaymentType(), Options::getAvailablePaymentType(), true) === Options::ORDER_API) {
                 unset($details['customerId']);
 
                 $details['metadata']['methodType'] = Options::ORDER_API;

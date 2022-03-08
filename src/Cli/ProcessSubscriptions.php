@@ -22,6 +22,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
+use Webmozart\Assert\Assert;
 
 class ProcessSubscriptions extends Command
 {
@@ -91,6 +92,8 @@ class ProcessSubscriptions extends Command
                 $configuration = $subscription->getSubscriptionConfiguration();
                 $routerContext->setHost($configuration->getHostName());
                 $firstOrder = $subscription->getFirstOrder();
+
+                Assert::notNull($firstOrder);
                 $routerContext->setParameter('_locale', $firstOrder->getLocaleCode());
                 $this->subscriptionProcessor->processNextPayment($subscription);
 

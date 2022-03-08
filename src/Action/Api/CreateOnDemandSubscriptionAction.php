@@ -49,7 +49,7 @@ final class CreateOnDemandSubscriptionAction extends BaseApiAwareAction implemen
         $this->guzzleNegativeResponseParser = $guzzleNegativeResponseParser;
     }
 
-    /** @param CreateSepaMandate $request */
+    /** @param CreateSepaMandate|mixed $request */
     public function execute($request): void
     {
         $details = ArrayObject::ensureArrayObject($request->getModel());
@@ -74,7 +74,7 @@ final class CreateOnDemandSubscriptionAction extends BaseApiAwareAction implemen
             $formattedMessage = sprintf('Error with create payment with: %s', $e->getMessage());
             $this->loggerAction->addNegativeLog($formattedMessage);
 
-            if (empty($message)) {
+            if ('' === $message) {
                 throw new ApiException($formattedMessage);
             }
 

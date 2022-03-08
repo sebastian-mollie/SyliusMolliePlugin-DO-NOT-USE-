@@ -20,6 +20,7 @@ use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Sylius\Component\Core\Model\CustomerInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 final class CreateCustomerAction extends BaseApiAwareAction implements ActionInterface, ApiAwareInterface
@@ -36,7 +37,7 @@ final class CreateCustomerAction extends BaseApiAwareAction implements ActionInt
         $this->mollieCustomerRepository = $mollieCustomerRepository;
     }
 
-    /** @param CreateCustomer $request */
+    /** @param CreateCustomer|mixed $request */
     public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
@@ -47,7 +48,7 @@ final class CreateCustomerAction extends BaseApiAwareAction implements ActionInt
             'email' => $model['email'],
         ];
 
-        /** @var MollieCustomerInterface $customer */
+        /** @var ?MollieCustomer $customer */
         $customer = $this->mollieCustomerRepository->findOneBy(['email' => $model['email']]);
 
         if (null === $customer) {
@@ -56,7 +57,7 @@ final class CreateCustomerAction extends BaseApiAwareAction implements ActionInt
         }
 
         try {
-            if (empty($customer->getProfileId())) {
+            if (null === $customer->getProfileId()) {
                 $customerMollie = $this->mollieApiClient->customers->create($data);
                 $customer->setProfileId($customerMollie->id);
 

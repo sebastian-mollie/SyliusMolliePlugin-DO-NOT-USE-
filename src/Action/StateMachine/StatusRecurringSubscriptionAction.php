@@ -50,7 +50,7 @@ final class StatusRecurringSubscriptionAction extends BaseApiAwareAction impleme
         $this->stateMachineTransition = $stateMachineTransition;
     }
 
-    /** @param StatusRecurringSubscription $request */
+    /** @param StatusRecurringSubscription|mixed $request */
     public function execute($request): void
     {
         /** @var StatusRecurringSubscription $request */
