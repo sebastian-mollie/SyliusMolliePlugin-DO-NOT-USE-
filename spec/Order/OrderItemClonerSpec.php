@@ -59,10 +59,7 @@ final class OrderItemClonerSpec extends ObjectBehavior
         $orderItem->getUnitPrice()->willReturn(59);
         $orderItem->getVariant()->willReturn($variant);
         $orderItem->getVariantName()->willReturn('test_variant_name');
-
-        if ($clonedOrderItem->getWrappedObject() instanceof VersionedInterface) {
-            $orderItem->getVersion()->willReturn(3);
-        }
+        $orderItem->getVersion()->willReturn(3);
 
         $orderItem->isImmutable()->willReturn(true);
 
