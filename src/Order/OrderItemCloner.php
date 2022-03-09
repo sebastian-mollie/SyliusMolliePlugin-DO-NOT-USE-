@@ -35,10 +35,8 @@ final class OrderItemCloner implements OrderItemClonerInterface
         $clonedOrderItem->setVariant($orderItem->getVariant());
         $clonedOrderItem->setVariantName($orderItem->getVariantName());
 
-        if (method_exists(OrderItemInterface::class, 'setVersion') &&
-            method_exists(OrderItemInterface::class, 'getVersion')
-        ) {
-            /** @phpstan-ignore-next-line For Sylius 1.9 always evaluates to false, for above 1.9.3 always evaluates to true*/
+        /** @phpstan-ignore-next-line  For Sylius 1.9.0-1.9.3 always evaluates to false, for above 1.9.3 always evaluates to true*/
+        if (method_exists(OrderItemInterface::class, 'setVersion') && method_exists(OrderItemInterface::class, 'getVersion')) {
             $clonedOrderItem->setVersion($orderItem->getVersion());
         }
 
