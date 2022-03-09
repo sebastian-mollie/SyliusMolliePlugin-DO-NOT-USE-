@@ -144,8 +144,13 @@ final class MollieGatewayConfigurationType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
+        $defaults = [
+            'field' => self::API_KEY_LIVE,
+            'groups' => ['sylius'],
+        ];
+
         $resolver->setDefault('constraints', [
-            new LiveApiKeyIsNotBlank(['field' => self::API_KEY_LIVE], ['sylius']),
+            new LiveApiKeyIsNotBlank($defaults),
         ]);
     }
 }
