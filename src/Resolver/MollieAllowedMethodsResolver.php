@@ -25,8 +25,7 @@ final class MollieAllowedMethodsResolver implements MollieAllowedMethodsResolver
     public function __construct(
         MollieApiClientKeyResolverInterface $mollieApiClientKeyResolver,
         PaymentLocaleResolverInterface $paymentLocaleResolver
-    )
-    {
+    ) {
         $this->mollieApiClientKeyResolver = $mollieApiClientKeyResolver;
         $this->paymentLocaleResolver = $paymentLocaleResolver;
     }
@@ -50,7 +49,7 @@ final class MollieAllowedMethodsResolver implements MollieAllowedMethodsResolver
 
     private function createParametersByOrder(OrderInterface $order): array
     {
-        $parameters =  array_merge(
+        $parameters = array_merge(
             [
                 'amount' => [
                     'value' => $this->parseTotalToString($order->getTotal()),
@@ -58,7 +57,7 @@ final class MollieAllowedMethodsResolver implements MollieAllowedMethodsResolver
                 ],
                 'billingCountry' => null !== $order->getBillingAddress()
                     ? $order->getBillingAddress()->getCountryCode()
-                    : null
+                    : null,
             ],
             MollieMethodsResolverInterface::PARAMETERS
         );
@@ -72,6 +71,6 @@ final class MollieAllowedMethodsResolver implements MollieAllowedMethodsResolver
 
     private function parseTotalToString(int $total): string
     {
-        return substr_replace((string)$total, '.', -2, 0);
+        return substr_replace((string) $total, '.', -2, 0);
     }
 }

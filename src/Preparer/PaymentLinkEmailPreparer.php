@@ -13,11 +13,9 @@ namespace BitBag\SyliusMolliePlugin\Preparer;
 
 use BitBag\SyliusMolliePlugin\EmailSender\PaymentLinkEmailSenderInterface;
 use BitBag\SyliusMolliePlugin\Entity\TemplateMollieEmailTranslationInterface;
-use BitBag\SyliusMolliePlugin\Repository\TemplateMollieEmailTranslationRepository;
 use BitBag\SyliusMolliePlugin\Repository\TemplateMollieEmailTranslationRepositoryInterface;
 use Liip\ImagineBundle\Exception\Config\Filter\NotFoundException;
 use Sylius\Component\Core\Model\OrderInterface;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 final class PaymentLinkEmailPreparer implements PaymentLinkEmailPreparerInterface
 {

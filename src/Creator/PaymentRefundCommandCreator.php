@@ -89,6 +89,7 @@ final class PaymentRefundCommandCreator implements PaymentRefundCommandCreatorIn
         $shipmentRefund = $this->shipmentRefund->refund($order, $orderItemUnitRefund, $toRefund);
 
         Assert::notNull($order->getNumber());
+
         return new RefundUnits($order->getNumber(), $orderItemUnitRefund, $shipmentRefund, $refundMethod->getId(), '');
     }
 

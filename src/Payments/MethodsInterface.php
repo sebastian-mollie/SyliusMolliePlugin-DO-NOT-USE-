@@ -53,7 +53,7 @@ interface MethodsInterface
         Przelewy24::class,
         SofortBanking::class,
         MealVoucher::class,
-        DirectDebit::class
+        DirectDebit::class,
     ];
 
     public function getAllEnabled(): array;

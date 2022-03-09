@@ -15,7 +15,6 @@ use BitBag\SyliusMolliePlugin\Entity\MollieGatewayConfigInterface;
 use BitBag\SyliusMolliePlugin\Entity\OrderInterface;
 use BitBag\SyliusMolliePlugin\Payments\Methods\AbstractMethod;
 use Sylius\Component\Core\Model\PaymentInterface;
-use Webmozart\Assert\Assert;
 
 final class ApplePayDirectPaymentTypeResolver implements ApplePayDirectPaymentTypeResolverInterface
 {

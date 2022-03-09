@@ -16,7 +16,6 @@ use BitBag\SyliusMolliePlugin\Action\StateMachine\SetStatusOrderActionInterface;
 use BitBag\SyliusMolliePlugin\Entity\MollieSubscriptionInterface;
 use BitBag\SyliusMolliePlugin\Logger\MollieLoggerActionInterface;
 use BitBag\SyliusMolliePlugin\Repository\MollieSubscriptionRepositoryInterface;
-use BitBag\SyliusMolliePlugin\Request\Api\CreateMollieSubscription;
 use BitBag\SyliusMolliePlugin\Request\StateMachine\StatusRecurringSubscription;
 use Mollie\Api\Exceptions\ApiException;
 use Payum\Core\Action\ActionInterface;
@@ -51,8 +50,7 @@ final class NotifyAction extends BaseApiAwareAction implements ActionInterface, 
         MollieSubscriptionRepositoryInterface $subscriptionRepository,
         SetStatusOrderActionInterface $setStatusOrderAction,
         MollieLoggerActionInterface $loggerAction
-    )
-    {
+    ) {
         $this->getHttpRequest = $getHttpRequest;
         $this->subscriptionRepository = $subscriptionRepository;
         $this->setStatusOrderAction = $setStatusOrderAction;

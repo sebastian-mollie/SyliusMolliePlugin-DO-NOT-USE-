@@ -16,7 +16,6 @@ use Mollie\Api\Resources\Payment;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Order\Factory\AdjustmentFactoryInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
-use Webmozart\Assert\Assert;
 
 final class OrderVoucherAdjustmentUpdater implements OrderVoucherAdjustmentUpdaterInterface
 {

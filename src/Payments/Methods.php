@@ -11,10 +11,8 @@ declare(strict_types=1);
 
 namespace BitBag\SyliusMolliePlugin\Payments;
 
-use BitBag\SyliusMolliePlugin\Payments\Methods\AbstractMethod;
 use BitBag\SyliusMolliePlugin\Payments\Methods\MethodInterface;
 use Mollie\Api\Resources\Method;
-use Webmozart\Assert\Assert;
 
 final class Methods implements MethodsInterface
 {

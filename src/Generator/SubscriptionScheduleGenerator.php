@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace BitBag\SyliusMolliePlugin\Generator;
@@ -10,13 +11,13 @@ use BitBag\SyliusMolliePlugin\Factory\MollieSubscriptionScheduleFactoryInterface
 final class SubscriptionScheduleGenerator implements SubscriptionScheduleGeneratorInterface
 {
     private DatePeriodFactoryInterface $datePeriodFactory;
+
     private MollieSubscriptionScheduleFactoryInterface $scheduleFactory;
 
     public function __construct(
         DatePeriodFactoryInterface $datePeriodFactory,
         MollieSubscriptionScheduleFactoryInterface $scheduleFactory
-    )
-    {
+    ) {
         $this->datePeriodFactory = $datePeriodFactory;
         $this->scheduleFactory = $scheduleFactory;
     }

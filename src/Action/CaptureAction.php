@@ -19,7 +19,6 @@ use BitBag\SyliusMolliePlugin\Request\Api\CreateOnDemandSubscription;
 use BitBag\SyliusMolliePlugin\Request\Api\CreateOnDemandSubscriptionPayment;
 use BitBag\SyliusMolliePlugin\Request\Api\CreateOrder;
 use BitBag\SyliusMolliePlugin\Request\Api\CreatePayment;
-use Psr\Log\InvalidArgumentException;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\RuntimeException;
@@ -27,6 +26,7 @@ use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Capture;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 use Payum\Core\Security\TokenInterface;
+use Psr\Log\InvalidArgumentException;
 
 final class CaptureAction extends BaseApiAwareAction implements CaptureActionInterface
 {
@@ -87,9 +87,9 @@ final class CaptureAction extends BaseApiAwareAction implements CaptureActionInt
             $metadata['refund_token'] = $refundToken->getHash();
             $details['metadata'] = $metadata;
 
-            if (isset($details['metadata']['methodType']) && $details['metadata']['methodType'] === Options::PAYMENT_API) {
+            if (isset($details['metadata']['methodType']) && Options::PAYMENT_API === $details['metadata']['methodType']) {
                 if (in_array($details['metadata']['molliePaymentMethods'], Options::getOnlyOrderAPIMethods(), true)) {
-                    throw new InvalidArgumentException( sprintf(
+                    throw new InvalidArgumentException(sprintf(
                         'Method %s is not allowed to use %s',
                         $details['metadata']['molliePaymentMethods'],
                         Options::PAYMENT_API
@@ -99,7 +99,7 @@ final class CaptureAction extends BaseApiAwareAction implements CaptureActionInt
                 $this->gateway->execute(new CreatePayment($details));
             }
 
-            if (isset($details['metadata']['methodType']) && $details['metadata']['methodType'] === Options::ORDER_API) {
+            if (isset($details['metadata']['methodType']) && Options::ORDER_API === $details['metadata']['methodType']) {
                 $this->gateway->execute(new CreateOrder($details));
             }
         }

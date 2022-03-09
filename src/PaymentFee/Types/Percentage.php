@@ -44,7 +44,7 @@ final class Percentage implements SurchargeTypeInterface
             $order->removeAdjustments(AdjustmentInterface::PERCENTAGE_ADJUSTMENT);
         }
 
-        if ($limit > 0 && $limit <= $amount) {
+        if (0 < $limit && $limit <= $amount) {
             $amount = $limit;
         }
 
@@ -60,6 +60,6 @@ final class Percentage implements SurchargeTypeInterface
 
     public function canCalculate(string $type): bool
     {
-        return array_search($type, Options::getAvailablePaymentSurchargeFeeType(),true) === Options::PERCENTAGE;
+        return Options::PERCENTAGE === array_search($type, Options::getAvailablePaymentSurchargeFeeType(), true);
     }
 }

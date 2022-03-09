@@ -14,43 +14,25 @@ namespace Tests\BitBag\SyliusMolliePlugin\Behat\Context\Ui\Shop;
 
 use Behat\Behat\Context\Context;
 use Behat\MinkExtension\Context\RawMinkContext;
-use BitBag\SyliusMolliePlugin\Entity\MollieSubscriptionInterface;
-use Sylius\Behat\Page\Admin\ProductVariant\CreatePage;
 use Sylius\Behat\Page\Shop\Order\ShowPageInterface;
-use Sylius\Component\Core\Model\OrderInterface;
 use Tests\BitBag\SyliusMolliePlugin\Behat\Mocker\MollieApiMocker;
-use Tests\BitBag\SyliusMolliePlugin\Behat\Page\Admin\PaymentMethod\CreatePageInterface;
 use Tests\BitBag\SyliusMolliePlugin\Behat\Page\External\PaymentPageInterface;
 use Tests\BitBag\SyliusMolliePlugin\Behat\Page\Shop\Checkout\CompletePageInterface;
 
 final class CheckoutContext extends RawMinkContext implements Context
 {
-    /**
-     * @var CompletePageInterface
-     */
+    /** @var CompletePageInterface */
     private $summaryPage;
 
-    /**
-     * @var ShowPageInterface
-     */
+    /** @var ShowPageInterface */
     private $orderDetails;
 
-    /**
-     * @var MollieApiMocker
-     */
+    /** @var MollieApiMocker */
     private $mollieApiMocker;
 
-    /**
-     * @var PaymentPageInterface
-     */
+    /** @var PaymentPageInterface */
     private $paymentPage;
 
-    /**
-     * @param CompletePageInterface $summaryPage
-     * @param ShowPageInterface $orderDetails
-     * @param MollieApiMocker $mollieApiMocker
-     * @param PaymentPageInterface $paymentPage
-     */
     public function __construct(
         CompletePageInterface $summaryPage,
         ShowPageInterface $orderDetails,
@@ -152,9 +134,4 @@ final class CheckoutContext extends RawMinkContext implements Context
         $page = $session->getPage();
         $page->clickLink($arg1);
     }
-
-
-
-
-
 }

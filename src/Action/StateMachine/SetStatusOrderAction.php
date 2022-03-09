@@ -111,7 +111,7 @@ final class SetStatusOrderAction implements SetStatusOrderActionInterface
             if (!property_exists($line, 'type')) {
                 throw new \InvalidArgumentException();
             }
-            if ($line->type === 'physical') {
+            if ('physical' === $line->type) {
                 if (!property_exists($line, 'shippableQuantity')) {
                     throw new \InvalidArgumentException();
                 }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace BitBag\SyliusMolliePlugin\Form\Type;
@@ -33,8 +34,8 @@ final class MollieIntervalType extends AbstractType
                 new GreaterThan([
                     'value' => 0,
                     'groups' => ['recurring_product_variant'],
-                ])
-            ]
+                ]),
+            ],
         ]);
         $builder->add('step', ChoiceType::class, [
             'choices' => array_combine(

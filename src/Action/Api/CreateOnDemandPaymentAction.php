@@ -34,8 +34,7 @@ final class CreateOnDemandPaymentAction extends BaseApiAwareAction implements Ac
     public function __construct(
         MollieLoggerActionInterface $loggerAction,
         GuzzleNegativeResponseParserInterface $guzzleNegativeResponseParser
-    )
-    {
+    ) {
         $this->loggerAction = $loggerAction;
         $this->guzzleNegativeResponseParser = $guzzleNegativeResponseParser;
     }

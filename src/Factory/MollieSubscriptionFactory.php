@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace BitBag\SyliusMolliePlugin\Factory;
@@ -15,13 +16,13 @@ use Webmozart\Assert\Assert;
 final class MollieSubscriptionFactory implements MollieSubscriptionFactoryInterface
 {
     private FactoryInterface $decoratedFactory;
+
     private RouterInterface $router;
 
     public function __construct(
         FactoryInterface $decoratedFactory,
         RouterInterface $router
-    )
-    {
+    ) {
         $this->decoratedFactory = $decoratedFactory;
         $this->router = $router;
     }
@@ -55,8 +56,7 @@ final class MollieSubscriptionFactory implements MollieSubscriptionFactoryInterf
         OrderItemInterface $orderItem,
         array $paymentConfiguration = [],
         string $mandateId = null
-    ): MollieSubscriptionInterface
-    {
+    ): MollieSubscriptionInterface {
         $variant = $orderItem->getVariant();
         if (false === $variant instanceof ProductVariantInterface) {
             throw new \InvalidArgumentException(

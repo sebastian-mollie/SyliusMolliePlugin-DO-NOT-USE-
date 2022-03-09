@@ -136,7 +136,6 @@ final class MollieGatewayConfigType extends AbstractResourceType
                 $gateway = $object->getGateway();
                 $factoryName = $gateway->getFactoryName();
 
-
                 if (MollieSubscriptionGatewayFactory::FACTORY_NAME === $factoryName) {
                     $form->remove('paymentType');
                     $form->add('paymentType', ChoiceType::class, [
@@ -146,8 +145,8 @@ final class MollieGatewayConfigType extends AbstractResourceType
                         'help_html' => true,
                         'empty_data' => Options::PAYMENT_API_VALUE,
                         'attr' => [
-                            'disabled' => 'disabled'
-                        ]
+                            'disabled' => 'disabled',
+                        ],
                     ]);
                 }
 
@@ -157,7 +156,7 @@ final class MollieGatewayConfigType extends AbstractResourceType
                     $translation->setName($object->getName());
                 }
             })
-            ->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event): void{
+            ->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event): void {
                 $form = $event->getForm();
                 /** @var MollieGatewayConfigInterface $object */
                 $object = $form->getData();
@@ -171,8 +170,8 @@ final class MollieGatewayConfigType extends AbstractResourceType
                         'help' => $this->documentationLinks->getPaymentMethodDoc(),
                         'help_html' => true,
                         'attr' => [
-                            'disabled' => 'disabled'
-                        ]
+                            'disabled' => 'disabled',
+                        ],
                     ]);
                 }
 

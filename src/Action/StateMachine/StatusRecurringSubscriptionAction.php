@@ -42,8 +42,7 @@ final class StatusRecurringSubscriptionAction extends BaseApiAwareAction impleme
         SubscriptionAndPaymentIdApplicatorInterface $subscriptionAndPaymentIdApplicator,
         SubscriptionAndSyliusPaymentApplicatorInterface $subscriptionAndSyliusPaymentApplicator,
         StateMachineTransitionInterface $stateMachineTransition
-    )
-    {
+    ) {
         $this->subscriptionManager = $subscriptionManager;
         $this->subscriptionAndPaymentIdApplicator = $subscriptionAndPaymentIdApplicator;
         $this->subscriptionAndSyliusPaymentApplicator = $subscriptionAndSyliusPaymentApplicator;
@@ -53,7 +52,6 @@ final class StatusRecurringSubscriptionAction extends BaseApiAwareAction impleme
     /** @param StatusRecurringSubscription|mixed $request */
     public function execute($request): void
     {
-        /** @var StatusRecurringSubscription $request */
         RequestNotSupportedException::assertSupports($this, $request);
 
         /** @var MollieSubscriptionInterface $subscription */

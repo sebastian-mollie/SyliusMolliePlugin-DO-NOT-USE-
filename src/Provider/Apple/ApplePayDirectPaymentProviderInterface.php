@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace BitBag\SyliusMolliePlugin\Provider\Apple;
 
-
 use BitBag\SyliusMolliePlugin\Entity\OrderInterface;
 
 interface ApplePayDirectPaymentProviderInterface

@@ -56,7 +56,7 @@ final class OrderController extends BaseOrderController
             /** @var PaymentInterface $payment */
             $payment = $currentCart->getLastPayment();
 
-            if ($payment->getState() !== PaymentInterface::STATE_COMPLETED) {
+            if (PaymentInterface::STATE_COMPLETED !== $payment->getState()) {
                 $response = [
                     'status' => 1,
                     'errors' => 'Payment not created',

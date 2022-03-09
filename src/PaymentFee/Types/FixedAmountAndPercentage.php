@@ -78,7 +78,7 @@ final class FixedAmountAndPercentage implements SurchargeTypeInterface
 
     public function canCalculate(string $type): bool
     {
-        return array_search($type, Options::getAvailablePaymentSurchargeFeeType(), true) === Options::FIXED_FEE_AND_PERCENTAGE;
+        return Options::FIXED_FEE_AND_PERCENTAGE === array_search($type, Options::getAvailablePaymentSurchargeFeeType(), true);
     }
 
     private function getSumOfCalculatedValue(Collection $adjustments): float

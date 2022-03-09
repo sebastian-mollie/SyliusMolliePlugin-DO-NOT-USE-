@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace BitBag\SyliusMolliePlugin\Processor;
@@ -6,22 +7,19 @@ namespace BitBag\SyliusMolliePlugin\Processor;
 use BitBag\SyliusMolliePlugin\Entity\MollieSubscriptionInterface;
 use BitBag\SyliusMolliePlugin\Entity\OrderInterface;
 use BitBag\SyliusMolliePlugin\Generator\SubscriptionScheduleGeneratorInterface;
-use BitBag\SyliusMolliePlugin\Transitions\MollieSubscriptionTransitions;
-use SM\Factory\Factory;
-use Sylius\Component\Core\Model\PaymentInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Webmozart\Assert\Assert;
 
 final class SubscriptionScheduleProcessor implements SubscriptionScheduleProcessorInterface
 {
     private RepositoryInterface $scheduleRepository;
+
     private SubscriptionScheduleGeneratorInterface $scheduleGenerator;
 
     public function __construct(
         RepositoryInterface $scheduleRepository,
         SubscriptionScheduleGeneratorInterface $scheduleGenerator
-    )
-    {
+    ) {
         $this->scheduleRepository = $scheduleRepository;
         $this->scheduleGenerator = $scheduleGenerator;
     }

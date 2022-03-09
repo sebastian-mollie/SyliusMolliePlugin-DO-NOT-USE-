@@ -13,7 +13,6 @@ namespace BitBag\SyliusMolliePlugin\Helper;
 
 use BitBag\SyliusMolliePlugin\Calculator\CalculateTaxAmountInterface;
 use BitBag\SyliusMolliePlugin\Entity\MollieGatewayConfigInterface;
-use BitBag\SyliusMolliePlugin\Order\AdjustmentInterface;
 use BitBag\SyliusMolliePlugin\Payments\PaymentTerms\Options;
 use BitBag\SyliusMolliePlugin\Resolver\MealVoucherResolverInterface;
 use BitBag\SyliusMolliePlugin\Resolver\TaxShipmentResolverInterface;
@@ -51,7 +50,7 @@ final class ConvertOrder implements ConvertOrderInterface
     /** @var TaxRateResolverInterface */
     private $taxRateResolver;
 
-    /** @var ZoneMatcherInterface  */
+    /** @var ZoneMatcherInterface */
     private $zoneMatcher;
 
     public function __construct(
@@ -72,8 +71,12 @@ final class ConvertOrder implements ConvertOrderInterface
         $this->zoneMatcher = $zoneMatcher;
     }
 
-    public function convert(OrderInterface $order, array $details, int $divisor, MollieGatewayConfigInterface $method): array
-    {
+    public function convert(
+        OrderInterface $order,
+        array $details,
+        int $divisor,
+        MollieGatewayConfigInterface $method
+    ): array {
         $this->order = $order;
 
         $customer = $order->getCustomer();
@@ -96,6 +99,7 @@ final class ConvertOrder implements ConvertOrderInterface
         $shippingAddress = $this->order->getShippingAddress();
 
         Assert::notNull($shippingAddress);
+
         return [
             'streetAndNumber' => $shippingAddress->getStreet(),
             'postalCode' => $shippingAddress->getPostcode(),
@@ -112,6 +116,7 @@ final class ConvertOrder implements ConvertOrderInterface
         $billingAddress = $this->order->getBillingAddress();
 
         Assert::notNull($billingAddress);
+
         return [
             'streetAndNumber' => $billingAddress->getStreet(),
             'postalCode' => $billingAddress->getPostcode(),
@@ -164,7 +169,7 @@ final class ConvertOrder implements ConvertOrderInterface
 
         /** @var Adjustment $adjustment */
         foreach ($this->order->getAdjustments() as $adjustment) {
-            if (false !== array_search($adjustment->getType(), Options::getAvailablePaymentSurchargeFeeType(),true)) {
+            if (false !== array_search($adjustment->getType(), Options::getAvailablePaymentSurchargeFeeType(), true)) {
                 $details[] = $this->createAdjustments($adjustment, $divisor);
             }
         }
@@ -237,14 +242,13 @@ final class ConvertOrder implements ConvertOrderInterface
 
     private function getUnitPriceWithTax(OrderItem $item): int
     {
-
         Assert::notNull($this->order->getBillingAddress());
         $zone = $this->zoneMatcher->match($this->order->getBillingAddress());
         /** @var TaxableInterface $taxableVariant */
         $taxableVariant = $item->getVariant();
         $taxRate = $this->taxRateResolver->resolve($taxableVariant, [self::TAX_RATE_CRITERIA_ZONE => $zone]);
 
-        if ($taxRate === null) {
+        if (null === $taxRate) {
             return $item->getUnitPrice();
         }
 

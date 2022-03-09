@@ -28,7 +28,6 @@ interface MollieMethodsResolverInterface
         'sequenceType' => 'recurring',
     ];
 
-
     /** @var string[] */
     public const UNSUPPORTED_METHODS = [
         PaymentMethod::INGHOMEPAY,

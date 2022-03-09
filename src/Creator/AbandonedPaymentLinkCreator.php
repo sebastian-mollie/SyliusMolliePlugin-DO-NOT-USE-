@@ -100,7 +100,7 @@ final class AbandonedPaymentLinkCreator implements AbandonedPaymentLinkCreatorIn
             /** @var \Payum\Core\Model\GatewayConfigInterface $gatewayConfig */
             $gatewayConfig = $paymentMethod->getGatewayConfig();
 
-            if ($gatewayConfig->getFactoryName() === MollieGatewayFactory::FACTORY_NAME) {
+            if (MollieGatewayFactory::FACTORY_NAME === $gatewayConfig->getFactoryName()) {
                 $this->paymentLinkResolver->resolve($order, [], TemplateMollieEmailInterface::PAYMENT_LINK_ABANDONED);
                 $order->setAbandonedEmail(true);
                 $this->orderRepository->add($order);

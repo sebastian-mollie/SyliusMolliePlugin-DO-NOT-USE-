@@ -39,8 +39,7 @@ final class SubscriptionAndPaymentIdApplicator implements SubscriptionAndPayment
         StateMachineTransitionInterface $stateMachineTransition,
         PaymentStateMachineTransitionInterface $paymentStateMachineTransition,
         ProcessingStateMachineTransitionInterface $processingStateMachineTransition
-    )
-    {
+    ) {
         $this->mollieApiClient = $mollieApiClient;
         $this->stateMachineTransition = $stateMachineTransition;
         $this->paymentStateMachineTransition = $paymentStateMachineTransition;
@@ -50,8 +49,7 @@ final class SubscriptionAndPaymentIdApplicator implements SubscriptionAndPayment
     public function execute(
         MollieSubscriptionInterface $subscription,
         string $paymentId
-    ): void
-    {
+    ): void {
         $configuration = $subscription->getSubscriptionConfiguration();
         $payment = $this->mollieApiClient->payments->get($paymentId);
 
@@ -73,7 +71,8 @@ final class SubscriptionAndPaymentIdApplicator implements SubscriptionAndPayment
                 );
                 $this->stateMachineTransition->apply(
                     $subscription,
-                    MollieSubscriptionTransitions::TRANSITION_PROCESS)
+                    MollieSubscriptionTransitions::TRANSITION_PROCESS
+                )
                 ;
 
                 break;

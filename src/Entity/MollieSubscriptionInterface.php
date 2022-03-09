@@ -21,20 +21,31 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 interface MollieSubscriptionInterface extends ResourceInterface
 {
     public const STATE_NEW = 'new';
+
     public const STATE_ACTIVE = 'active';
+
     public const STATE_PROCESSING = 'processing';
+
     public const STATE_PAUSED = 'paused';
+
     public const STATE_CANCELED = 'canceled';
+
     public const STATE_COMPLETED = 'completed';
+
     public const STATE_ABORTED = 'aborted';
 
     public const PROCESSING_STATE_NONE = 'none';
+
     public const PROCESSING_STATE_PENDING = 'pending';
+
     public const PROCESSING_STATE_PROCESSING = 'processing';
+
     public const PROCESSING_STATE_PROCESSED = 'processed';
 
     public const PAYMENT_STATE_PENDING = 'pending';
+
     public const PAYMENT_STATE_OK = 'ok';
+
     public const PAYMENT_STATE_FAIL = 'fail';
 
     public function getState(): string;

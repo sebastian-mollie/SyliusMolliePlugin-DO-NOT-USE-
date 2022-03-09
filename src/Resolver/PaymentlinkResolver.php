@@ -57,8 +57,11 @@ final class PaymentlinkResolver implements PaymentlinkResolverInterface
         $this->paymentTokenProvider = $paymentTokenProvider;
     }
 
-    public function resolve(OrderInterface $order, array $data, string $templateName): string
-    {
+    public function resolve(
+        OrderInterface $order,
+        array $data,
+        string $templateName
+    ): string {
         $methodsArray = [];
         $methods = $data['methods'] ?? $data['methods'] = [];
 
@@ -73,7 +76,7 @@ final class PaymentlinkResolver implements PaymentlinkResolverInterface
             $paymentMethod->getGatewayConfig()->getFactoryName(),
             [MollieGatewayFactory::FACTORY_NAME, MollieSubscriptionGatewayFactory::FACTORY_NAME],
             true
-            )) {
+        )) {
             throw new NotFoundException('No method mollie found in order');
         }
 

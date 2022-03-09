@@ -1,22 +1,22 @@
 <?php
+
 declare(strict_types=1);
 
 namespace BitBag\SyliusMolliePlugin\Order;
 
-use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Model\ShipmentInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface;
 
 final class ShipmentCloner implements ShipmentClonerInterface
 {
     private FactoryInterface $shipmentFactory;
+
     private ShipmentUnitClonerInterface $shipmentUnitCloner;
 
     public function __construct(
         FactoryInterface $shipmentFactory,
         ShipmentUnitClonerInterface $shipmentUnitCloner
-    )
-    {
+    ) {
         $this->shipmentFactory = $shipmentFactory;
         $this->shipmentUnitCloner = $shipmentUnitCloner;
     }

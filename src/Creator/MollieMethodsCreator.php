@@ -30,12 +30,11 @@ final class MollieMethodsCreator implements MollieMethodsCreatorInterface
     /** @var MollieGatewayConfigFactoryInterface */
     private $factory;
 
-
     public function __construct(
         MethodsFactoryInterface $methodsFactory,
         EntityManagerInterface $entityManager,
         MollieGatewayConfigFactoryInterface $factory
-    ){
+    ) {
         $this->methodsFactory = $methodsFactory;
         $this->entityManager = $entityManager;
         $this->factory = $factory;

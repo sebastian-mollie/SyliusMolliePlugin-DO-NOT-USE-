@@ -63,8 +63,8 @@ final class ShipmentShipEventListener
         $modusKey = $this->getModus($paymentMethod->getGatewayConfig()->getConfig());
 
         try {
-            /** @var Order $order */
             $this->apiClient->setApiKey($modusKey);
+            /** @var Order $order */
             $order = $this->apiClient->orders->get($payment->getDetails()['order_mollie_id']);
             $order->shipAll();
         } catch (ApiException $e) {

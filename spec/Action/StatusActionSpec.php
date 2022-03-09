@@ -329,52 +329,100 @@ final class StatusActionSpec extends ObjectBehavior
 
     function it_marks_when_subscription_mollie_id_and_order_id_are_unset_and_with_refund_set_to_true(
         GetStatusInterface $request,
-        PaymentInterface $payment,
-        PaymentEndpoint $paymentEndpoint,
-        MollieApiClient $mollieApiClient,
+        PaymentInterface $corePayment,
+        Payment $payment,
         Payment $molliePayment,
+        PaymentEndpoint $paymentEndpoint,
+        OrderEndpoint $orderEndpoint,
+        MollieApiClient $mollieApiClient,
         MollieLoggerActionInterface $loggerAction,
-        PaymentRefundInterface $paymentRefund
+        Order $order,
+        OrderVoucherAdjustmentUpdaterInterface $orderVoucherAdjustmentUpdater,
+        OrderRefundInterface $orderRefund
     ): void {
+//        $details = [
+//            'payment_mollie_id' => 2,
+//            'customer_mollie_id' => 1,
+//            'statusError',
+//            'order_mollie_id' => null
+//        ];
+//        $payment->getDetails()->willReturn($details);
+//        $payment->getId()->willReturn(1);
+//        $request->getModel()->willReturn($payment);
+//
+//        $mollieApiClient->payments = $paymentEndpoint;
+//        $paymentEndpoint->get(2)->willReturn($molliePayment);
         $details = [
-            'payment_mollie_id' => 2,
+            'payment_mollie_id' => null,
             'customer_mollie_id' => 1,
-            'statusError'
+            'order_mollie_id' => 1,
+            'statusError',
         ];
-        $payment->getDetails()->willReturn($details);
-        $payment->getId()->willReturn(1);
-        $request->getModel()->willReturn($payment);
+        $corePayment->getDetails()->willReturn($details);
+        $corePayment->getId()->willReturn(1);
+        $request->getModel()->willReturn($corePayment);
+
+        $mollieApiClient->orders = $orderEndpoint;
+        $orderEndpoint->get(1, ['embed' => 'payments'])->willReturn($order);
+
+        $payment->method = 'voucher';
+        $payment->id = 1;
+        $order->_embedded = new \stdClass();
+        $order->_embedded->payments = [$payment->getWrappedObject()];
+        $order->metadata = new \stdClass();
+        $order->metadata->order_id = 1;
+
+        $orderVoucherAdjustmentUpdater->update($payment, 1)->shouldBeCalled();
 
         $mollieApiClient->payments = $paymentEndpoint;
-        $paymentEndpoint->get(2)->willReturn($molliePayment);
+        $paymentEndpoint->get(1)->willReturn($molliePayment);
+        $molliePayment->metadata = $order->metadata;
         $molliePayment->hasRefunds()->willReturn(true);
         $molliePayment->hasChargebacks()->willReturn(true);
 
-        $paymentRefund->refund($molliePayment)->shouldBeCalled();
-        $loggerAction->addLog(sprintf('Mark payment refunded to: %s', $molliePayment->status))->shouldBeCalled();
+        $orderRefund->refund($order)->shouldBeCalled();
+        $loggerAction->addLog(sprintf('Mark payment order refunded to: %s', $molliePayment->status))->shouldBeCalled();
 
         $this->execute($request);
     }
 
     function it_marks_when_subscription_mollie_id_and_order_id_are_unset_and_with_refund_set_to_false(
         GetStatusInterface $request,
-        PaymentInterface $payment,
-        PaymentEndpoint $paymentEndpoint,
-        MollieApiClient $mollieApiClient,
+        PaymentInterface $corePayment,
+        Payment $payment,
         Payment $molliePayment,
-        MollieLoggerActionInterface $loggerAction
+        PaymentEndpoint $paymentEndpoint,
+        OrderEndpoint $orderEndpoint,
+        MollieApiClient $mollieApiClient,
+        MollieLoggerActionInterface $loggerAction,
+        Order $order,
+        OrderVoucherAdjustmentUpdaterInterface $orderVoucherAdjustmentUpdater
     ): void {
         $details = [
-            'payment_mollie_id' => 2,
+            'payment_mollie_id' => null,
             'customer_mollie_id' => 1,
+            'order_mollie_id' => 1,
             'statusError',
         ];
-        $payment->getDetails()->willReturn($details);
-        $payment->getId()->willReturn(1);
-        $request->getModel()->willReturn($payment);
+        $corePayment->getDetails()->willReturn($details);
+        $corePayment->getId()->willReturn(1);
+        $request->getModel()->willReturn($corePayment);
+
+        $mollieApiClient->orders = $orderEndpoint;
+        $orderEndpoint->get(1, ['embed' => 'payments'])->willReturn($order);
+
+        $payment->method = 'voucher';
+        $payment->id = 1;
+        $order->_embedded = new \stdClass();
+        $order->_embedded->payments = [$payment->getWrappedObject()];
+        $order->metadata = new \stdClass();
+        $order->metadata->order_id = 1;
+
+        $orderVoucherAdjustmentUpdater->update($payment, 1)->shouldBeCalled();
 
         $mollieApiClient->payments = $paymentEndpoint;
-        $paymentEndpoint->get(2)->willReturn($molliePayment);
+        $paymentEndpoint->get(1)->willReturn($molliePayment);
+        $molliePayment->metadata = $order->metadata;
         $molliePayment->hasRefunds()->willReturn(false);
         $molliePayment->hasChargebacks()->willReturn(false);
 

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace BitBag\SyliusMolliePlugin\Order;
@@ -12,13 +13,13 @@ use Sylius\Component\Resource\Model\VersionedInterface;
 final class OrderItemCloner implements OrderItemClonerInterface
 {
     private FactoryInterface $orderItemFactory;
+
     private OrderItemUnitFactoryInterface $orderItemUnitFactory;
 
     public function __construct(
         FactoryInterface $orderItemFactory,
         OrderItemUnitFactoryInterface $orderItemUnitFactory
-    )
-    {
+    ) {
         $this->orderItemFactory = $orderItemFactory;
         $this->orderItemUnitFactory = $orderItemUnitFactory;
     }
@@ -26,8 +27,7 @@ final class OrderItemCloner implements OrderItemClonerInterface
     public function clone(
         OrderItemInterface $orderItem,
         OrderInterface $order
-    ): OrderItemInterface
-    {
+    ): OrderItemInterface {
         /** @var OrderItemInterface $clonedOrderItem */
         $clonedOrderItem = $this->orderItemFactory->createNew();
         $clonedOrderItem->setOrder($order);

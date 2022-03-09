@@ -1,13 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
 namespace BitBag\SyliusMolliePlugin\Order;
 
 use BitBag\SyliusMolliePlugin\Entity\MollieSubscriptionInterface;
 use BitBag\SyliusMolliePlugin\Entity\OrderInterface;
-use BitBag\SyliusMolliePlugin\Factory\PartialShip\ShipmentFactoryInterface;
 use Sylius\Component\Core\Model\OrderItemInterface;
-use Sylius\Component\Core\Model\ShipmentInterface;
 use Sylius\Component\Core\OrderCheckoutStates;
 use Sylius\Component\Core\OrderPaymentStates;
 use Sylius\Component\Core\OrderShippingStates;
@@ -19,9 +18,13 @@ use Webmozart\Assert\Assert;
 final class SubscriptionOrderCloner implements SubscriptionOrderClonerInterface
 {
     private OrderItemClonerInterface $orderItemCloner;
+
     private FactoryInterface $orderFactory;
+
     private RandomnessGeneratorInterface $generator;
+
     private AdjustmentClonerInterface $adjustmentCloner;
+
     private ShipmentClonerInterface $shipmentCloner;
 
     public function __construct(
@@ -30,8 +33,7 @@ final class SubscriptionOrderCloner implements SubscriptionOrderClonerInterface
         RandomnessGeneratorInterface $generator,
         AdjustmentClonerInterface $adjustmentCloner,
         ShipmentClonerInterface $shipmentCloner
-    )
-    {
+    ) {
         $this->orderItemCloner = $orderItemCloner;
         $this->orderFactory = $orderFactory;
         $this->generator = $generator;
@@ -43,8 +45,7 @@ final class SubscriptionOrderCloner implements SubscriptionOrderClonerInterface
         MollieSubscriptionInterface $subscription,
         OrderInterface $order,
         OrderItemInterface $orderItem
-    ): OrderInterface
-    {
+    ): OrderInterface {
         $rootOrder = $subscription->getFirstOrder();
 
         /** @var OrderInterface $clonedOrder */
@@ -110,7 +111,6 @@ final class SubscriptionOrderCloner implements SubscriptionOrderClonerInterface
                     $clonedAdjustment->setAdjustable($clonedOrder);
                 }
             }
-
         }
 
         $clonedOrder->recalculateAdjustmentsTotal();

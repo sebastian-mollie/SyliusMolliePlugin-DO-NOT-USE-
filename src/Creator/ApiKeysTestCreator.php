@@ -14,7 +14,6 @@ namespace BitBag\SyliusMolliePlugin\Creator;
 use BitBag\SyliusMolliePlugin\Client\MollieApiClient;
 use BitBag\SyliusMolliePlugin\DTO\ApiKeyTest;
 use BitBag\SyliusMolliePlugin\Form\Type\MollieGatewayConfigurationType;
-use BitBag\SyliusMolliePlugin\Resolver\MollieMethodsResolver;
 use BitBag\SyliusMolliePlugin\Resolver\MollieMethodsResolverInterface;
 use Mollie\Api\Resources\MethodCollection;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -37,7 +36,6 @@ final class ApiKeysTestCreator implements ApiKeysTestCreatorInterface
 
     public function create(string $keyType, string $key = null): ApiKeyTest
     {
-
         $apiKeyTest = new ApiKeyTest(
             $keyType,
             isset($key),
@@ -50,14 +48,14 @@ final class ApiKeysTestCreator implements ApiKeysTestCreatorInterface
             return $apiKeyTest;
         }
 
-        if ($apiKeyTest->getType() === MollieGatewayConfigurationType::API_KEY_TEST && !str_starts_with($key, self::TEST_PREFIX)) {
+        if (MollieGatewayConfigurationType::API_KEY_TEST === $apiKeyTest->getType() && !str_starts_with($key, self::TEST_PREFIX)) {
             $apiKeyTest->setStatus(self::ERROR_STATUS);
             $apiKeyTest->setMessage($this->translator->trans('bitbag_sylius_mollie_plugin.ui.api_key_start_with_api_key_test'));
 
             return $apiKeyTest;
         }
 
-        if ($apiKeyTest->getType() === MollieGatewayConfigurationType::API_KEY_LIVE && !str_starts_with($key, self::LIVE_PREFIX)) {
+        if (MollieGatewayConfigurationType::API_KEY_LIVE === $apiKeyTest->getType() && !str_starts_with($key, self::LIVE_PREFIX)) {
             $apiKeyTest->setStatus(self::ERROR_STATUS);
             $apiKeyTest->setMessage($this->translator->trans('bitbag_sylius_mollie_plugin.ui.api_key_start_with_api_key_live'));
 
@@ -80,7 +78,7 @@ final class ApiKeysTestCreator implements ApiKeysTestCreatorInterface
         } catch (\Exception $exception) {
             $apiKeyTest->setStatus(self::ERROR_STATUS);
 
-            if ($exception->getCode() === 0) {
+            if (0 === $exception->getCode()) {
                 $apiKeyTest->setMessage($this->translator->trans(
                     \sprintf('bitbag_sylius_mollie_plugin.ui.api_key_start_with_%s', $apiKeyTest->getType())
                 ));

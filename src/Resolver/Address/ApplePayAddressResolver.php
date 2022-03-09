@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace BitBag\SyliusMolliePlugin\Resolver\Address;
 
-
 use Sylius\Component\Core\Model\OrderInterface;
 
 final class ApplePayAddressResolver implements ApplePayAddressResolverInterface

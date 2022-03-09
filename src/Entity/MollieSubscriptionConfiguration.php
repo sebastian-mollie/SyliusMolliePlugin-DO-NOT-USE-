@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace BitBag\SyliusMolliePlugin\Entity;
@@ -6,14 +7,23 @@ namespace BitBag\SyliusMolliePlugin\Entity;
 class MollieSubscriptionConfiguration implements MollieSubscriptionConfigurationInterface
 {
     protected ?int $id = null;
+
     protected string $hostName = '';
+
     protected ?int $port = null;
+
     protected ?string $subscriptionId = null;
+
     protected ?string $mandateId = null;
+
     protected ?string $customerId = null;
+
     protected ?string $interval = null;
+
     protected int $numberOfRepetitions = 1;
+
     protected array $paymentDetailsConfiguration = [];
+
     protected MollieSubscriptionInterface $subscription;
 
     public function __construct(MollieSubscriptionInterface $subscription)

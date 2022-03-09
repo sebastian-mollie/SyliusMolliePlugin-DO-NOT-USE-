@@ -49,8 +49,7 @@ final class CreatePaymentAction extends BaseApiAwareAction
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
         try {
-            if(!isset($details['metadata']['molliePaymentMethods']))
-            {
+            if (!isset($details['metadata']['molliePaymentMethods'])) {
                 $details['metadata']['molliePaymentMethods'] = '';
             }
             $paymentDetails = [

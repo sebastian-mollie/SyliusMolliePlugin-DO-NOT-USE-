@@ -52,7 +52,7 @@ final class Calculate
     private function calculatePaymentSurcharge(OrderInterface $order, MollieGatewayConfig $paymentMethod): OrderInterface
     {
         Assert::notNull($paymentMethod->getPaymentSurchargeFee());
-        if (null === $paymentMethod->getPaymentSurchargeFee()->getType() || $paymentMethod->getPaymentSurchargeFee()->getType() === ' ') {
+        if (null === $paymentMethod->getPaymentSurchargeFee()->getType() || ' ' === $paymentMethod->getPaymentSurchargeFee()->getType()) {
             return $order;
         }
 

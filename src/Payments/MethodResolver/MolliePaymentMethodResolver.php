@@ -12,19 +12,21 @@ namespace BitBag\SyliusMolliePlugin\Payments\MethodResolver;
 
 use BitBag\SyliusMolliePlugin\Entity\OrderInterface;
 use BitBag\SyliusMolliePlugin\Factory\MollieSubscriptionGatewayFactory;
+use BitBag\SyliusMolliePlugin\Repository\PaymentMethodRepositoryInterface;
 use BitBag\SyliusMolliePlugin\Resolver\MollieFactoryNameResolverInterface;
 use Sylius\Component\Core\Model\PaymentInterface as CorePaymentInterface;
-use Sylius\Component\Core\Model\PaymentMethodInterface;
 use Sylius\Component\Payment\Model\PaymentInterface;
-use BitBag\SyliusMolliePlugin\Repository\PaymentMethodRepositoryInterface;
 use Sylius\Component\Payment\Resolver\PaymentMethodsResolverInterface;
 use Webmozart\Assert\Assert;
 
 final class MolliePaymentMethodResolver implements PaymentMethodsResolverInterface
 {
     private PaymentMethodsResolverInterface $decoratedService;
+
     private PaymentMethodRepositoryInterface $paymentMethodRepository;
+
     private MollieFactoryNameResolverInterface $factoryNameResolver;
+
     private MollieMethodFilterInterface $mollieMethodFilter;
 
     public function __construct(
@@ -32,8 +34,7 @@ final class MolliePaymentMethodResolver implements PaymentMethodsResolverInterfa
         PaymentMethodRepositoryInterface $paymentMethodRepository,
         MollieFactoryNameResolverInterface $factoryNameResolver,
         MollieMethodFilterInterface $mollieMethodFilter
-    )
-    {
+    ) {
         $this->decoratedService = $decoratedService;
         $this->paymentMethodRepository = $paymentMethodRepository;
         $this->factoryNameResolver = $factoryNameResolver;
@@ -42,8 +43,9 @@ final class MolliePaymentMethodResolver implements PaymentMethodsResolverInterfa
 
     public function getSupportedMethods(PaymentInterface $subject): array
     {
-        /** @var CorePaymentInterface $subject */
-        /** @var OrderInterface $order */
+        /** @var OrderInterface $order
+         * @phpstan-ignore-next-line Ecs yield about missing variable after doc, when subject is set to core
+         */
         $order = $subject->getOrder();
         $channel = $order->getChannel();
         $factoryName = $this->factoryNameResolver->resolve($order);
@@ -81,6 +83,7 @@ final class MolliePaymentMethodResolver implements PaymentMethodsResolverInterfa
         }
 
         Assert::notNull($subject->getOrder());
+
         return $order->hasRecurringContents() || $order->hasNonRecurringContents()
             && null !== $subject->getOrder()->getChannel();
     }

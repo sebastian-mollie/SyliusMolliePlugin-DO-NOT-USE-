@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace BitBag\SyliusMolliePlugin\Entity;
@@ -6,6 +7,7 @@ namespace BitBag\SyliusMolliePlugin\Entity;
 trait RecurringOrderTrait
 {
     protected ?int $recurringSequenceIndex = null;
+
     protected ?MollieSubscriptionInterface $subscription = null;
 
     public function getRecurringSequenceIndex(): ?int

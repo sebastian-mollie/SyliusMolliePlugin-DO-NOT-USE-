@@ -13,7 +13,6 @@ namespace BitBag\SyliusMolliePlugin\Purifier;
 
 use BitBag\SyliusMolliePlugin\Entity\MollieGatewayConfigInterface;
 use BitBag\SyliusMolliePlugin\Resolver\MollieMethodsResolverInterface;
-use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 final class MolliePaymentMethodPurifier implements MolliePaymentMethodPurifierInterface
@@ -38,7 +37,7 @@ final class MolliePaymentMethodPurifier implements MolliePaymentMethodPurifierIn
         $methodConfig = $this->repository->findOneBy(['methodId' => $methodId]);
 
         if ($methodConfig instanceof MollieGatewayConfigInterface) {
-            /** @var ResourceInterface $methodConfig */
+            /** @phpstan-ignore-next-line Ecs yield about doc comment in wrong place */
             $this->repository->remove($methodConfig);
         }
     }

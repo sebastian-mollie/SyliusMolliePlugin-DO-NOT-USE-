@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace BitBag\SyliusMolliePlugin\Factory;
@@ -26,8 +27,7 @@ final class MollieSubscriptionScheduleFactory implements MollieSubscriptionSched
         \DateTime $scheduledDateStart,
         int $index,
         \DateTime $fulfilledDate = null
-    ): MollieSubscriptionScheduleInterface
-    {
+    ): MollieSubscriptionScheduleInterface {
         /** @var MollieSubscriptionScheduleInterface $schedule */
         $schedule = $this->createNew();
         $schedule->setMollieSubscription($mollieSubscription);

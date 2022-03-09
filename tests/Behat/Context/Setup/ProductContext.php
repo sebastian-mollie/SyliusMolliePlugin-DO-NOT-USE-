@@ -19,28 +19,17 @@ use Sylius\Behat\Service\SharedStorageInterface;
 use Sylius\Bundle\CoreBundle\Doctrine\ORM\ProductRepository;
 use Sylius\Bundle\CoreBundle\Doctrine\ORM\ProductVariantRepository;
 
-
 final class ProductContext extends RawMinkContext implements Context
 {
-    /**
-     * @var SharedStorageInterface
-     */
+    /** @var SharedStorageInterface */
     private $sharedStorage;
-    /**
-     * @var ProductRepository
-     */
+
+    /** @var ProductRepository */
     private $productRepository;
 
-    /**
-     * @var ProductVariantRepository
-     */
+    /** @var ProductVariantRepository */
     private $productVariantRepository;
 
-    /**
-     * @param SharedStorageInterface $sharedStorage
-     * @param ProductRepository $productRepository
-     * @param ProductVariantRepository $productVariantRepository
-     */
     public function __construct(
         SharedStorageInterface $sharedStorage,
         ProductRepository $productRepository,
@@ -57,7 +46,7 @@ final class ProductContext extends RawMinkContext implements Context
     public function theVariantHasRecurringPaymentEnabled($productName)
     {
         /** @var \Sylius\Component\Core\Model\Product $product */
-        $product = $this->productRepository->findByName($productName,'en_US');
+        $product = $this->productRepository->findByName($productName, 'en_US');
         $productVariants = $product[0]->getVariants();
         $productVariant = $productVariants->first();
         $productVariant->setRecurring(true);
@@ -70,5 +59,4 @@ final class ProductContext extends RawMinkContext implements Context
         $this->productVariantRepository->add($product);
         $this->sharedStorage->set('product_variant', $product);
     }
-
 }

@@ -47,7 +47,7 @@ final class MolliePluginLatestVersion extends AbstractExtension
         Assert::notNull($this->latestVersionChecker->checkLatestVersion());
         $latestVersion = str_replace('v', '', $this->latestVersionChecker->checkLatestVersion());
 
-        if ($latestVersion === BitBagSyliusMolliePlugin::VERSION) {
+        if (BitBagSyliusMolliePlugin::VERSION === $latestVersion) {
             return '';
         }
 

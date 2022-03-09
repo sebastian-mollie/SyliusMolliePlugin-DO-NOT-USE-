@@ -28,6 +28,7 @@ final class MollieSubscriptionRepository extends EntityRepository implements Mol
         return $qb->getQuery()->getOneOrNullResult()
         ;
     }
+
     public function findByOrderId(int $orderId): array
     {
         $qb = $this->createQueryBuilder('q');

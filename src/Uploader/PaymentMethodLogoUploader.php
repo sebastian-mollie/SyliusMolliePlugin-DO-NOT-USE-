@@ -14,7 +14,6 @@ namespace BitBag\SyliusMolliePlugin\Uploader;
 use BitBag\SyliusMolliePlugin\Entity\MollieGatewayConfigInterface;
 use Doctrine\Common\Collections\Collection;
 use Gaufrette\Filesystem;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Webmozart\Assert\Assert;
 
@@ -84,7 +83,7 @@ final class PaymentMethodLogoUploader implements PaymentMethodLogoUploaderInterf
 
     private function isAdBlockingProne(string $path): bool
     {
-        return strpos($path, 'ad') !== false;
+        return false !== strpos($path, 'ad');
     }
 
     private function expandPath(string $path): string

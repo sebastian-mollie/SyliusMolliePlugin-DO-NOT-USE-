@@ -21,7 +21,7 @@ final class MealVoucherResolver implements MealVoucherResolverInterface
 {
     public function resolve(MollieGatewayConfigInterface $method, OrderItemInterface $item): ?string
     {
-        if ($method->getMethodId() === MealVoucher::MEAL_VOUCHERS) {
+        if (MealVoucher::MEAL_VOUCHERS === $method->getMethodId()) {
             return $this->getMealVoucherCategory($method, $item);
         }
 
@@ -37,6 +37,7 @@ final class MealVoucherResolver implements MealVoucherResolverInterface
             return $method->getDefaultCategory()->getName();
         }
         Assert::notNull($item->getProduct());
+
         throw new \LogicException(\sprintf('Voucher need default category, product category found in product name %s', $item->getProduct()->getName()));
     }
 

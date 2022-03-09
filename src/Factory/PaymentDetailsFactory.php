@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace BitBag\SyliusMolliePlugin\Factory;
@@ -11,8 +12,7 @@ final class PaymentDetailsFactory implements PaymentDetailsFactoryInterface
     public function createForSubscriptionAndOrder(
         MollieSubscriptionConfigurationInterface $subscriptionConfiguration,
         OrderInterface $order
-    ): array
-    {
+    ): array {
         $originalDetails = $subscriptionConfiguration->getPaymentDetailsConfiguration();
 
         return [
@@ -20,7 +20,7 @@ final class PaymentDetailsFactory implements PaymentDetailsFactoryInterface
             'cartToken' => null,
             'mandateId' => $subscriptionConfiguration->getMandateId(),
             'metadata' => [
-                'gateway' => $originalDetails['metadata']['gateway']
+                'gateway' => $originalDetails['metadata']['gateway'],
             ],
         ];
     }

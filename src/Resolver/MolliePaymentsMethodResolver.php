@@ -23,7 +23,6 @@ use BitBag\SyliusMolliePlugin\Repository\PaymentMethodRepositoryInterface;
 use BitBag\SyliusMolliePlugin\Resolver\Order\PaymentCheckoutOrderResolverInterface;
 use Mollie\Api\Exceptions\ApiException;
 use Sylius\Component\Core\Model\OrderInterface;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Webmozart\Assert\Assert;
 
 final class MolliePaymentsMethodResolver implements MolliePaymentsMethodResolverInterface
@@ -61,8 +60,7 @@ final class MolliePaymentsMethodResolver implements MolliePaymentsMethodResolver
         MollieAllowedMethodsResolverInterface $allowedMethodsResolver,
         MollieLoggerActionInterface $loggerAction,
         MollieFactoryNameResolverInterface $mollieFactoryNameResolver
-    )
-    {
+    ) {
         $this->mollieGatewayRepository = $mollieGatewayRepository;
         $this->countriesRestrictionResolver = $countriesRestrictionResolver;
         $this->productVoucherTypeChecker = $productVoucherTypeChecker;
@@ -75,9 +73,9 @@ final class MolliePaymentsMethodResolver implements MolliePaymentsMethodResolver
 
     public function resolve(): array
     {
+        /** @var OrderInterface $order */
         $order = $this->paymentCheckoutOrderResolver->resolve();
 
-        /** @var OrderInterface $order */
         $address = $order->getBillingAddress();
 
         if (null === $address) {

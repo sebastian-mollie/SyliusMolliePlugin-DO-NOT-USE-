@@ -18,7 +18,6 @@ use BitBag\SyliusMolliePlugin\Logger\MollieLoggerActionInterface;
 use BitBag\SyliusMolliePlugin\Resolver\PartialShip\FromSyliusToMollieLinesResolverInterface;
 use Doctrine\Common\Collections\Collection;
 use Mollie\Api\Exceptions\ApiException;
-use Mollie\Api\Resources\Order;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Model\PaymentMethodInterface;
 use Webmozart\Assert\Assert;

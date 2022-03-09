@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace BitBag\SyliusMolliePlugin\Form\Extension;
@@ -35,8 +36,8 @@ final class ProductVariantRecurringExtension extends AbstractTypeExtension
                 'help' => 'bitbag_sylius_mollie_plugin.form.product_variant.recurring_help',
                 'required' => false,
                 'constraints' => [
-                    new NotNull()
-                ]
+                    new NotNull(),
+                ],
             ])
             ->add('times', NumberType::class, [
                 'label' => 'bitbag_sylius_mollie_plugin.form.product_variant.times',
@@ -46,18 +47,18 @@ final class ProductVariantRecurringExtension extends AbstractTypeExtension
                     new Range([
                         'min' => 2,
                         'minMessage' => 'bitbag_sylius_mollie_plugin.times.min_range',
-                        'groups' => ['recurring_product_variant']
+                        'groups' => ['recurring_product_variant'],
                     ]),
                     new IsNull([
-                        'groups' => 'non_recurring_product_variant'
-                    ])
-                ]
+                        'groups' => 'non_recurring_product_variant',
+                    ]),
+                ],
             ])
             ->add('interval', MollieIntervalType::class, [
                 'label' => false,
                 'required' => false,
                 'attr' => [
-                    'class' => 'inline fields'
+                    'class' => 'inline fields',
                 ],
                 'constraints' => [
                     new Valid([
@@ -83,5 +84,4 @@ final class ProductVariantRecurringExtension extends AbstractTypeExtension
             return $this->groupProvider->provide($form);
         });
     }
-
 }

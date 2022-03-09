@@ -147,6 +147,5 @@ final class MollieGatewayConfigurationType extends AbstractType
         $resolver->setDefault('constraints', [
             new LiveApiKeyIsNotBlank(['field' => self::API_KEY_LIVE], ['sylius']),
         ]);
-
     }
 }

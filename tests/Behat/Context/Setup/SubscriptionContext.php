@@ -14,27 +14,18 @@ namespace Tests\BitBag\SyliusMolliePlugin\Behat\Context\Setup;
 
 use Behat\Behat\Context\Context;
 use BitBag\SyliusMolliePlugin\Entity\MollieSubscriptionInterface;
-use BitBag\SyliusMolliePlugin\Entity\SubscriptionInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface;
 
 final class SubscriptionContext implements Context
 {
-    /**
-     * @var EntityManagerInterface
-     */
+    /** @var EntityManagerInterface */
     private $entityManagerSubscription;
 
-    /**
-     * @var FactoryInterface
-     */
+    /** @var FactoryInterface */
     private $subscriptionFactory;
 
-    /**
-     * @param EntityManagerInterface $entityManagerSubscription
-     * @param FactoryInterface $subscriptionFactory
-     */
     public function __construct(EntityManagerInterface $entityManagerSubscription, FactoryInterface $subscriptionFactory)
     {
         $this->entityManagerSubscription = $entityManagerSubscription;

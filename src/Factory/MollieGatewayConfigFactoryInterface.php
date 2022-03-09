@@ -17,5 +17,9 @@ use BitBag\SyliusMolliePlugin\Payments\Methods\MethodInterface;
 
 interface MollieGatewayConfigFactoryInterface
 {
-    public function create(MethodInterface $method, GatewayConfigInterface $gateway, int $key): MollieGatewayConfigInterface;
+    public function create(
+        MethodInterface $method,
+        GatewayConfigInterface $gateway,
+        int $key
+    ): MollieGatewayConfigInterface;
 }

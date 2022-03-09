@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace BitBag\SyliusMolliePlugin\Entity;
@@ -6,9 +7,13 @@ namespace BitBag\SyliusMolliePlugin\Entity;
 class MollieSubscriptionSchedule implements MollieSubscriptionScheduleInterface
 {
     protected ?int $id = null;
+
     protected MollieSubscriptionInterface $mollieSubscription;
+
     protected \DateTime $scheduledDate;
+
     protected ?\DateTimeInterface $fulfilledDate = null;
+
     protected int $scheduleIndex = 0;
 
     public function getId(): ?int

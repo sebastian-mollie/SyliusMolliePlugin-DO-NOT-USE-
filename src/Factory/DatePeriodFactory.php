@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace BitBag\SyliusMolliePlugin\Factory;
@@ -13,15 +14,14 @@ final class DatePeriodFactory implements DatePeriodFactoryInterface
         \DateTime $start,
         int $times,
         string $interval
-    ): array
-    {
-        Assert::regex($interval, DatePeriodFactory::READ_PATTERN);
+    ): array {
+        Assert::regex($interval, self::READ_PATTERN);
 
         $dates = [
             $start,
         ];
-        for ($i = 1; $i < $times; $i++) {
-            $dates[] = (clone $dates[$i-1])->modify(sprintf('+%s', $interval));
+        for ($i = 1; $i < $times; ++$i) {
+            $dates[] = (clone $dates[$i - 1])->modify(sprintf('+%s', $interval));
         }
 
         return $dates;

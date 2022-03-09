@@ -18,13 +18,11 @@ use BitBag\SyliusMolliePlugin\Factory\MollieGatewayFactory;
 use BitBag\SyliusMolliePlugin\Factory\MollieSubscriptionGatewayFactory;
 use BitBag\SyliusMolliePlugin\Form\Type\MollieGatewayConfigurationType;
 use BitBag\SyliusMolliePlugin\Logger\MollieLoggerActionInterface;
-use Mollie\Api\Resources\BaseCollection;
 use Mollie\Api\Resources\MethodCollection;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 final class MollieMethodsResolver implements MollieMethodsResolverInterface
 {
-
     /** @var MollieLoggerActionInterface */
     private $loggerAction;
 
@@ -42,8 +40,7 @@ final class MollieMethodsResolver implements MollieMethodsResolverInterface
         MollieApiClient $mollieApiClient,
         RepositoryInterface $gatewayConfigRepository,
         MollieMethodsCreatorInterface $mollieMethodsCreator
-    )
-    {
+    ) {
         $this->loggerAction = $loggerAction;
         $this->mollieApiClient = $mollieApiClient;
         $this->gatewayConfigRepository = $gatewayConfigRepository;

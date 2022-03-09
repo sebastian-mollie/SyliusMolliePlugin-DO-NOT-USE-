@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace BitBag\SyliusMolliePlugin\Action\Api;
 
 use BitBag\SyliusMolliePlugin\Entity\MollieCustomer;
-use BitBag\SyliusMolliePlugin\Entity\MollieCustomerInterface;
 use BitBag\SyliusMolliePlugin\Logger\MollieLoggerActionInterface;
 use BitBag\SyliusMolliePlugin\Request\Api\CreateCustomer;
 use Mollie\Api\Exceptions\ApiException;
@@ -20,7 +19,6 @@ use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Sylius\Component\Core\Model\CustomerInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 final class CreateCustomerAction extends BaseApiAwareAction implements ActionInterface, ApiAwareInterface

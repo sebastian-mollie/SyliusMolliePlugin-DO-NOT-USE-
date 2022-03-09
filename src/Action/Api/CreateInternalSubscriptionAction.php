@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace BitBag\SyliusMolliePlugin\Action\Api;
@@ -16,15 +17,16 @@ use Payum\Core\Exception\RequestNotSupportedException;
 final class CreateInternalSubscriptionAction extends BaseApiAwareAction implements ActionInterface, ApiAwareInterface
 {
     private MollieSubscriptionRepositoryInterface $subscriptionRepository;
+
     private MollieSubscriptionFactoryInterface $subscriptionFactory;
+
     private OrderRepositoryInterface $orderRepository;
 
     public function __construct(
         MollieSubscriptionRepositoryInterface $subscriptionRepository,
         MollieSubscriptionFactoryInterface $subscriptionFactory,
         OrderRepositoryInterface $orderRepository
-    )
-    {
+    ) {
         $this->subscriptionRepository = $subscriptionRepository;
         $this->subscriptionFactory = $subscriptionFactory;
         $this->orderRepository = $orderRepository;

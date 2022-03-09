@@ -26,7 +26,6 @@ use Payum\Core\GatewayAwareInterface;
 use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Request\Convert;
 use Payum\Core\Request\GetCurrency;
-use Sylius\Bundle\CoreBundle\Context\CustomerContext;
 use Sylius\Component\Core\Model\CustomerInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Model\PaymentInterface;
@@ -105,11 +104,11 @@ final class ConvertMolliePaymentAction extends BaseApiAwareAction implements Act
         if (isset($paymentOptions['metadata'])) {
             $paymentMethod = $paymentOptions['metadata']['molliePaymentMethods'] ?? null;
             $cartToken = $paymentOptions['metadata']['cartToken'];
-            $selectedIssuer = $paymentMethod === PaymentMethod::IDEAL ? $paymentOptions['metadata']['selected_issuer'] : null;
+            $selectedIssuer = PaymentMethod::IDEAL === $paymentMethod ? $paymentOptions['metadata']['selected_issuer'] : null;
         } else {
             $paymentMethod = $paymentOptions['molliePaymentMethods'] ?? null;
             $cartToken = $paymentOptions['cartToken'];
-            $selectedIssuer = $paymentMethod === PaymentMethod::IDEAL ? $paymentOptions['issuers']['id'] : null;
+            $selectedIssuer = PaymentMethod::IDEAL === $paymentMethod ? $paymentOptions['issuers']['id'] : null;
         }
 
         /** @var MollieGatewayConfigInterface $method */
@@ -147,7 +146,7 @@ final class ConvertMolliePaymentAction extends BaseApiAwareAction implements Act
                 $details['locale'] = $paymentLocale;
             }
 
-            if (array_search($method->getPaymentType(), Options::getAvailablePaymentType(), true) === Options::ORDER_API) {
+            if (Options::ORDER_API === array_search($method->getPaymentType(), Options::getAvailablePaymentType(), true)) {
                 unset($details['customerId']);
 
                 $details['metadata']['methodType'] = Options::ORDER_API;
@@ -163,7 +162,7 @@ final class ConvertMolliePaymentAction extends BaseApiAwareAction implements Act
         return
             $request instanceof Convert &&
             $request->getSource() instanceof PaymentInterface &&
-            $request->getTo() === 'array'
+            'array' === $request->getTo()
             ;
     }
 }

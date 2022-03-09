@@ -22,14 +22,13 @@ final class MollieMethodFilter implements MollieMethodFilterInterface
     {
         $filteredMethods = [];
         /** @var PaymentMethodInterface $method */
-        foreach ($paymentMethods as $method)
-        {
+        foreach ($paymentMethods as $method) {
             Assert::notNull($method->getGatewayConfig());
-            if ($method->getGatewayConfig()->getFactoryName() !== MollieSubscriptionGatewayFactory::FACTORY_NAME)
-            {
+            if (MollieSubscriptionGatewayFactory::FACTORY_NAME !== $method->getGatewayConfig()->getFactoryName()) {
                 $filteredMethods[] = $method;
             }
         }
+
         return $filteredMethods;
     }
 
@@ -39,11 +38,9 @@ final class MollieMethodFilter implements MollieMethodFilterInterface
         $filteredMethods = [];
 
         /** @var PaymentMethodInterface $method */
-        foreach ($paymentMethods as $method)
-        {
+        foreach ($paymentMethods as $method) {
             Assert::notNull($method->getGatewayConfig());
-            if ($method->getGatewayConfig()->getFactoryName() !== MollieGatewayFactory::FACTORY_NAME)
-            {
+            if (MollieGatewayFactory::FACTORY_NAME !== $method->getGatewayConfig()->getFactoryName()) {
                 $filteredMethods[] = $method;
             }
         }

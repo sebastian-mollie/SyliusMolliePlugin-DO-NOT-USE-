@@ -13,15 +13,12 @@ namespace BitBag\SyliusMolliePlugin\Resolver;
 
 use BitBag\SyliusMolliePlugin\Client\MollieApiClient;
 use BitBag\SyliusMolliePlugin\Entity\OrderInterface;
-use BitBag\SyliusMolliePlugin\Factory\MollieGatewayFactory;
-use BitBag\SyliusMolliePlugin\Factory\MollieSubscriptionGatewayFactory;
 use BitBag\SyliusMolliePlugin\Form\Type\MollieGatewayConfigurationType;
 use BitBag\SyliusMolliePlugin\Logger\MollieLoggerActionInterface;
 use BitBag\SyliusMolliePlugin\Repository\PaymentMethodRepositoryInterface;
 use Mollie\Api\Exceptions\ApiException;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
-use Sylius\Component\Order\Context\CartContextInterface;
 use Sylius\Component\Resource\Exception\UpdateHandlingException;
 use Webmozart\Assert\Assert;
 
@@ -39,7 +36,7 @@ final class MollieApiClientKeyResolver implements MollieApiClientKeyResolverInte
     /** @var ChannelContextInterface */
     private $channelContext;
 
-    /** @var MollieFactoryNameResolverInterface  */
+    /** @var MollieFactoryNameResolverInterface */
     private $factoryNameResolver;
 
     public function __construct(

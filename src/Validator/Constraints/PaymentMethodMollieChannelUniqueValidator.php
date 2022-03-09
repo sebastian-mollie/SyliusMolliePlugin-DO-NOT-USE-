@@ -35,8 +35,7 @@ final class PaymentMethodMollieChannelUniqueValidator extends ConstraintValidato
     public function __construct(
         PaymentMethodRepositoryInterface $paymentMethodRepository,
         TranslatorInterface $translator
-    )
-    {
+    ) {
         $this->paymentMethodRepository = $paymentMethodRepository;
         $this->translator = $translator;
     }
@@ -126,10 +125,10 @@ final class PaymentMethodMollieChannelUniqueValidator extends ConstraintValidato
         $gateway = $paymentMethod->getGatewayConfig();
 
         return true === in_array(
-                $gateway->getFactoryName(),
-                [MollieGatewayFactory::FACTORY_NAME, MollieSubscriptionGatewayFactory::FACTORY_NAME],
-                true
-            );
+            $gateway->getFactoryName(),
+            [MollieGatewayFactory::FACTORY_NAME, MollieSubscriptionGatewayFactory::FACTORY_NAME],
+            true
+        );
     }
 
     private function getChannelsNameByChannels(Collection $alreadyUsedChannels): string

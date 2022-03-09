@@ -63,7 +63,7 @@ final class OrderRefundCommandCreator implements OrderRefundCommandCreatorInterf
             ) {
                 throw new \InvalidArgumentException();
             }
-            if ($line->status === 'paid' && $line->type === ConvertOrderInterface::PHYSICAL_TYPE) {
+            if ('paid' === $line->status && ConvertOrderInterface::PHYSICAL_TYPE === $line->type) {
                 if (!property_exists($line, 'metadata') ||
                     !property_exists($line, 'quantityRefunded')
                 ) {
@@ -93,6 +93,7 @@ final class OrderRefundCommandCreator implements OrderRefundCommandCreatorInterf
         $shipmentToRefund = $this->shipmentOrderRefund->refund($order, $syliusOrder);
 
         Assert::notNull($syliusOrder->getNumber());
+
         return new RefundUnits($syliusOrder->getNumber(), $unitsToRefund, $shipmentToRefund, $refundMethod->getId(), '');
     }
 }

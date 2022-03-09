@@ -32,8 +32,11 @@ final class MollieLoggerFactory implements MollieLoggerFactoryInterface
         return $loggerFactory;
     }
 
-    public function create(string $message, int $logLevel, int $errorCode): MollieLoggerInterface
-    {
+    public function create(
+        string $message,
+        int $logLevel,
+        int $errorCode
+    ): MollieLoggerInterface {
         $mollieLogger = $this->createNew();
         $mollieLogger->setDateTime(new \DateTime('now'));
         $mollieLogger->setLevel($logLevel);

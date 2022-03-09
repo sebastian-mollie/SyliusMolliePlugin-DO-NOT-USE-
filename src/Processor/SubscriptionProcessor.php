@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace BitBag\SyliusMolliePlugin\Processor;
@@ -23,10 +24,15 @@ final class SubscriptionProcessor implements SubscriptionProcessorInterface
     use GatewayAwareTrait;
 
     private SubscriptionOrderClonerInterface $orderCloner;
+
     private PaymentFactoryInterface $paymentFactory;
+
     private OrderRepositoryInterface $orderRepository;
+
     private PaymentDetailsFactoryInterface $paymentDetailsFactory;
+
     private MollieSubscriptionRepositoryInterface $subscriptionRepository;
+
     private Payum $paymentRegistry;
 
     public function __construct(
@@ -36,8 +42,7 @@ final class SubscriptionProcessor implements SubscriptionProcessorInterface
         PaymentDetailsFactoryInterface $paymentDetailsFactory,
         MollieSubscriptionRepositoryInterface $subscriptionRepository,
         Payum $paymentRegistry
-    )
-    {
+    ) {
         $this->orderCloner = $orderCloner;
         $this->paymentFactory = $paymentFactory;
         $this->orderRepository = $orderRepository;
@@ -101,8 +106,7 @@ final class SubscriptionProcessor implements SubscriptionProcessorInterface
         MollieSubscriptionInterface $subscription,
         OrderInterface $clonedOrder,
         OrderItemInterface $orderItem
-    ): SyliusCorePayment
-    {
+    ): SyliusCorePayment {
         Assert::notNull($clonedOrder->getCurrencyCode());
         /** @var SyliusCorePayment $payment */
         $payment = $this->paymentFactory->createWithAmountAndCurrencyCode(

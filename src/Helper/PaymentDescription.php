@@ -37,13 +37,13 @@ final class PaymentDescription implements PaymentDescriptionInterface
         $paymentMethodType = array_search($methodConfig->getPaymentType(), Options::getAvailablePaymentType(), true);
         $description = $methodConfig->getPaymentDescription();
 
-        if ($methodConfig->getMethodId() === PaymentMethod::PAYPAL) {
+        if (PaymentMethod::PAYPAL === $methodConfig->getMethodId()) {
             Assert::notNull($order->getNumber());
+
             return $this->createPayPalDescription($order->getNumber());
         }
 
-        if ($paymentMethodType === Options::PAYMENT_API && isset($description)) {
-
+        if (Options::PAYMENT_API === $paymentMethodType && isset($description)) {
             Assert::notNull($order->getChannel());
             $replacements = [
                 '{ordernumber}' => $order->getNumber(),

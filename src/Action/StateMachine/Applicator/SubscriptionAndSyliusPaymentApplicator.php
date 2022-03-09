@@ -10,11 +10,9 @@ declare(strict_types=1);
 
 namespace BitBag\SyliusMolliePlugin\Action\StateMachine\Applicator;
 
-use BitBag\SyliusMolliePlugin\Action\Api\BaseApiAwareAction;
 use BitBag\SyliusMolliePlugin\Action\StateMachine\Transition\PaymentStateMachineTransitionInterface;
 use BitBag\SyliusMolliePlugin\Action\StateMachine\Transition\ProcessingStateMachineTransitionInterface;
 use BitBag\SyliusMolliePlugin\Action\StateMachine\Transition\StateMachineTransitionInterface;
-use BitBag\SyliusMolliePlugin\Client\MollieApiClient;
 use BitBag\SyliusMolliePlugin\Entity\MollieSubscriptionInterface;
 use BitBag\SyliusMolliePlugin\Transitions\MollieSubscriptionPaymentProcessingTransitions;
 use BitBag\SyliusMolliePlugin\Transitions\MollieSubscriptionProcessingTransitions;
@@ -36,17 +34,16 @@ final class SubscriptionAndSyliusPaymentApplicator implements SubscriptionAndSyl
         StateMachineTransitionInterface $stateMachineTransition,
         PaymentStateMachineTransitionInterface $paymentStateMachineTransition,
         ProcessingStateMachineTransitionInterface $processingStateMachineTransition
-    )
-    {
+    ) {
         $this->stateMachineTransition = $stateMachineTransition;
         $this->paymentStateMachineTransition = $paymentStateMachineTransition;
         $this->processingStateMachineTransition = $processingStateMachineTransition;
     }
+
     public function execute(
         MollieSubscriptionInterface $subscription,
         PaymentInterface $payment
-    ): void
-    {
+    ): void {
         switch ($payment->getState()) {
             case PaymentInterface::STATE_NEW:
             case PaymentInterface::STATE_PROCESSING:

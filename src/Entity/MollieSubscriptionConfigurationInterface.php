@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace BitBag\SyliusMolliePlugin\Entity;
@@ -8,7 +9,7 @@ interface MollieSubscriptionConfigurationInterface
     public const SUPPORTED_INTERVAL_STEPS = [
         'days',
         'weeks',
-        'months'
+        'months',
     ];
 
     public function getId(): ?int;

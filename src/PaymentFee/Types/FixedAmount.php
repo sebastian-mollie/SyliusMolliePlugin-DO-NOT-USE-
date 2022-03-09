@@ -51,6 +51,6 @@ final class FixedAmount implements SurchargeTypeInterface
 
     public function canCalculate(string $type): bool
     {
-        return array_search($type, Options::getAvailablePaymentSurchargeFeeType(), true) === Options::FIXED_FEE;
+        return Options::FIXED_FEE === array_search($type, Options::getAvailablePaymentSurchargeFeeType(), true);
     }
 }

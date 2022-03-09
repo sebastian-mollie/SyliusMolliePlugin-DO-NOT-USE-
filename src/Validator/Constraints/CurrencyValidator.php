@@ -32,7 +32,7 @@ final class CurrencyValidator extends ConstraintValidator
         if (
             null === $gatewayConfig ||
             (
-                $gatewayConfig->getFactoryName() !== MollieSubscriptionGatewayFactory::FACTORY_NAME
+                MollieSubscriptionGatewayFactory::FACTORY_NAME !== $gatewayConfig->getFactoryName()
             )
         ) {
             return;
@@ -40,19 +40,19 @@ final class CurrencyValidator extends ConstraintValidator
 
         /** @var ChannelInterface $channel */
         foreach ($paymentMethod->getChannels() as $channel) {
-
             /** @var CurrencyInterface $baseChannelCurrency */
             $baseChannelCurrency = $channel->getBaseCurrency();
             $currencyCode = $baseChannelCurrency->getCode();
 
-            if (null === $currencyCode){
+            if (null === $currencyCode) {
                 return;
             }
 
             if (
-                false === in_array(strtoupper($currencyCode),
+                false === in_array(
+                    strtoupper($currencyCode),
                     MollieSubscriptionGatewayFactory::CURRENCIES_AVAILABLE,
-                true
+                    true
                 )
             ) {
                 $message = $constraint->message ?? null;

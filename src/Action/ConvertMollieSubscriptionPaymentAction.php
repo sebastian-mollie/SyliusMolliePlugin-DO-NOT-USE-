@@ -12,12 +12,9 @@ declare(strict_types=1);
 namespace BitBag\SyliusMolliePlugin\Action;
 
 use BitBag\SyliusMolliePlugin\Action\Api\BaseApiAwareAction;
-use BitBag\SyliusMolliePlugin\Entity\MollieGatewayConfigInterface;
 use BitBag\SyliusMolliePlugin\Entity\OrderInterface;
-use BitBag\SyliusMolliePlugin\Entity\ProductVariantInterface;
 use BitBag\SyliusMolliePlugin\Helper\ConvertOrderInterface;
 use BitBag\SyliusMolliePlugin\Helper\PaymentDescriptionInterface;
-use BitBag\SyliusMolliePlugin\Payments\PaymentTerms\Options;
 use BitBag\SyliusMolliePlugin\Request\Api\CreateCustomer;
 use BitBag\SyliusMolliePlugin\Resolver\PaymentLocaleResolverInterface;
 use Mollie\Api\Types\PaymentMethod;
@@ -31,7 +28,6 @@ use Payum\Core\Request\GetCurrency;
 use Sylius\Bundle\CoreBundle\Context\CustomerContext;
 use Sylius\Component\Core\Model\CustomerInterface;
 use Sylius\Component\Core\Model\PaymentInterface;
-use Sylius\Component\Payment\Model\PaymentMethodInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Webmozart\Assert\Assert;
@@ -65,8 +61,7 @@ final class ConvertMollieSubscriptionPaymentAction extends BaseApiAwareAction im
         ConvertOrderInterface $orderConverter,
         CustomerContext $customerContext,
         PaymentLocaleResolverInterface $paymentLocaleResolver
-    )
-    {
+    ) {
         $this->paymentDescription = $paymentDescription;
         $this->session = $session;
         $this->mollieMethodsRepository = $mollieMethodsRepository;
@@ -112,7 +107,7 @@ final class ConvertMollieSubscriptionPaymentAction extends BaseApiAwareAction im
         } else {
             $paymentMethod = $paymentOptions['molliePaymentMethods'] ?? null;
         }
-        $selectedIssuer = $paymentMethod === PaymentMethod::IDEAL ? $paymentOptions['issuers']['id'] : null;
+        $selectedIssuer = PaymentMethod::IDEAL === $paymentMethod ? $paymentOptions['issuers']['id'] : null;
 
         $details = [
             'amount' => [
@@ -148,6 +143,6 @@ final class ConvertMollieSubscriptionPaymentAction extends BaseApiAwareAction im
             $request instanceof Convert
             && $request->getSource() instanceof PaymentInterface
             && $request->getSource()->getOrder() instanceof OrderInterface
-            && $request->getTo() === 'array';
+            && 'array' === $request->getTo();
     }
 }

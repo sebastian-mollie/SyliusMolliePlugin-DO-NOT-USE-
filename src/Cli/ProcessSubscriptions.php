@@ -34,8 +34,11 @@ class ProcessSubscriptions extends Command
     private $io;
 
     private MollieSubscriptionRepositoryInterface $mollieSubscriptionRepository;
+
     private Factory $stateMachineFactory;
+
     private SubscriptionProcessorInterface $subscriptionProcessor;
+
     private RouterInterface $router;
 
     public function __construct(
@@ -43,8 +46,7 @@ class ProcessSubscriptions extends Command
         Factory $stateMachineFactory,
         SubscriptionProcessorInterface $subscriptionProcessor,
         RouterInterface $router
-    )
-    {
+    ) {
         parent::__construct(self::COMMAND_NAME);
         $this->mollieSubscriptionRepository = $mollieSubscriptionRepository;
         $this->stateMachineFactory = $stateMachineFactory;

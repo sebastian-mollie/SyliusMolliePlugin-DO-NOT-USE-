@@ -13,47 +13,28 @@ declare(strict_types=1);
 namespace Tests\BitBag\SyliusMolliePlugin\Behat\Context\Setup;
 
 use Behat\Behat\Context\Context;
-use BitBag\SyliusMolliePlugin\Entity\ProductVariantInterface;
 use BitBag\SyliusMolliePlugin\Factory\MollieGatewayFactory;
 use BitBag\SyliusMolliePlugin\Factory\MollieSubscriptionGatewayFactory;
 use Doctrine\ORM\EntityManager;
 use Sylius\Behat\Service\SharedStorageInterface;
-use Sylius\Bundle\CoreBundle\Doctrine\ORM\ProductRepository;
-use Sylius\Bundle\CoreBundle\Doctrine\ORM\ProductVariantRepository;
 use Sylius\Bundle\CoreBundle\Fixture\Factory\ExampleFactoryInterface;
 use Sylius\Component\Core\Model\PaymentMethodInterface;
-use Sylius\Component\Core\Model\ProductInterface;
 use Sylius\Component\Core\Repository\PaymentMethodRepositoryInterface;
-use Tests\BitBag\SyliusMolliePlugin\Entity\Product;
 
 final class MollieContext implements Context
 {
-    /**
-     * @var SharedStorageInterface
-     */
+    /** @var SharedStorageInterface */
     private $sharedStorage;
 
-    /**
-     * @var PaymentMethodRepositoryInterface
-     */
+    /** @var PaymentMethodRepositoryInterface */
     private $paymentMethodRepository;
 
-    /**
-     * @var ExampleFactoryInterface
-     */
+    /** @var ExampleFactoryInterface */
     private $paymentMethodExampleFactory;
 
-    /**
-     * @var EntityManager
-     */
+    /** @var EntityManager */
     private $paymentMethodManager;
 
-    /**
-     * @param SharedStorageInterface $sharedStorage
-     * @param PaymentMethodRepositoryInterface $paymentMethodRepository
-     * @param ExampleFactoryInterface $paymentMethodExampleFactory
-     * @param EntityManager $paymentMethodManager
-     */
     public function __construct(
         SharedStorageInterface $sharedStorage,
         PaymentMethodRepositoryInterface $paymentMethodRepository,
@@ -108,16 +89,6 @@ final class MollieContext implements Context
         $this->paymentMethodManager->flush();
     }
 
-    /**
-     * @param string $name
-     * @param string $code
-     * @param string $factoryName
-     * @param string $description
-     * @param bool $addForCurrentChannel
-     * @param int|null $position
-     *
-     * @return PaymentMethodInterface
-     */
     private function createPaymentMethodMollie(
         string $name,
         string $code,

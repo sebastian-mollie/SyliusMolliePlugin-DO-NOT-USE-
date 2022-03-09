@@ -39,7 +39,7 @@ final class PaymentSurchargeProcessor implements PaymentSurchargeProcessorInterf
         $paymentMethod = $payment->getMethod();
 
         Assert::notNull($paymentMethod->getGatewayConfig());
-        if ($paymentMethod->getGatewayConfig()->getFactoryName() !== 'mollie') {
+        if ('mollie' !== $paymentMethod->getGatewayConfig()->getFactoryName()) {
             return;
         }
 
@@ -67,7 +67,7 @@ final class PaymentSurchargeProcessor implements PaymentSurchargeProcessorInterf
         /** @var Collection $configMethods */
         $configMethods = $gatewayConfig->getMollieGatewayConfig();
 
-        if ($molliePaymentMethod === null) {
+        if (null === $molliePaymentMethod) {
             return $configMethods->last();
         }
 

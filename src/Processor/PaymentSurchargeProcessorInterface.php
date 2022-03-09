@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace BitBag\SyliusMolliePlugin\Processor;
 
 use BitBag\SyliusMolliePlugin\Entity\OrderInterface;
-use Sylius\Component\Order\Processor\OrderProcessorInterface;
 
 interface PaymentSurchargeProcessorInterface
 {

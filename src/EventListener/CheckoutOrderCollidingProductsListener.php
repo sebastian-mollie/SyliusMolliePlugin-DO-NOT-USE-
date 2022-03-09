@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace BitBag\SyliusMolliePlugin\EventListener;
@@ -13,15 +14,16 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 final class CheckoutOrderCollidingProductsListener
 {
     private RouterInterface $router;
+
     private TranslatorInterface $translator;
+
     private FlashBagInterface $flashBag;
 
     public function __construct(
         RouterInterface $router,
         TranslatorInterface $translator,
         FlashBagInterface $flashBag
-    )
-    {
+    ) {
         $this->router = $router;
         $this->translator = $translator;
         $this->flashBag = $flashBag;
@@ -33,7 +35,6 @@ final class CheckoutOrderCollidingProductsListener
             return;
         }
 
-        /** @var OrderInterface $subject */
         if (true === $subject->hasNonRecurringContents() && true === $subject->hasRecurringContents()) {
             $url = $this->router->generate('sylius_shop_cart_summary');
             $response = new RedirectResponse($url);

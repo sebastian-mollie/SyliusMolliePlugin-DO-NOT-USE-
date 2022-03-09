@@ -43,7 +43,7 @@ final class FromMollieToSyliusResolver implements FromMollieToSyliusResolverInte
             if (!property_exists($line, 'status')) {
                 throw new \InvalidArgumentException();
             }
-            if ($line->status === self::SHIPPING_STATUS) {
+            if (self::SHIPPING_STATUS === $line->status) {
                 if (!property_exists($line, 'metadata')) {
                     throw new \InvalidArgumentException();
                 }
