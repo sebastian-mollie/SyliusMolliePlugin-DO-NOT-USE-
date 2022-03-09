@@ -8,7 +8,6 @@ use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Model\OrderItemInterface;
 use Sylius\Component\Order\Factory\OrderItemUnitFactoryInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface;
-use Sylius\Component\Resource\Model\VersionedInterface;
 
 final class OrderItemCloner implements OrderItemClonerInterface
 {
@@ -35,12 +34,7 @@ final class OrderItemCloner implements OrderItemClonerInterface
         $clonedOrderItem->setUnitPrice($orderItem->getUnitPrice());
         $clonedOrderItem->setVariant($orderItem->getVariant());
         $clonedOrderItem->setVariantName($orderItem->getVariantName());
-
-        /** @phpstan-ignore-next-line  */
-        if ($clonedOrderItem instanceof VersionedInterface) {
-            $clonedOrderItem->setVersion($orderItem->getVersion());
-        }
-
+        $clonedOrderItem->setVersion($orderItem->getVersion());
         $clonedOrderItem->setImmutable(true);
 
         $clonedUnit = $this->orderItemUnitFactory->createForItem($clonedOrderItem);
