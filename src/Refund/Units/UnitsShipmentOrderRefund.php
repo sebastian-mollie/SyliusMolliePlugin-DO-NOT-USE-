@@ -63,6 +63,10 @@ final class UnitsShipmentOrderRefund implements UnitsShipmentOrderRefundInterfac
             'type' => RefundType::shipment(),
         ]);
 
-        return $unitRefunded ? true : false;
+        if (null !== $unitRefunded) {
+            return true;
+        }
+
+        return false;
     }
 }

@@ -33,13 +33,17 @@ final class MollieGatewayConfigFactory implements MollieGatewayConfigFactoryInte
 
     private function createNewOrUpdate(MethodInterface $method, GatewayConfigInterface $gateway): MollieGatewayConfigInterface
     {
+        /** @var ?MollieGatewayConfigInterface $methodExist */
         $methodExist = $this->repository->findOneBy([
             /** @phpstan-ignore-next-line Not every class which implements MethodInterface returns the same type */
             'methodId' => $method->getMethodId(),
             'gateway' => $gateway,
         ]);
 
-        return null !== $methodExist ? $methodExist : $this->mollieGatewayConfigFactory->createNew();
+        /** @var MollieGatewayConfigInterface $gatewayConfig */
+        $gatewayConfig = $this->mollieGatewayConfigFactory->createNew();
+
+        return null !== $methodExist ? $methodExist : $gatewayConfig;
     }
 
     public function create(

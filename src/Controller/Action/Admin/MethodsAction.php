@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace BitBag\SyliusMolliePlugin\Controller\Action\Admin;
 
+use BitBag\SyliusMolliePlugin\Entity\GatewayConfigInterface;
 use BitBag\SyliusMolliePlugin\Logger\MollieLoggerActionInterface;
 use BitBag\SyliusMolliePlugin\Purifier\MolliePaymentMethodPurifierInterface;
 use BitBag\SyliusMolliePlugin\Resolver\MollieMethodsResolverInterface;
@@ -55,7 +56,9 @@ final class MethodsAction
     public function __invoke(int $id, Request $request): Response
     {
         try {
+            /** @var GatewayConfigInterface $gateway */
             $gateway = $this->gatewayConfigRepository->find($id);
+
             $this->mollieMethodsResolver->createForGateway($gateway);
 
             $this->methodPurifier->removeAllNoLongerSupportedMethods();

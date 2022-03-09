@@ -8,6 +8,7 @@ use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Model\OrderItemInterface;
 use Sylius\Component\Order\Factory\OrderItemUnitFactoryInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface;
+use Sylius\Component\Resource\Model\VersionedInterface;
 
 final class OrderItemCloner implements OrderItemClonerInterface
 {
@@ -35,8 +36,8 @@ final class OrderItemCloner implements OrderItemClonerInterface
         $clonedOrderItem->setVariant($orderItem->getVariant());
         $clonedOrderItem->setVariantName($orderItem->getVariantName());
 
-        /** @phpstan-ignore-next-line  For Sylius 1.9.0-1.9.3 always evaluates to false, for above 1.9.3 always evaluates to true*/
-        if (method_exists(OrderItemInterface::class, 'setVersion') && method_exists(OrderItemInterface::class, 'getVersion')) {
+        /** @phpstan-ignore-next-line  */
+        if ($clonedOrderItem instanceof VersionedInterface) {
             $clonedOrderItem->setVersion($orderItem->getVersion());
         }
 

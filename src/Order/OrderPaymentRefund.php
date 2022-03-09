@@ -18,6 +18,7 @@ use BitBag\SyliusMolliePlugin\Request\Api\RefundOrder;
 use Payum\Core\Payum;
 use Payum\Core\Request\Refund as RefundAction;
 use Payum\Core\Security\TokenInterface;
+use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Model\PaymentInterface;
 use Sylius\Component\Core\Model\PaymentMethodInterface;
 use Sylius\Component\Resource\Exception\UpdateHandlingException;
@@ -50,6 +51,7 @@ final class OrderPaymentRefund implements OrderPaymentRefundInterface
 
     public function refund(UnitsRefunded $units): void
     {
+        /** @var OrderInterface $order */
         $order = $this->orderRepository->findOneBy(['number' => $units->orderNumber()]);
 
         /** @var PaymentInterface|null $payment */
