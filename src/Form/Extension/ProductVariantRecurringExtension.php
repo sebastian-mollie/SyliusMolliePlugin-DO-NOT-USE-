@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace BitBag\SyliusMolliePlugin\Form\Extension;
 
-use BitBag\SyliusMolliePlugin\Entity\ProductVariantInterface;
 use BitBag\SyliusMolliePlugin\Form\Type\MollieIntervalType;
+use BitBag\SyliusMolliePlugin\Provider\Form\ResolverGroupProviderInterface;
 use Sylius\Bundle\ProductBundle\Form\Type\ProductVariantType as ProductVariantFormType;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -17,10 +17,16 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\Range;
 use Symfony\Component\Validator\Constraints\Regex;
-use Symfony\Component\Validator\Constraints\Valid;
 
 final class ProductVariantRecurringExtension extends AbstractTypeExtension
 {
+    private ResolverGroupProviderInterface $groupProvider;
+
+    public function __construct(ResolverGroupProviderInterface $groupProvider)
+    {
+        $this->groupProvider = $groupProvider;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -48,18 +54,20 @@ final class ProductVariantRecurringExtension extends AbstractTypeExtension
                 ]
             ])
             ->add('interval', MollieIntervalType::class, [
-                'label' => false,
+                'label' => 'bitbag_sylius_mollie_plugin.form.product_variant.interval',
                 'required' => false,
                 'attr' => [
                     'class' => 'inline fields'
                 ],
                 'constraints' => [
-                    new Valid([
-                        'groups' => ['recurring_product_variant'],
-                    ]),
                     new NotBlank([
                         'message' => 'bitbag_sylius_mollie_plugin.interval.not_blank',
                         'groups' => ['recurring_product_variant'],
+                    ]),
+                    new Regex([
+                        'message' => 'bitbag_sylius_mollie_plugin.interval.invalid',
+                        'groups' => ['recurring_product_variant'],
+                        'pattern' => '/^\d{1,} (months|weeks|days)$/',
                     ]),
                 ],
             ])
@@ -74,22 +82,7 @@ final class ProductVariantRecurringExtension extends AbstractTypeExtension
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('validation_groups', function (FormInterface $form) {
-            $groups = ['sylius'];
-            $data = $form->getData();
-
-            if (false === $data instanceof ProductVariantInterface) {
-                return $groups;
-            }
-
-            if (false === $data->isRecurring()) {
-                $groups[] = 'non_recurring_product_variant';
-
-                return $groups;
-            }
-
-            $groups[] = 'recurring_product_variant';
-
-            return $groups;
+            return $this->groupProvider->provide($form);
         });
     }
 

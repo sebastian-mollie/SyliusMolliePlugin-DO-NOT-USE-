@@ -14,7 +14,6 @@ namespace BitBag\SyliusMolliePlugin\Controller\Action\Admin;
 use BitBag\SyliusMolliePlugin\Creator\MollieMethodsCreatorInterface;
 use BitBag\SyliusMolliePlugin\Logger\MollieLoggerActionInterface;
 use BitBag\SyliusMolliePlugin\Purifier\MolliePaymentMethodPurifierInterface;
-use BitBag\SyliusMolliePlugin\Repository\MollieGatewayConfigRepositoryInterface;
 use Mollie\Api\Exceptions\ApiException;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Sylius\Component\Resource\Exception\UpdateHandlingException;
@@ -73,3 +72,4 @@ final class MethodsAction
         }
     }
 }
+

@@ -14,16 +14,31 @@ namespace spec\BitBag\SyliusMolliePlugin\Action;
 
 use BitBag\SyliusMolliePlugin\Action\RefundAction;
 use BitBag\SyliusMolliePlugin\Client\MollieApiClient;
+use BitBag\SyliusMolliePlugin\Helper\ConvertRefundDataInterface;
+use BitBag\SyliusMolliePlugin\Logger\MollieLoggerActionInterface;
+use Mollie\Api\Endpoints\PaymentEndpoint;
+use Mollie\Api\Exceptions\ApiException;
+use Mollie\Api\Resources\Payment;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\GatewayAwareInterface;
-use Payum\Core\GatewayInterface;
 use Payum\Core\Request\Refund;
 use PhpSpec\ObjectBehavior;
+use spec\Sylius\Component\Resource\Exception\UpdateHandlingExceptionSpec;
+use Sylius\Component\Core\Model\PaymentInterface;
+use Sylius\Component\Resource\Exception\UpdateHandlingException;
 
 final class RefundActionSpec extends ObjectBehavior
 {
+    function let(MollieLoggerActionInterface $loggerAction, ConvertRefundDataInterface $convertOrderRefundData): void
+    {
+        $this->beConstructedWith(
+            $loggerAction,
+            $convertOrderRefundData
+        );
+    }
+
     function it_is_initializable(): void
     {
         $this->shouldHaveType(RefundAction::class);
@@ -44,23 +59,123 @@ final class RefundActionSpec extends ObjectBehavior
         $this->shouldHaveType(GatewayAwareInterface::class);
     }
 
-    function it_executes(
+    function it_executes_and_create_refund(
         Refund $request,
-        GatewayInterface $gateway,
-        MollieApiClient $mollieApiClient
+        ArrayObject $arrayObject,
+        MollieLoggerActionInterface $loggerAction
     ): void {
-        $this->setGateway($gateway);
-        $this->setApi($mollieApiClient);
-        $arrayObject = new ArrayObject(['payment_mollie_id' => 1]);
         $request->getModel()->willReturn($arrayObject);
-        $payment = \Mockery::mock('payment');
-        $payment->shouldReceive('canBeRefunded')->andReturn(true);
-        $payment->shouldReceive('refund')->andReturn(true);
-        $payment->shouldReceive('get')->andReturn($payment);
-
-        $mollieApiClient->payments = $payment;
+        $arrayObject->offsetGet('created_in_mollie')->willReturn(true);
 
         $this->execute($request);
+
+        $loggerAction->addLog('Received refund created in Mollie dashboard')->shouldBeCalled();
+    }
+
+    function it_executes_and_refund_received(
+        Refund $request,
+        MollieApiClient $mollieApiClient,
+        ArrayObject $details,
+        MollieLoggerActionInterface $loggerAction,
+        PaymentInterface $payment,
+        Payment $molliePayment,
+        PaymentEndpoint $paymentEndpoint,
+        ConvertRefundDataInterface $convertOrderRefundData
+    ): void {
+        $this->setApi($mollieApiClient);
+        $request->getModel()->willReturn($details);
+
+        $details->offsetGet('created_in_mollie')->willReturn(true);
+
+        $loggerAction->addLog('Received refund created in Mollie dashboard')->shouldBeCalled();
+        $this->execute($request);
+    }
+
+    function it_executes_and_refund_action_with_payment_id(
+        Refund $request,
+        MollieApiClient $mollieApiClient,
+        ArrayObject $details,
+        MollieLoggerActionInterface $loggerAction,
+        PaymentInterface $payment,
+        Payment $molliePayment,
+        PaymentEndpoint $paymentEndpoint,
+        ConvertRefundDataInterface $convertOrderRefundData
+    ): void {
+        $this->setApi($mollieApiClient);
+        $request->getModel()->willReturn($details);
+        $request->getFirstModel()->willReturn($payment);
+        $mollieApiClient->payments = $paymentEndpoint;
+        $payment->getCurrencyCode()->willReturn('EUR');
+
+        $details->offsetGet('payment_mollie_id')->willReturn(4);
+        $details->offsetGet('created_in_mollie')->willReturn(null);
+        $details->offsetGet('metadata')->willReturn(['refund' => ['test_refund']]);
+        $paymentEndpoint->get(4)->willReturn($molliePayment);
+        $convertOrderRefundData->convert(['test_refund'],'EUR')->willReturn(['5']);
+
+        $molliePayment->id = '4';
+        $molliePayment->amountRemaining = 5;
+        $molliePayment->canBeRefunded()->willReturn(true);
+        $molliePayment->refund(['amount' => ['5']])->shouldBeCalled();
+        $loggerAction->addLog(sprintf('Refund action with payment id %s', $molliePayment->id))->shouldBeCalled();
+        $this->execute($request);
+    }
+
+    function it_executes_and_cannot_refund(
+        Refund $request,
+        MollieApiClient $mollieApiClient,
+        ArrayObject $details,
+        MollieLoggerActionInterface $loggerAction,
+        PaymentInterface $payment,
+        Payment $molliePayment,
+        PaymentEndpoint $paymentEndpoint,
+        ConvertRefundDataInterface $convertOrderRefundData
+    ): void {
+        $this->setApi($mollieApiClient);
+        $request->getModel()->willReturn($details);
+        $request->getFirstModel()->willReturn($payment);
+        $mollieApiClient->payments = $paymentEndpoint;
+        $payment->getCurrencyCode()->willReturn('EUR');
+
+        $details->offsetGet('payment_mollie_id')->willReturn(4);
+        $details->offsetGet('created_in_mollie')->willReturn(null);
+        $details->offsetGet('metadata')->willReturn(['refund' => ['test_refund']]);
+        $paymentEndpoint->get(4)->willReturn($molliePayment);
+        $convertOrderRefundData->convert(['test_refund'],'EUR')->willReturn(['5']);
+
+        $molliePayment->id = '4';
+        $molliePayment->amountRemaining = 5;
+        $molliePayment->canBeRefunded()->willReturn(false);
+        $loggerAction->addNegativeLog(sprintf('Payment %s can not be refunded.', $molliePayment->id))->shouldBeCalled();
+        $this->shouldThrow(new UpdateHandlingException(sprintf('Payment %s can not be refunded.', $molliePayment->id)))
+            ->during('execute',[$request]);
+    }
+
+    function it_executes_with_api_exception(
+        Refund $request,
+        MollieApiClient $mollieApiClient,
+        ArrayObject $details,
+        MollieLoggerActionInterface $loggerAction,
+        PaymentInterface $payment,
+        Payment $molliePayment,
+        PaymentEndpoint $paymentEndpoint,
+        ConvertRefundDataInterface $convertOrderRefundData
+    ): void {
+        $this->setApi($mollieApiClient);
+        $request->getModel()->willReturn($details);
+        $request->getFirstModel()->willReturn($payment);
+        $mollieApiClient->payments = $paymentEndpoint;
+        $payment->getCurrencyCode()->willReturn('EUR');
+
+        $details->offsetGet('payment_mollie_id')->willReturn(4);
+        $details->offsetGet('created_in_mollie')->willReturn(null);
+        $details->offsetGet('metadata')->willReturn(['refund' => ['test_refund']]);
+        $e = new ApiException;
+        $paymentEndpoint->get(4)->willThrow($e);
+
+        $loggerAction->addNegativeLog(sprintf('API call failed: %s', htmlspecialchars($e->getMessage())))->shouldBeCalled();
+        $this->shouldThrow(new \Exception(sprintf('API call failed: %s', htmlspecialchars($e->getMessage()))))
+            ->during('execute',[$request]);
     }
 
     function it_supports_only_refund_request_and_array_access(

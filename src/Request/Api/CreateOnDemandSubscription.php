@@ -5,7 +5,7 @@ namespace BitBag\SyliusMolliePlugin\Request\Api;
 
 use Payum\Core\Request\Generic;
 
-final class CreateOnDemandSubscription extends Generic
+final class CreateOnDemandSubscription extends Generic implements CreateMollieSubscriptionInterface
 {
 
 }

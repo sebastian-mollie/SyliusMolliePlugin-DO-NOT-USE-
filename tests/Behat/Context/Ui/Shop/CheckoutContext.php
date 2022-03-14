@@ -13,12 +13,17 @@ declare(strict_types=1);
 namespace Tests\BitBag\SyliusMolliePlugin\Behat\Context\Ui\Shop;
 
 use Behat\Behat\Context\Context;
+use Behat\MinkExtension\Context\RawMinkContext;
+use BitBag\SyliusMolliePlugin\Entity\MollieSubscriptionInterface;
+use Sylius\Behat\Page\Admin\ProductVariant\CreatePage;
 use Sylius\Behat\Page\Shop\Order\ShowPageInterface;
+use Sylius\Component\Core\Model\OrderInterface;
 use Tests\BitBag\SyliusMolliePlugin\Behat\Mocker\MollieApiMocker;
+use Tests\BitBag\SyliusMolliePlugin\Behat\Page\Admin\PaymentMethod\CreatePageInterface;
 use Tests\BitBag\SyliusMolliePlugin\Behat\Page\External\PaymentPageInterface;
 use Tests\BitBag\SyliusMolliePlugin\Behat\Page\Shop\Checkout\CompletePageInterface;
 
-final class CheckoutContext implements Context
+final class CheckoutContext extends RawMinkContext implements Context
 {
     /**
      * @var CompletePageInterface
@@ -119,4 +124,37 @@ final class CheckoutContext implements Context
             $this->summaryPage->confirmOrder();
         });
     }
+
+    /**
+     * @Given the product :$productName has recurring payment option available
+     */
+    public function theProductHasRecurringPaymentOptionAvailable($productName)
+    {
+        $this->createPage->open(['/variants']);
+    }
+
+    /**
+     * @Given I click :arg1 item
+     */
+    public function iClickItem($arg1)
+    {
+        $session = $this->getSession();
+        $page = $session->getPage();
+        $page->clickLink('PHP T-Shirt');
+    }
+
+    /**
+     * @Given I click :arg1
+     */
+    public function iClick($arg1)
+    {
+        $session = $this->getSession();
+        $page = $session->getPage();
+        $page->clickLink($arg1);
+    }
+
+
+
+
+
 }
