@@ -12,7 +12,7 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
- ########################## PACKAGES FOR WKHTMLTOPDF ##########################
+########################## PACKAGES FOR WKHTMLTOPDF ##########################
 RUN apk add --no-cache \
  libstdc++ \
  libx11 \
@@ -136,6 +136,21 @@ COPY --from=nodejs /var/www/tests/Application/public public/
 FROM bitbag/sylius-php:${PHP_VERSION}-alpine AS result_php
 
 RUN apk add --no-cache fcgi;
+
+########################## PACKAGES FOR WKHTMLTOPDF ##########################
+RUN apk add --no-cache \
+ libstdc++ \
+ libx11 \
+ libxrender \
+ libxext \
+ ca-certificates \
+ fontconfig \
+ freetype \
+ ttf-dejavu \
+ ttf-droid \
+ ttf-freefont \
+ ttf-liberation \
+    ;
 
 COPY --from=wkhtmltopdf_image /bin/wkhtmltopdf /usr/local/bin/wkhtmltopdf
 
