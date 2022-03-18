@@ -49,22 +49,27 @@ final class RefundOrderAction extends BaseApiAwareAction implements ActionInterf
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        if ($details['created_in_mollie']) {
-            $this->loggerAction->addLog('Received refund created in Mollie dashboard');
-
-            return;
-        }
-
-        /** @var PaymentInterface $payment */
-        $payment = $request->getFirstModel();
-        $refundData = $this->convertOrderRefundData->convert($details['metadata']['refund'], $payment->getCurrencyCode());
-
         try {
             $order = $this->mollieApiClient->orders->get($details['order_mollie_id'], ['embed' => 'payments']);
             $payments = $order->_embedded->payments;
             $payment = current($payments);
 
             $molliePayment = $this->mollieApiClient->payments->get($payment->id);
+        } catch (ApiException $e) {
+            $this->loggerAction->addNegativeLog(sprintf('API call failed: %s', htmlspecialchars($e->getMessage())));
+
+            throw new \Exception(sprintf('API call failed: %s', htmlspecialchars($e->getMessage())));
+        }
+
+        if ($molliePayment->hasRefunds()) {
+            return;
+        }
+
+        /** @var PaymentInterface $payment */
+        $payment = $request->getFirstModel();
+
+        try {
+            $refundData = $this->convertOrderRefundData->convert($details['metadata']['refund'], $payment->getCurrencyCode());
 
             $this->mollieApiClient->payments->refund(
                 $molliePayment,
