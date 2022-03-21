@@ -50,6 +50,10 @@ final class RefundAction extends BaseApiAwareAction implements ActionInterface, 
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
+        if (!array_key_exists('refund', $details['metadata'])) {
+            return;
+        }
+
         try {
             $molliePayment = $this->mollieApiClient->payments->get($details['payment_mollie_id']);
         } catch (ApiException $e) {

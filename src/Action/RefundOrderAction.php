@@ -16,6 +16,8 @@ use BitBag\SyliusMolliePlugin\Helper\ConvertRefundDataInterface;
 use BitBag\SyliusMolliePlugin\Logger\MollieLoggerActionInterface;
 use BitBag\SyliusMolliePlugin\Request\Api\RefundOrder;
 use Mollie\Api\Exceptions\ApiException;
+use Mollie\Api\Resources\Payment;
+use Mollie\Api\Types\PaymentStatus;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -49,12 +51,20 @@ final class RefundOrderAction extends BaseApiAwareAction implements ActionInterf
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
+        if (!array_key_exists('refund', $details['metadata'])) {
+            return;
+        }
+
         try {
             $order = $this->mollieApiClient->orders->get($details['order_mollie_id'], ['embed' => 'payments']);
             $payments = $order->_embedded->payments;
-            $payment = current($payments);
 
-            $molliePayment = $this->mollieApiClient->payments->get($payment->id);
+            /** @var Payment $payment */
+            foreach ($payments as $payment) {
+                if (PaymentStatus::STATUS_PAID === $payment->status) {
+                    $molliePayment = $this->mollieApiClient->payments->get($payment->id);
+                }
+            }
         } catch (ApiException $e) {
             $this->loggerAction->addNegativeLog(sprintf('API call failed: %s', htmlspecialchars($e->getMessage())));
 
