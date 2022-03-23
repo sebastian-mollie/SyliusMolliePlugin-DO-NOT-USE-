@@ -15,7 +15,6 @@ use BitBag\SyliusMolliePlugin\Resolver\Order\MollieResourceOrderResolverInterfac
 use Sylius\Component\Order\Context\CartContextInterface;
 use Sylius\Component\Order\Context\CartNotFoundException;
 use Sylius\Component\Order\Model\OrderInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 final class MollieResourceBasedCartContext implements CartContextInterface
@@ -34,7 +33,8 @@ final class MollieResourceBasedCartContext implements CartContextInterface
 
     public function getCart(): OrderInterface
     {
-        $request = $this->getMasterRequest();
+        $request = $this->requestStack->getMasterRequest();
+
         $mollieResourceId = $request->get('id');
 
         if (null === $mollieResourceId) {
@@ -47,15 +47,5 @@ final class MollieResourceBasedCartContext implements CartContextInterface
             ;
 
         return $order;
-    }
-
-    private function getMasterRequest(): Request
-    {
-        $masterRequest = $this->requestStack->getMasterRequest();
-        if (null === $masterRequest) {
-            throw new CartNotFoundException('There is no master request on request stack.');
-        }
-
-        return $masterRequest;
     }
 }

@@ -63,7 +63,7 @@ final class MollieResourceOrderResolver implements MollieResourceOrderResolverIn
         } catch (ApiException $e) {
             $this->loggerAction->addNegativeLog(sprintf('API call failed: %s', htmlspecialchars($e->getMessage())));
 
-            throw new \Exception(sprintf('API call failed: %s', htmlspecialchars($e->getMessage())));
+            throw new ApiException($e->getMessage());
         }
 
         $order = $this
