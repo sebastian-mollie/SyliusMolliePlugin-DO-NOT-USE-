@@ -55,7 +55,7 @@ final class UnitsShipmentOrderRefund implements UnitsShipmentOrderRefundInterfac
     private function hasShipmentRefund(OrderInterface $order): bool
     {
         $unitRefunded = $this->refundUnitsRepository->findOneBy([
-            'orderNumber' => $order->getNumber(),
+            'order' => $order->getId(),
             'type' => RefundType::shipment(),
         ]);
 
