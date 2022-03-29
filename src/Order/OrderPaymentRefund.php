@@ -83,7 +83,7 @@ final class OrderPaymentRefund implements OrderPaymentRefundInterface
         /** @var TokenInterface|mixed $token */
         $token = $this->payum->getTokenStorage()->find($hash);
 
-        if (null === $token  || !$token instanceof TokenInterface) {
+        if (null === $token || !$token instanceof TokenInterface) {
             $this->loggerAction->addNegativeLog(sprintf('A token with hash `%s` could not be found.', $hash));
 
             throw new BadRequestHttpException(sprintf('A token with hash `%s` could not be found.', $hash));

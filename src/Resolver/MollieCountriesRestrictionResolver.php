@@ -13,7 +13,6 @@ namespace BitBag\SyliusMolliePlugin\Resolver;
 
 use BitBag\SyliusMolliePlugin\Entity\MollieGatewayConfigInterface;
 use BitBag\SyliusMolliePlugin\Entity\MollieGatewayConfigTranslationInterface;
-use Webmozart\Assert\Assert;
 
 final class MollieCountriesRestrictionResolver implements MollieCountriesRestrictionResolverInterface
 {

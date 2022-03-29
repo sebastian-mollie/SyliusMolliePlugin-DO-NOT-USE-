@@ -51,9 +51,8 @@ final class CreatePaymentAction extends BaseApiAwareAction
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
         try {
-
-            Assert::keyExists($details,'metadata');
-            Assert::keyExists($details['metadata'],'molliePaymentMethods');
+            Assert::keyExists($details, 'metadata');
+            Assert::keyExists($details['metadata'], 'molliePaymentMethods');
             $paymentDetails = [
                 'method' => $details['metadata']['molliePaymentMethods'],
                 'issuer' => $details['metadata']['selected_issuer'] ?? null,

@@ -19,7 +19,6 @@ use BitBag\SyliusMolliePlugin\Refund\PaymentRefundInterface;
 use BitBag\SyliusMolliePlugin\Updater\Order\OrderVoucherAdjustmentUpdaterInterface;
 use Mollie\Api\Exceptions\ApiException;
 use Mollie\Api\Resources\Customer;
-use Mollie\Api\Resources\Order;
 use Mollie\Api\Resources\Payment;
 use Mollie\Api\Resources\Subscription;
 use Mollie\Api\Types\PaymentStatus;
