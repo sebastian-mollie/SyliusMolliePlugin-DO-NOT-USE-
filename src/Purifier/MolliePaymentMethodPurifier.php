@@ -37,7 +37,7 @@ final class MolliePaymentMethodPurifier implements MolliePaymentMethodPurifierIn
         $methodConfig = $this->repository->findOneBy(['methodId' => $methodId]);
 
         if ($methodConfig instanceof MollieGatewayConfigInterface) {
-            /** @phpstan-ignore-next-line Ecs yield about doc comment in wrong place */
+            /** @phpstan-ignore-next-line Ecs yields about doc comment in wrong place */
             $this->repository->remove($methodConfig);
         }
     }

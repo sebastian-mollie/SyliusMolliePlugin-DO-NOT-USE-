@@ -38,7 +38,7 @@ final class ApiKeysTestCreator implements ApiKeysTestCreatorInterface
     {
         $apiKeyTest = new ApiKeyTest(
             $keyType,
-            isset($key),
+            $key !== null && $key !== ''
         );
 
         if (null === $key || '' === (trim($key))) {

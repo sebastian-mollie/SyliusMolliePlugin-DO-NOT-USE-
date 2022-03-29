@@ -29,7 +29,10 @@ final class Methods implements MethodsInterface
                 $payment->setMinimumAmount((array) $mollieMethod->minimumAmount);
                 $payment->setMaximumAmount((array) $mollieMethod->maximumAmount);
                 $payment->setImage((array) $mollieMethod->image);
-                $payment->setIssuers($mollieMethod->issuers);
+
+                /** @var array|null $issuers */
+                $issuers = $mollieMethod->issuers;
+                $payment->setIssuers((array) $issuers);
 
                 $this->methods[] = $payment;
             }

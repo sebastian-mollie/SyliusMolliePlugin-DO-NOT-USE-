@@ -33,12 +33,6 @@ final class StatusAction extends BaseApiAwareAction implements StatusActionInter
 {
     use GatewayAwareTrait;
 
-    /** @var Order */
-    private $order;
-
-    /** @var Payment */
-    private $molliePayment;
-
     /** @var PaymentRefundInterface */
     private $paymentRefund;
 
@@ -71,6 +65,8 @@ final class StatusAction extends BaseApiAwareAction implements StatusActionInter
         $payment = $request->getModel();
 
         $details = $payment->getDetails();
+        $order = null;
+        $molliePayment = null;
 
         if (
             !isset($details['payment_mollie_id']) &&
@@ -138,41 +134,41 @@ final class StatusAction extends BaseApiAwareAction implements StatusActionInter
 
         if (false === isset($details['subscription_mollie_id']) && isset($details['order_mollie_id'])) {
             try {
-                $this->order = $this->mollieApiClient->orders->get($details['order_mollie_id'], ['embed' => 'payments']);
-                $payments = $this->order->_embedded->payments;
+                $order = $this->mollieApiClient->orders->get($details['order_mollie_id'], ['embed' => 'payments']);
+                $payments = $order->_embedded->payments;
 
                 /** @var Payment $payment */
                 $payment = current($payments);
 
                 if (MealVoucher::MEAL_VOUCHERS === $payment->method) {
-                    $this->orderVoucherAdjustmentUpdater->update($payment, $this->order->metadata->order_id);
+                    $this->orderVoucherAdjustmentUpdater->update($payment, $order->metadata->order_id);
                 }
 
-                $this->molliePayment = $this->mollieApiClient->payments->get($payment->id);
-                $this->molliePayment->metadata = $this->order->metadata;
+                $molliePayment = $this->mollieApiClient->payments->get($payment->id);
+                $molliePayment->metadata = $order->metadata;
             } catch (\Exception $e) {
                 $this->loggerAction->addNegativeLog(sprintf('Error with get payment page with id %s', $details['payment_mollie_id']));
 
                 throw new ApiException(sprintf('Error with get payment page with id %s', $details['payment_mollie_id']));
             }
         }
-        if (null !== $this->molliePayment) {
-            if ($this->molliePayment->hasRefunds() || $this->molliePayment->hasChargebacks()) {
-                if (isset($details['order_mollie_id']) && null !== $this->order) {
-                    $this->orderRefund->refund($this->order);
-                    $this->loggerAction->addLog(sprintf('Mark payment order refunded to: %s', $this->molliePayment->status));
+        if (null !== $molliePayment) {
+            if ($molliePayment->hasRefunds() || $molliePayment->hasChargebacks()) {
+                if (isset($details['order_mollie_id']) && null !== $order) {
+                    $this->orderRefund->refund($order);
+                    $this->loggerAction->addLog(sprintf('Mark payment order refunded to: %s', $molliePayment->status));
 
                     return;
                 }
 
-                $this->paymentRefund->refund($this->molliePayment);
+                $this->paymentRefund->refund($molliePayment);
 
-                $this->loggerAction->addLog(sprintf('Mark payment refunded to: %s', $this->molliePayment->status));
+                $this->loggerAction->addLog(sprintf('Mark payment refunded to: %s', $molliePayment->status));
 
                 return;
             }
 
-            switch ($this->molliePayment->status) {
+            switch ($molliePayment->status) {
                 case PaymentStatus::STATUS_PENDING:
                 case PaymentStatus::STATUS_OPEN:
                     $request->markPending();
@@ -204,7 +200,7 @@ final class StatusAction extends BaseApiAwareAction implements StatusActionInter
                     break;
             }
 
-            $this->loggerAction->addLog(sprintf('Mark payment status to: %s', $this->molliePayment->status));
+            $this->loggerAction->addLog(sprintf('Mark payment status to: %s', $molliePayment->status));
         }
     }
 

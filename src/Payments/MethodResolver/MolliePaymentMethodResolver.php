@@ -43,10 +43,12 @@ final class MolliePaymentMethodResolver implements PaymentMethodsResolverInterfa
 
     public function getSupportedMethods(PaymentInterface $subject): array
     {
-        /** @var OrderInterface $order
+        /** @var ?OrderInterface $order
          * @phpstan-ignore-next-line Ecs yield about missing variable after doc, when subject is set to core
          */
         $order = $subject->getOrder();
+
+        Assert::notNull($order);
         $channel = $order->getChannel();
         $factoryName = $this->factoryNameResolver->resolve($order);
 

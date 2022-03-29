@@ -338,18 +338,6 @@ final class StatusActionSpec extends ObjectBehavior
         OrderVoucherAdjustmentUpdaterInterface $orderVoucherAdjustmentUpdater,
         OrderRefundInterface $orderRefund
     ): void {
-//        $details = [
-//            'payment_mollie_id' => 2,
-//            'customer_mollie_id' => 1,
-//            'statusError',
-//            'order_mollie_id' => null
-//        ];
-//        $payment->getDetails()->willReturn($details);
-//        $payment->getId()->willReturn(1);
-//        $request->getModel()->willReturn($payment);
-//
-//        $mollieApiClient->payments = $paymentEndpoint;
-//        $paymentEndpoint->get(2)->willReturn($molliePayment);
         $details = [
             'payment_mollie_id' => null,
             'customer_mollie_id' => 1,

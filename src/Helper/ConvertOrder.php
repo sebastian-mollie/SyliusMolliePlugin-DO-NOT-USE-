@@ -203,10 +203,10 @@ final class ConvertOrder implements ConvertOrderInterface
     {
         $details = [];
 
-        /** @var ?ShipmentInterface $shipment */
+        /** @var ShipmentInterface|bool $shipment */
         $shipment = $this->order->getShipments()->first();
 
-        if (null !== $shipment) {
+        if (false !== $shipment) {
             $details[] = [
                 'type' => self::SHIPPING_TYPE,
                 'name' => self::SHIPPING_FEE,

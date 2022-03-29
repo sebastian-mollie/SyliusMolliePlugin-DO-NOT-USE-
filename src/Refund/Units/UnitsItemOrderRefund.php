@@ -84,10 +84,6 @@ final class UnitsItemOrderRefund implements UnitsItemOrderRefundInterface
             'type' => RefundType::orderItemUnit(),
         ]);
 
-        if (null !== $unitRefunded) {
-            return true;
-        }
-
-        return false;
+        return null !== $unitRefunded;
     }
 }

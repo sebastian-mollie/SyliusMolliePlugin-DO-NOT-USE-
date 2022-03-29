@@ -63,12 +63,14 @@ final class OrderRefundCommandCreator implements OrderRefundCommandCreatorInterf
             ) {
                 throw new \InvalidArgumentException();
             }
+
             if ('paid' === $line->status && ConvertOrderInterface::PHYSICAL_TYPE === $line->type) {
                 if (!property_exists($line, 'metadata') ||
                     !property_exists($line, 'quantityRefunded')
                 ) {
                     throw new \InvalidArgumentException();
                 }
+
                 $getRefundedQuantity = $this->unitsItemOrderRefund->getActualRefundedQuantity($syliusOrder, $line->metadata->item_id);
                 $partialRefundItems->addPartialRefundItemByQuantity(
                     $line->metadata->item_id,

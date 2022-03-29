@@ -73,13 +73,7 @@ final class MollieCountriesRestrictionResolver implements MollieCountriesRestric
         $methods['data'][$translation->getName() ?? $paymentMethod->getName()] = $paymentMethod->getMethodId();
         $methods['image'][$paymentMethod->getMethodId()] = $this->imageResolver->resolve($paymentMethod);
         $methods['issuers'][$paymentMethod->getMethodId()] = $paymentMethod->getIssuers();
-
-        Assert::notNull($paymentMethod->getPaymentSurchargeFee());
-        if ('string' === gettype($paymentMethod->getPaymentSurchargeFee()->getType())) {
-            $methods['paymentFee'][$paymentMethod->getMethodId()] = $paymentMethod->getPaymentSurchargeFee();
-        } else {
-            $methods['paymentFee'][$paymentMethod->getMethodId()] = [];
-        }
+        $methods['paymentFee'][$paymentMethod->getMethodId()] = null !== $paymentMethod->getPaymentSurchargeFee() ? $paymentMethod->getPaymentSurchargeFee() : [];
 
         return $methods;
     }

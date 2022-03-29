@@ -43,7 +43,10 @@ final class PaymentDescription implements PaymentDescriptionInterface
             return $this->createPayPalDescription($order->getNumber());
         }
 
-        if (Options::PAYMENT_API === $paymentMethodType && isset($description)) {
+        if (Options::PAYMENT_API === $paymentMethodType
+            && isset($description)
+            && '' !== $description
+        ) {
             Assert::notNull($order->getChannel());
             $replacements = [
                 '{ordernumber}' => $order->getNumber(),
