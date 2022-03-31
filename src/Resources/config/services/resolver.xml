@@ -89,6 +89,7 @@
             <argument type="service" id="sylius.context.cart"/>
             <argument type="service" id="sylius.repository.order"/>
         </service>
+
         <service id="bitbag_sylius_mollie_plugin.creator.mollie_methods_resolver" class="BitBag\SyliusMolliePlugin\Resolver\MollieMethodsResolver">
             <argument type="service" id="bitbag_sylius_mollie_plugin.logger.mollie_logger_action"/>
             <argument type="service" id="bitbag_sylius_mollie_plugin.mollie_api_client"/>
