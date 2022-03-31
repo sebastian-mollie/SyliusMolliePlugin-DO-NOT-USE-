@@ -66,6 +66,10 @@ final class CaptureAction extends BaseApiAwareAction implements CaptureActionInt
         $details['webhookUrl'] = $notifyToken->getTargetUrl();
         $details['backurl'] = $token->getTargetUrl();
 
+        $metadata = $details['metadata'];
+        $metadata['refund_token'] = $refundToken->getHash();
+        $details['metadata'] = $metadata;
+
         if (true === $this->mollieApiClient->isRecurringSubscription()) {
             if ('first' === $details['sequenceType']) {
                 $cancelToken = $this->tokenFactory->createToken(
@@ -83,10 +87,6 @@ final class CaptureAction extends BaseApiAwareAction implements CaptureActionInt
                 $this->gateway->execute(new CreateOnDemandSubscriptionPayment($details));
             }
         } else {
-            $metadata = $details['metadata'];
-            $metadata['refund_token'] = $refundToken->getHash();
-            $details['metadata'] = $metadata;
-
             if (isset($details['metadata']['methodType']) && Options::PAYMENT_API === $details['metadata']['methodType']) {
                 if (in_array($details['metadata']['molliePaymentMethods'], Options::getOnlyOrderAPIMethods(), true)) {
                     throw new InvalidArgumentException(sprintf(

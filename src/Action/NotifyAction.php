@@ -65,8 +65,6 @@ final class NotifyAction extends BaseApiAwareAction implements ActionInterface, 
         $details = ArrayObject::ensureArrayObject($request->getModel());
         $this->gateway->execute($this->getHttpRequest);
 
-        $details['created_in_mollie'] = true;
-
         if (true === isset($details['sequenceType'])) {
             try {
                 $payment = $this->mollieApiClient->payments->get($this->getHttpRequest->request['id']);
@@ -94,7 +92,7 @@ final class NotifyAction extends BaseApiAwareAction implements ActionInterface, 
             throw new HttpResponse(Response::$statusTexts[Response::HTTP_OK], Response::HTTP_OK);
         }
 
-        if (true === isset($details['order_mollie_id'])) {
+        if (true === isset($details['order_mollie_id']) && str_starts_with($this->getHttpRequest->request['id'], 'ord_')) {
             try {
                 $order = $this->mollieApiClient->orders->get($this->getHttpRequest->request['id']);
             } catch (\Exception $e) {

@@ -51,9 +51,19 @@ final class RefundAction extends BaseApiAwareAction implements ActionInterface, 
 
         $details = ArrayObject::ensureArrayObject($request->getModel());
 
-        if ($details['created_in_mollie']) {
-            $this->loggerAction->addLog('Received refund created in Mollie dashboard');
+        if (!array_key_exists('refund', $details['metadata'])) {
+            return;
+        }
 
+        try {
+            $molliePayment = $this->mollieApiClient->payments->get($details['payment_mollie_id']);
+        } catch (ApiException $e) {
+            $this->loggerAction->addNegativeLog(sprintf('API call failed: %s', htmlspecialchars($e->getMessage())));
+
+            throw new \Exception(sprintf('API call failed: %s', htmlspecialchars($e->getMessage())));
+        }
+
+        if ($molliePayment->hasRefunds()) {
             return;
         }
 
