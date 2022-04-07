@@ -48,7 +48,7 @@ final class RefundUnitsCommandValidator implements RefundUnitsCommandValidatorIn
         }
 
         if (empty($command->units()) && empty($command->shipments())) {
-            throw new OrderNotAvailableForRefunding(sprintf('There is no units to refund in order %s', $command->orderNumber()));
+            throw new OrderNotAvailableForRefunding(sprintf('There are no units to refund in order %s', $command->orderNumber()));
         }
 
         $this->refundAmountValidator->validateUnits($command->units(), RefundType::orderItemUnit());
