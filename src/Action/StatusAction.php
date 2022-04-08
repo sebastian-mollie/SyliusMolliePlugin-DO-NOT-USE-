@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace BitBag\SyliusMolliePlugin\Action;
 
 use BitBag\SyliusMolliePlugin\Action\Api\BaseApiAwareAction;
+use BitBag\SyliusMolliePlugin\Checker\Refund\MollieOrderRefundCheckerInterface;
 use BitBag\SyliusMolliePlugin\Logger\MollieLoggerActionInterface;
 use BitBag\SyliusMolliePlugin\Payments\Methods\MealVoucher;
 use BitBag\SyliusMolliePlugin\Refund\OrderRefundInterface;
@@ -44,28 +45,31 @@ final class StatusAction extends BaseApiAwareAction implements StatusActionInter
     /** @var OrderVoucherAdjustmentUpdaterInterface */
     private $orderVoucherAdjustmentUpdater;
 
+    private MollieOrderRefundCheckerInterface $mollieOrderRefundChecker;
+
     public function __construct(
         PaymentRefundInterface $paymentRefund,
         OrderRefundInterface $orderRefund,
         MollieLoggerActionInterface $loggerAction,
-        OrderVoucherAdjustmentUpdaterInterface $orderVoucherAdjustmentUpdater
+        OrderVoucherAdjustmentUpdaterInterface $orderVoucherAdjustmentUpdater,
+        MollieOrderRefundCheckerInterface $mollieOrderRefundChecker
     ) {
         $this->paymentRefund = $paymentRefund;
         $this->orderRefund = $orderRefund;
         $this->loggerAction = $loggerAction;
         $this->orderVoucherAdjustmentUpdater = $orderVoucherAdjustmentUpdater;
+        $this->mollieOrderRefundChecker = $mollieOrderRefundChecker;
     }
 
-    /** @param GetStatusInterface|mixed $request */
+    /** @param GetStatusInterface $request */
     public function execute($request): void
     {
         RequestNotSupportedException::assertSupports($this, $request);
+
         /** @var PaymentInterface $payment */
         $payment = $request->getModel();
 
         $details = $payment->getDetails();
-        $order = null;
-        $molliePayment = null;
 
         if (
             !isset($details['payment_mollie_id']) &&
@@ -139,10 +143,11 @@ final class StatusAction extends BaseApiAwareAction implements StatusActionInter
                 /** @var Payment $payment */
                 $payment = current($payments);
 
-                if (MealVoucher::MEAL_VOUCHERS === $payment->method) {
+                if ($payment->method === MealVoucher::MEAL_VOUCHERS) {
                     $this->orderVoucherAdjustmentUpdater->update($payment, $order->metadata->order_id);
                 }
 
+                /** @var Payment $molliePayment */
                 $molliePayment = $this->mollieApiClient->payments->get($payment->id);
                 $molliePayment->metadata = $order->metadata;
             } catch (\Exception $e) {
@@ -151,56 +156,61 @@ final class StatusAction extends BaseApiAwareAction implements StatusActionInter
                 throw new ApiException(sprintf('Error with get payment page with id %s', $details['payment_mollie_id']));
             }
         }
-        if (null !== $molliePayment) {
-            if ($molliePayment->hasRefunds() || $molliePayment->hasChargebacks()) {
-                if (isset($details['order_mollie_id']) && null !== $order) {
+        if ($molliePayment->hasRefunds() || $molliePayment->hasChargebacks()) {
+            if (isset($details['order_mollie_id'])) {
+                $mollieOrderLinesRefundable = $this->mollieOrderRefundChecker->check($order);
+
+                if ($mollieOrderLinesRefundable) {
                     $this->orderRefund->refund($order);
                     $this->loggerAction->addLog(sprintf('Mark payment order refunded to: %s', $molliePayment->status));
-
-                    return;
+                } else {
+                    $this->paymentRefund->refund($molliePayment);
+                    $this->loggerAction->addLog(sprintf('Mark payment refunded to: %s', $molliePayment->status));
                 }
-
-                $this->paymentRefund->refund($molliePayment);
-
-                $this->loggerAction->addLog(sprintf('Mark payment refunded to: %s', $molliePayment->status));
 
                 return;
             }
 
-            switch ($molliePayment->status) {
-                case PaymentStatus::STATUS_PENDING:
-                case PaymentStatus::STATUS_OPEN:
-                    $request->markPending();
+            $this->paymentRefund->refund($molliePayment);
 
-                    break;
-                case PaymentStatus::STATUS_AUTHORIZED:
-                    $request->markAuthorized();
+            $this->loggerAction->addLog(sprintf('Mark payment refunded to: %s', $molliePayment->status));
 
-                    break;
-                case PaymentStatus::STATUS_PAID:
-                    $request->markCaptured();
-
-                    break;
-                case PaymentStatus::STATUS_CANCELED:
-                    $request->markCanceled();
-
-                    break;
-                case PaymentStatus::STATUS_FAILED:
-                    $request->markFailed();
-
-                    break;
-                case PaymentStatus::STATUS_EXPIRED:
-                    $request->markExpired();
-
-                    break;
-                default:
-                    $request->markUnknown();
-
-                    break;
-            }
-
-            $this->loggerAction->addLog(sprintf('Mark payment status to: %s', $molliePayment->status));
+            return;
         }
+
+        switch ($molliePayment->status) {
+            case PaymentStatus::STATUS_PENDING:
+            case PaymentStatus::STATUS_OPEN:
+                $request->markPending();
+
+                break;
+            case PaymentStatus::STATUS_AUTHORIZED:
+                $request->markAuthorized();
+
+                break;
+            case PaymentStatus::STATUS_PAID:
+                $request->markCaptured();
+
+                break;
+            case PaymentStatus::STATUS_CANCELED:
+                $request->markCanceled();
+
+                break;
+            case PaymentStatus::STATUS_FAILED:
+                $request->markFailed();
+
+                break;
+            case PaymentStatus::STATUS_EXPIRED:
+                $request->markExpired();
+
+                break;
+            default:
+                $request->markUnknown();
+
+                break;
+        }
+
+        $this->loggerAction->addLog(sprintf('Mark payment status to: %s', $molliePayment->status));
     }
 
     public function supports($request): bool

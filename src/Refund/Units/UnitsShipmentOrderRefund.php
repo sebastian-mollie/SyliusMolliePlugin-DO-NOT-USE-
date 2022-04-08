@@ -40,7 +40,8 @@ final class UnitsShipmentOrderRefund implements UnitsShipmentOrderRefundInterfac
                 !property_exists($line, 'refundableQuantity')) {
                 throw new \InvalidArgumentException();
             }
-            if (ConvertOrderInterface::SHIPPING_TYPE === $line->type && 0 < $line->refundableQuantity) {
+
+            if ($line->type === ConvertOrderInterface::SHIPPING_TYPE && $line->quantityRefunded > 0) {
                 /** @var Adjustment $refundedShipment */
                 $refundedShipment = $syliusOrder->getAdjustments('shipping')->first();
 
