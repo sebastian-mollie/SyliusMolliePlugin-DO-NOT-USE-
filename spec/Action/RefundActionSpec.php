@@ -111,7 +111,7 @@ final class RefundActionSpec extends ObjectBehavior
         $this->execute($request);
     }
 
-    public function it_cannot_refunds(
+    public function it_cannot_refund(
         Refund $request,
         MollieApiClient $mollieApiClient,
         MollieLoggerActionInterface $loggerAction,
