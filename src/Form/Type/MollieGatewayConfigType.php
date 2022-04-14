@@ -131,24 +131,6 @@ final class MollieGatewayConfigType extends AbstractResourceType
             ->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event): void {
                 /** @var MollieGatewayConfigInterface $object */
                 $object = $event->getData();
-                $form = $event->getForm();
-
-                $gateway = $object->getGateway();
-                $factoryName = $gateway->getFactoryName();
-
-                if (MollieSubscriptionGatewayFactory::FACTORY_NAME === $factoryName) {
-                    $form->remove('paymentType');
-                    $form->add('paymentType', ChoiceType::class, [
-                        'label' => 'bitbag_sylius_mollie_plugin.ui.payment_type',
-                        'choices' => Options::getAvailablePaymentType(),
-                        'help' => $this->documentationLinks->getPaymentMethodDoc(),
-                        'help_html' => true,
-                        'empty_data' => Options::PAYMENT_API_VALUE,
-                        'attr' => [
-                            'disabled' => 'disabled',
-                        ],
-                    ]);
-                }
 
                 if (false === $object->hasTranslationLocale($this->defaultLocale)) {
                     /** @var MollieGatewayConfigTranslationInterface $translation */
