@@ -72,7 +72,8 @@ final class PaymentMethodLogoUploader implements PaymentMethodLogoUploaderInterf
 
         $this->filesystem->write(
             $customizeImage->getPath(),
-            $file->getPathname()
+            /** @phpstan-ignore-next-line  */
+            file_get_contents($file->getPathname())
         );
     }
 
