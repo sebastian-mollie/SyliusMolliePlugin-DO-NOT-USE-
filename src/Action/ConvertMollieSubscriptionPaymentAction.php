@@ -12,9 +12,11 @@ declare(strict_types=1);
 namespace BitBag\SyliusMolliePlugin\Action;
 
 use BitBag\SyliusMolliePlugin\Action\Api\BaseApiAwareAction;
+use BitBag\SyliusMolliePlugin\Entity\MollieGatewayConfigInterface;
 use BitBag\SyliusMolliePlugin\Entity\OrderInterface;
 use BitBag\SyliusMolliePlugin\Helper\ConvertOrderInterface;
 use BitBag\SyliusMolliePlugin\Helper\PaymentDescriptionInterface;
+use BitBag\SyliusMolliePlugin\Payments\PaymentTerms\Options;
 use BitBag\SyliusMolliePlugin\Request\Api\CreateCustomer;
 use BitBag\SyliusMolliePlugin\Resolver\PaymentLocaleResolverInterface;
 use Mollie\Api\Types\PaymentMethod;
@@ -107,6 +109,12 @@ final class ConvertMollieSubscriptionPaymentAction extends BaseApiAwareAction im
         } else {
             $paymentMethod = $paymentOptions['molliePaymentMethods'] ?? null;
         }
+
+        /** @var MollieGatewayConfigInterface $method */
+        $method = $this->mollieMethodsRepository->findOneBy([
+            'methodId' => $paymentMethod,
+            'gateway' => $payment->getMethod()->getId(),
+        ]);
         $selectedIssuer = PaymentMethod::IDEAL === $paymentMethod ? $paymentOptions['issuers']['id'] : null;
 
         $details = [
@@ -133,6 +141,19 @@ final class ConvertMollieSubscriptionPaymentAction extends BaseApiAwareAction im
         $this->gateway->execute($mollieCustomer = new CreateCustomer($details));
         $model = $mollieCustomer->getModel();
         $details['customerId'] = $model['customer_mollie_id'];
+
+        $details['metadata']['methodType'] = Options::PAYMENT_API;
+
+        if (null !== ($paymentLocale = $this->paymentLocaleResolver->resolveFromOrder($order))) {
+            $details['locale'] = $paymentLocale;
+        }
+
+        if (Options::ORDER_API === array_search($method->getPaymentType(), Options::getAvailablePaymentType(), true)) {
+            unset($details['customerId']);
+
+            $details['metadata']['methodType'] = Options::ORDER_API;
+            $details = $this->orderConverter->convert($order, $details, $divisor, $method);
+        }
 
         $request->setResult($details);
     }
