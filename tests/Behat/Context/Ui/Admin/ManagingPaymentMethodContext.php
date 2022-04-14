@@ -21,9 +21,18 @@ final class ManagingPaymentMethodContext implements Context
     /** @var CreatePageInterface */
     private $createPage;
 
-    public function __construct(CreatePageInterface $createPage)
-    {
+    private string $mollieTestApiKey;
+
+    private string $mollieProfileId;
+
+    public function __construct(
+        CreatePageInterface $createPage,
+        string $mollieTestApiKey,
+        string $mollieProfileId
+    ) {
         $this->createPage = $createPage;
+        $this->mollieTestApiKey = $mollieTestApiKey;
+        $this->mollieProfileId = $mollieProfileId;
     }
 
     /**
@@ -39,6 +48,12 @@ final class ManagingPaymentMethodContext implements Context
      */
     public function iConfigureItWithTestMollieCredentials(string $apiKey): void
     {
+        if ('MOLLIE_TEST_API_KEY' === $apiKey) {
+            $this->createPage->setApiKey($this->mollieTestApiKey);
+
+            return;
+        }
+
         $this->createPage->setApiKey($apiKey);
     }
 
@@ -47,6 +62,12 @@ final class ManagingPaymentMethodContext implements Context
      */
     public function iConfigureProfileId(string $profileId): void
     {
+        if ('MOLLIE_PROFILE_KEY' === $profileId) {
+            $this->createPage->setProfileId($this->mollieProfileId);
+
+            return;
+        }
+
         $this->createPage->setProfileId($profileId);
     }
 
@@ -66,11 +87,19 @@ final class ManagingPaymentMethodContext implements Context
     }
 
     /**
-     * @Then I should be notified that :message
+     * @Then I should be notified with error :message message
      */
-    public function iShouldBeNotifiedThat(string $message): void
+    public function iShouldBeNotifiedWithErrorMessage(string $message): void
     {
         Assert::true($this->createPage->containsErrorWithMessage($message));
+    }
+
+    /**
+     * @Then I should be notified with success :message message
+     */
+    public function iShouldBeNotifiedWithSuccessMessage(string $message): void
+    {
+        Assert::true($this->createPage->containsSuccessMessage($message));
     }
 
     /**
@@ -79,6 +108,22 @@ final class ManagingPaymentMethodContext implements Context
     public function iWantToCreateANewMollieRecurringSubscription(): void
     {
         $this->createPage->open(['factory' => 'mollie_subscription']);
+    }
+
+    /**
+     * @Given I can load payment methods
+     */
+    public function iCanLoadPaymentMethods(): void
+    {
+        $this->createPage->loadPaymentMethods();
+    }
+
+    /**
+     * @Given I enable :paymentMethodName payment method
+     */
+    public function iEnablePaymentMethod(string $paymentMethodName): void
+    {
+        $this->createPage->enablePaymentMethod($paymentMethodName);
     }
 
     /**

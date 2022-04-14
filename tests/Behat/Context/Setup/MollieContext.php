@@ -13,13 +13,19 @@ declare(strict_types=1);
 namespace Tests\BitBag\SyliusMolliePlugin\Behat\Context\Setup;
 
 use Behat\Behat\Context\Context;
+use BitBag\SyliusMolliePlugin\Entity\GatewayConfigInterface;
+use BitBag\SyliusMolliePlugin\Entity\MollieGatewayConfigInterface;
 use BitBag\SyliusMolliePlugin\Factory\MollieGatewayFactory;
 use BitBag\SyliusMolliePlugin\Factory\MollieSubscriptionGatewayFactory;
+use BitBag\SyliusMolliePlugin\Purifier\MolliePaymentMethodPurifierInterface;
+use BitBag\SyliusMolliePlugin\Resolver\MollieMethodsResolverInterface;
 use Doctrine\ORM\EntityManager;
 use Sylius\Behat\Service\SharedStorageInterface;
 use Sylius\Bundle\CoreBundle\Fixture\Factory\ExampleFactoryInterface;
+use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Sylius\Component\Core\Model\PaymentMethodInterface;
 use Sylius\Component\Core\Repository\PaymentMethodRepositoryInterface;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 final class MollieContext implements Context
 {
@@ -35,16 +41,40 @@ final class MollieContext implements Context
     /** @var EntityManager */
     private $paymentMethodManager;
 
+    private string $mollieApiKeyTest;
+
+    private string $mollieProfileId;
+
+    private MollieMethodsResolverInterface $mollieMethodsResolver;
+
+    private MolliePaymentMethodPurifierInterface $molliePaymentMethodPurifier;
+
+    private EntityRepository $gatewayConfigRepository;
+
+    private EntityRepository $mollieConfigurationRepository;
+
     public function __construct(
         SharedStorageInterface $sharedStorage,
         PaymentMethodRepositoryInterface $paymentMethodRepository,
         ExampleFactoryInterface $paymentMethodExampleFactory,
-        EntityManager $paymentMethodManager
+        EntityManager $paymentMethodManager,
+        string $mollieApiKeyTest,
+        string $mollieProfileId,
+        MollieMethodsResolverInterface $mollieMethodsResolver,
+        MolliePaymentMethodPurifierInterface $molliePaymentMethodPurifier,
+        EntityRepository $gatewayConfigRepository,
+        EntityRepository $mollieConfigurationRepository
     ) {
         $this->sharedStorage = $sharedStorage;
         $this->paymentMethodRepository = $paymentMethodRepository;
         $this->paymentMethodExampleFactory = $paymentMethodExampleFactory;
         $this->paymentMethodManager = $paymentMethodManager;
+        $this->mollieApiKeyTest = $mollieApiKeyTest;
+        $this->mollieProfileId = $mollieProfileId;
+        $this->mollieMethodsResolver = $mollieMethodsResolver;
+        $this->molliePaymentMethodPurifier = $molliePaymentMethodPurifier;
+        $this->gatewayConfigRepository = $gatewayConfigRepository;
+        $this->mollieConfigurationRepository = $mollieConfigurationRepository;
     }
 
     /**
@@ -62,9 +92,32 @@ final class MollieContext implements Context
         $paymentMethod->getGatewayConfig()->setConfig([
             'api_key' => 'test',
             'payum.http_client' => '@bitbag_sylius_mollie_plugin.mollie_api_client',
+            'api_key_test' => $this->mollieApiKeyTest,
+            'profile_id' => $this->mollieProfileId,
+            'environment' => null,
         ]);
 
         $this->paymentMethodManager->flush();
+    }
+
+    /**
+     * @Given gateway :paymentMethodCode has all methods loaded and enabled
+     */
+    public function gatewayHasAllMethodsLoadedAndEnabled(string $paymentMethodCode): void
+    {
+        /** @var GatewayConfigInterface $gatewayConfig */
+        $gatewayConfig = $this->gatewayConfigRepository
+            ->findOneBy([
+                'gatewayName' => $paymentMethodCode,
+            ]);
+
+        if (null === $gatewayConfig) {
+            throw new ResourceNotFoundException('Gateway not found');
+        }
+
+        $this->loadMolliePaymentMethods($gatewayConfig);
+
+        $this->enableAllMolliePaymentMethods();
     }
 
     /**
@@ -82,11 +135,30 @@ final class MollieContext implements Context
         $paymentMethod->getGatewayConfig()->setConfig([
             'api_key' => 'test',
             'payum.http_client' => '@bitbag_sylius_mollie_plugin.mollie_api_client',
-            'times' => 1,
-            'interval' => '1 months',
+            'api_key_test' => $this->mollieApiKeyTest,
+            'profile_id' => $this->mollieProfileId,
+            'environment' => null,
         ]);
 
         $this->paymentMethodManager->flush();
+    }
+
+    private function loadMolliePaymentMethods(GatewayConfigInterface $gatewayConfig): void
+    {
+        $this->mollieMethodsResolver->createForGateway($gatewayConfig);
+
+        $this->molliePaymentMethodPurifier->removeAllNoLongerSupportedMethods();
+    }
+
+    private function enableAllMolliePaymentMethods(): void
+    {
+        $molliePaymentMethods = $this->mollieConfigurationRepository->findAll();
+
+        /** @var MollieGatewayConfigInterface $molliePaymentMethod */
+        foreach ($molliePaymentMethods as $molliePaymentMethod) {
+            $molliePaymentMethod->enable();
+            $molliePaymentMethod->setCountryRestriction(MollieGatewayConfigInterface::ALL_COUNTRIES);
+        }
     }
 
     private function createPaymentMethodMollie(
