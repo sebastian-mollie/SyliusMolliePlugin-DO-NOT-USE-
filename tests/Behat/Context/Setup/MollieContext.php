@@ -18,13 +18,14 @@ use BitBag\SyliusMolliePlugin\Entity\MollieGatewayConfigInterface;
 use BitBag\SyliusMolliePlugin\Factory\MollieGatewayFactory;
 use BitBag\SyliusMolliePlugin\Factory\MollieSubscriptionGatewayFactory;
 use BitBag\SyliusMolliePlugin\Purifier\MolliePaymentMethodPurifierInterface;
+use BitBag\SyliusMolliePlugin\Repository\MollieGatewayConfigRepositoryInterface;
 use BitBag\SyliusMolliePlugin\Resolver\MollieMethodsResolverInterface;
 use Doctrine\ORM\EntityManager;
 use Sylius\Behat\Service\SharedStorageInterface;
 use Sylius\Bundle\CoreBundle\Fixture\Factory\ExampleFactoryInterface;
-use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Sylius\Component\Core\Model\PaymentMethodInterface;
 use Sylius\Component\Core\Repository\PaymentMethodRepositoryInterface;
+use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 final class MollieContext implements Context
@@ -49,9 +50,9 @@ final class MollieContext implements Context
 
     private MolliePaymentMethodPurifierInterface $molliePaymentMethodPurifier;
 
-    private EntityRepository $gatewayConfigRepository;
+    private RepositoryInterface $gatewayConfigRepository;
 
-    private EntityRepository $mollieConfigurationRepository;
+    private MollieGatewayConfigRepositoryInterface $mollieConfigurationRepository;
 
     public function __construct(
         SharedStorageInterface $sharedStorage,
@@ -62,8 +63,8 @@ final class MollieContext implements Context
         string $mollieProfileId,
         MollieMethodsResolverInterface $mollieMethodsResolver,
         MolliePaymentMethodPurifierInterface $molliePaymentMethodPurifier,
-        EntityRepository $gatewayConfigRepository,
-        EntityRepository $mollieConfigurationRepository
+        RepositoryInterface $gatewayConfigRepository,
+        MollieGatewayConfigRepositoryInterface $mollieConfigurationRepository
     ) {
         $this->sharedStorage = $sharedStorage;
         $this->paymentMethodRepository = $paymentMethodRepository;
@@ -112,7 +113,7 @@ final class MollieContext implements Context
             ]);
 
         if (null === $gatewayConfig) {
-            throw new ResourceNotFoundException('Gateway not found');
+            throw new ResourceNotFoundException(sprintf('Gateway %s not found', $gatewayConfig->getFactoryName()));
         }
 
         $this->loadMolliePaymentMethods($gatewayConfig);
@@ -157,7 +158,9 @@ final class MollieContext implements Context
         /** @var MollieGatewayConfigInterface $molliePaymentMethod */
         foreach ($molliePaymentMethods as $molliePaymentMethod) {
             $molliePaymentMethod->enable();
-            $molliePaymentMethod->setCountryRestriction(MollieGatewayConfigInterface::ALL_COUNTRIES);
+            $molliePaymentMethod->setCountryRestriction(
+                MollieGatewayConfigInterface::ALL_COUNTRIES
+            );
         }
     }
 

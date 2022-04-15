@@ -25,6 +25,10 @@ final class ManagingPaymentMethodContext implements Context
 
     private string $mollieProfileId;
 
+    public const MOLLIE_TEST_API_KEY = 'MOLLIE_TEST_API_KEY';
+
+    public const MOLLIE_PROFILE_KEY = 'MOLLIE_PROFILE_KEY';
+
     public function __construct(
         CreatePageInterface $createPage,
         string $mollieTestApiKey,
@@ -48,7 +52,7 @@ final class ManagingPaymentMethodContext implements Context
      */
     public function iConfigureItWithTestMollieCredentials(string $apiKey): void
     {
-        if ('MOLLIE_TEST_API_KEY' === $apiKey) {
+        if (self::MOLLIE_TEST_API_KEY === $apiKey) {
             $this->createPage->setApiKey($this->mollieTestApiKey);
 
             return;
@@ -62,7 +66,7 @@ final class ManagingPaymentMethodContext implements Context
      */
     public function iConfigureProfileId(string $profileId): void
     {
-        if ('MOLLIE_PROFILE_KEY' === $profileId) {
+        if (self::MOLLIE_PROFILE_KEY === $profileId) {
             $this->createPage->setProfileId($this->mollieProfileId);
 
             return;
