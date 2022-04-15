@@ -52,8 +52,8 @@ final class CreatePage extends BaseCreatePage implements CreatePageInterface
     public function loadPaymentMethods(): void
     {
         $this->getDocument()->find('css', '#get_methods')->click();
-        $time = 25000;
-        $this->getSession()->wait($time);
+        $time = 10000;
+        $this->getSession()->wait($time, '(0 === jQuery.active)');
     }
 
     public function enablePaymentMethod(string $paymentMethodName): void
