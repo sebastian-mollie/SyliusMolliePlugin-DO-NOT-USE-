@@ -99,6 +99,8 @@ final class SubscriptionContext implements Context
 
         $subscription->addOrder($order);
         $subscription->setState(MollieSubscriptionInterface::STATE_ACTIVE);
+        $subscriptionConfiguration = $subscription->getSubscriptionConfiguration();
+        $subscriptionConfiguration->setInterval('10 days');
 
         $orderItem = $order->getItems()->first();
         Assert::assertInstanceOf(OrderItemInterface::class, $orderItem);
