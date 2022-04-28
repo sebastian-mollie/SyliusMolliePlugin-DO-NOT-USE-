@@ -1,0 +1,5 @@
+services:
+    bitbag_sylius_mollie_plugin.page.admin.order_index:
+        class: Tests\BitBag\SyliusMolliePlugin\Behat\Page\Admin\Order\IndexPage
+        parent: "sylius.behat.page.admin.order.index"
+        public: false
