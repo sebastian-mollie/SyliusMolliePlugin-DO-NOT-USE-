@@ -22,3 +22,5 @@ Feature: Creating order through admin with Mollie Subscription payment
     And I place and confirm this order
     Then I should be notified that order has been successfully created
     And there should be one not paid nor shipped order with channel "United States" for "mail@example.com" in the registry
+    When I view summary of last order
+    Then it should be paid with "Mollie Subscription"

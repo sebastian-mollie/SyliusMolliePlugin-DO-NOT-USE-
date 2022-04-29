@@ -141,7 +141,6 @@ final class SubscriptionContext implements Context
      */
     public function iRunCommand(string $command): void
     {
-        $this->mollieApiClient->setApiEndpoint('http://localhost:8218');
         $this->output = shell_exec($command);
     }
 

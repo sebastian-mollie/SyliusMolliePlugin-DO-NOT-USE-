@@ -37,3 +37,11 @@ services:
         arguments:
             - "@bitbag_sylius_mollie_plugin.page.admin.order_index"
             - "@sylius.repository.payment"
+            - "@bitbag_sylius_mollie_plugin.page.admin.order_show"
+
+    bitbag_sylius_mollie_plugin.behat.context.ui.admin.managing_orders:
+        class: Tests\BitBag\SyliusMolliePlugin\Behat\Context\Ui\Admin\ManagingOrdersContext
+        public: true
+        arguments:
+            - "@sylius.behat.page.admin.order.index"
+            - "@sylius.behat.page.admin.order.show"
