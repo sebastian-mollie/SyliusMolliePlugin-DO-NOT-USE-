@@ -30,6 +30,11 @@ Feature: Create scheduled Mollie Subscription payment
     Then I should see "[OK] Successfully marked scheduled subscriptions" in the output
     When I browse orders
     Then I should see 2 orders in the list
+    When I browse payments
+    Then I should see 2 payments in the list
+    When I choose "Completed" as a payment state
+    And I filter
+    Then I should see 2 payments in the list
 
   @ui
   Scenario: Recurring payment with changed price
@@ -47,6 +52,11 @@ Feature: Create scheduled Mollie Subscription payment
     When I browse orders
     Then I should see 2 orders in the list
     And all orders have same total set to "$1.00"
+    When I browse payments
+    Then I should see 2 payments in the list
+    When I choose "Completed" as a payment state
+    And I filter
+    Then I should see 2 payments in the list
 
   @ui
   Scenario: Failed recurring payment
@@ -56,4 +66,11 @@ Feature: Create scheduled Mollie Subscription payment
     Then I should see "[OK] Successfully marked scheduled subscriptions" in the output
     When I run command "cd tests/Application && APP_ENV=test php bin/console mollie:subscription:process"
     Then I should see "[ERROR] An error has occurred during send payment link process." in the output
+    When I browse orders
+    Then I should see a single order from customer "sylius@example.com"
+    When I browse payments
+    Then I should see a single payment in the list
+    When I choose "Completed" as a payment state
+    And I filter
+    Then I should see a single payment in the list
 

@@ -50,6 +50,7 @@ default:
                 - sylius.behat.context.ui.email
                 - sylius.behat.context.ui.shop.cart
                 - sylius.behat.context.ui.shop.currency
+                - bitbag_sylius_mollie_plugin.behat.context.ui.admin.order
                 - Tests\Sylius\AdminOrderCreationPlugin\Behat\Context\Admin\ManagingOrdersContext
 
             filters:

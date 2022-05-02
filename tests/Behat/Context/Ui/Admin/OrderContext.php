@@ -16,6 +16,7 @@ use BitBag\SyliusMolliePlugin\Entity\OrderInterface;
 use Sylius\Component\Core\Repository\PaymentRepositoryInterface;
 use Sylius\Component\Payment\Model\PaymentInterface;
 use Tests\BitBag\SyliusMolliePlugin\Behat\Page\Admin\Order\IndexPageInterface;
+use Tests\BitBag\SyliusMolliePlugin\Behat\Page\Admin\Order\ShowPageInterface;
 use Webmozart\Assert\Assert;
 
 final class OrderContext implements Context
@@ -24,12 +25,16 @@ final class OrderContext implements Context
 
     private PaymentRepositoryInterface $paymentRepository;
 
+    private ShowPageInterface $showPage;
+
     public function __construct(
         IndexPageInterface $indexPage,
-        PaymentRepositoryInterface $paymentRepository
+        PaymentRepositoryInterface $paymentRepository,
+        ShowPageInterface $showPage
     ) {
         $this->indexPage = $indexPage;
         $this->paymentRepository = $paymentRepository;
+        $this->showPage = $showPage;
     }
 
     /**
@@ -50,5 +55,13 @@ final class OrderContext implements Context
         $firstPayment->setDetails([]);
 
         $this->paymentRepository->add($firstPayment);
+    }
+
+    /**
+     * @When I view summary of last order
+     */
+    public function viewSummaryOfLastOrder(): void
+    {
+        $this->showPage->openLastOrderPage();
     }
 }

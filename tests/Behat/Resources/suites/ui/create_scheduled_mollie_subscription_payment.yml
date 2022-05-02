@@ -34,7 +34,6 @@ default:
                 - bitbag_sylius_mollie_plugin.context.setup.subscription
 
                 - sylius.behat.context.ui.channel
-                - sylius.behat.context.ui.admin.managing_orders
                 - sylius.behat.context.ui.shop.cart
                 - sylius.behat.context.ui.shop.checkout
                 - sylius.behat.context.ui.shop.checkout.addressing
@@ -45,6 +44,8 @@ default:
                 - bitbag_sylius_mollie_plugin.behat.context.ui.admin.order
                 - bitbag_sylius_mollie_plugin.behat.context.setup.product
                 - Behat\MinkExtension\Context\MinkContext
+                - sylius.behat.context.ui.admin.managing_payments
+                - bitbag_sylius_mollie_plugin.behat.context.ui.admin.managing_orders
 
                 - bitbag_sylius_mollie_plugin.behat.context.ui.shop.account
             filters:
