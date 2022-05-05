@@ -149,8 +149,8 @@ jobs:
                     path: etc/build/
                     if-no-files-found: ignore
 
-            - name: Stop Mockoon for Behat
-              run: mockoon-cli stop mockoon-mollie-behat
+            -   name: Stop Mockoon for Behat
+                run: mockoon-cli stop mockoon-mollie-behat
 
             -   name: Run Mockoon for PHPUnit
                 run: mockoon-cli start --data tests/PHPUnit/Functional/Mockoon.json
