@@ -22,6 +22,7 @@ use SM\Factory\FactoryInterface as StateMachineFactoryInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Model\PaymentMethodInterface;
 use Sylius\Component\Payment\PaymentTransitions;
+use Webmozart\Assert\Assert;
 
 final class OrderContext implements Context
 {
@@ -54,26 +55,27 @@ final class OrderContext implements Context
         $this->entityManager->flush();
     }
 
-    /**
-     * @param $transition
-     *
-     * @throws \SM\SMException
-     */
-    private function applyMolliePaymentTransitionOnOrder(OrderInterface $order, $transition): void
+    private function applyMolliePaymentTransitionOnOrder(OrderInterface $order, string $transition): void
     {
         foreach ($order->getPayments() as $payment) {
             /** @var PaymentMethodInterface $paymentMethod */
             $paymentMethod = $payment->getMethod();
 
-            if (true === in_array($paymentMethod->getGatewayConfig()->getFactoryName(), [MollieGatewayFactory::FACTORY_NAME, MollieSubscriptionGatewayFactory::FACTORY_NAME], true)) {
+            $gatewayConfig = $paymentMethod->getGatewayConfig();
+
+            Assert::notNull($gatewayConfig);
+
+            if (true === in_array($gatewayConfig->getFactoryName(), [MollieGatewayFactory::FACTORY_NAME, MollieSubscriptionGatewayFactory::FACTORY_NAME], true)) {
+                Assert::isInstanceOf($this->payum, Payum::class);
                 $refundToken = $this->payum->getTokenFactory()->createRefundToken('mollie', $payment);
 
                 $metadata = [];
-
+                $model = [];
                 $metadata['refund_token'] = $refundToken->getHash();
 
                 $model['metadata'] = $metadata;
 
+                Assert::notNull($payment->getAmount());
                 $model['amount'] = $payment->getAmount() / 100;
                 $model['payment_mollie_id'] = 'test';
 

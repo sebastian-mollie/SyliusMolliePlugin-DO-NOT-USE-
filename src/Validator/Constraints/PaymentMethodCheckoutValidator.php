@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace BitBag\SyliusMolliePlugin\Validator\Constraints;
 
 use BitBag\SyliusMolliePlugin\Factory\MollieGatewayFactory;
+use BitBag\SyliusMolliePlugin\Factory\MollieSubscriptionGatewayFactory;
 use BitBag\SyliusMolliePlugin\Resolver\Order\PaymentCheckoutOrderResolverInterface;
 use Payum\Core\Model\GatewayConfigInterface;
 use Sylius\Component\Core\Model\PaymentInterface;
@@ -52,7 +53,7 @@ final class PaymentMethodCheckoutValidator extends ConstraintValidator
         /** @var GatewayConfigInterface $gateway */
         $gateway = $paymentMethod->getGatewayConfig();
 
-        if (MollieGatewayFactory::FACTORY_NAME !== $gateway->getFactoryName() || null !== $value) {
+        if ((null !== $value) || (!$this->isMollieGatewayFactory($gateway))) {
             return;
         }
 
@@ -61,5 +62,14 @@ final class PaymentMethodCheckoutValidator extends ConstraintValidator
             throw new \InvalidArgumentException();
         }
         $this->context->buildViolation($constraint->message)->setTranslationDomain('messages')->addViolation();
+    }
+
+    private function isMollieGatewayFactory(GatewayConfigInterface $gateway): bool
+    {
+        return true === in_array(
+            $gateway->getFactoryName(),
+            [MollieGatewayFactory::FACTORY_NAME, MollieSubscriptionGatewayFactory::FACTORY_NAME],
+            true
+        );
     }
 }
