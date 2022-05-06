@@ -13,8 +13,7 @@ declare(strict_types=1);
 namespace Tests\BitBag\SyliusMolliePlugin\Behat\Context\Setup;
 
 use Behat\Behat\Context\Context;
-use BitBag\SyliusMolliePlugin\Factory\MollieGatewayFactory;
-use BitBag\SyliusMolliePlugin\Factory\MollieSubscriptionGatewayFactory;
+use BitBag\SyliusMolliePlugin\Checker\Gateway\MollieGatewayFactoryCheckerInterface;
 use Doctrine\ORM\EntityManager;
 use Payum\Core\Payum;
 use Payum\Core\Registry\RegistryInterface;
@@ -35,14 +34,18 @@ final class OrderContext implements Context
     /** @var RegistryInterface|Payum */
     private $payum;
 
+    private MollieGatewayFactoryCheckerInterface $mollieGatewayFactoryChecker;
+
     public function __construct(
         EntityManager $entityManager,
         StateMachineFactoryInterface $stateMachineFactory,
-        RegistryInterface $payum
+        RegistryInterface $payum,
+        MollieGatewayFactoryCheckerInterface $mollieGatewayFactoryChecker
     ) {
         $this->entityManager = $entityManager;
         $this->stateMachineFactory = $stateMachineFactory;
         $this->payum = $payum;
+        $this->mollieGatewayFactoryChecker = $mollieGatewayFactoryChecker;
     }
 
     /**
@@ -65,7 +68,7 @@ final class OrderContext implements Context
 
             Assert::notNull($gatewayConfig);
 
-            if (true === in_array($gatewayConfig->getFactoryName(), [MollieGatewayFactory::FACTORY_NAME, MollieSubscriptionGatewayFactory::FACTORY_NAME], true)) {
+            if ($this->mollieGatewayFactoryChecker->isMollieGateway($gatewayConfig)) {
                 Assert::isInstanceOf($this->payum, Payum::class);
                 $refundToken = $this->payum->getTokenFactory()->createRefundToken('mollie', $payment);
 
