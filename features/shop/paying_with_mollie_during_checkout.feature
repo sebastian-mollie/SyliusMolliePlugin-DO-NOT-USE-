@@ -55,7 +55,7 @@ Feature: Paying with Mollie during checkout
         And I should see the thank you page
 
     @ui
-    Scenario: Retrying the payment and failing
+    Scenario: Retrying the payment with failure
         Given the store has a product "PHP T-Shirt" priced at "$9.99"
         Given I added product "PHP T-Shirt" to the cart
         And I have proceeded selecting "Mollie" payment method

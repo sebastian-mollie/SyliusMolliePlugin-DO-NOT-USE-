@@ -17,6 +17,7 @@ use BitBag\SyliusMolliePlugin\Entity\GatewayConfigInterface;
 use BitBag\SyliusMolliePlugin\Entity\MollieGatewayConfigInterface;
 use BitBag\SyliusMolliePlugin\Factory\MollieGatewayFactory;
 use BitBag\SyliusMolliePlugin\Factory\MollieSubscriptionGatewayFactory;
+use BitBag\SyliusMolliePlugin\Logger\MollieLoggerActionInterface;
 use BitBag\SyliusMolliePlugin\Purifier\MolliePaymentMethodPurifierInterface;
 use BitBag\SyliusMolliePlugin\Repository\MollieGatewayConfigRepositoryInterface;
 use BitBag\SyliusMolliePlugin\Resolver\MollieMethodsResolverInterface;
@@ -98,7 +99,7 @@ final class MollieContext implements Context
             'api_key_test' => $this->mollieApiKeyTest,
             'profile_id' => $this->mollieProfileId,
             'environment' => null,
-            'loggerLevel' => 2,
+            'loggerLevel' => MollieLoggerActionInterface::LOG_EVERYTHING,
         ]);
 
         $this->paymentMethodManager->flush();
@@ -141,7 +142,7 @@ final class MollieContext implements Context
             'api_key_test' => $this->mollieApiKeyTest,
             'profile_id' => $this->mollieProfileId,
             'environment' => null,
-            'loggerLevel' => 2,
+            'loggerLevel' => MollieLoggerActionInterface::LOG_EVERYTHING,
         ]);
 
         $this->paymentMethodManager->flush();

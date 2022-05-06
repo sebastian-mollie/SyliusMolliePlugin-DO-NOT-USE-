@@ -63,8 +63,7 @@ final class CreatePage extends BaseCreatePage implements CreatePageInterface
                 return true;
             }
 
-            /** @phpstan-ignore-next-line  */
-            if (false === $strict && strstr($validationMessageElement->getText(), $message)) {
+            if (false === $strict && str_contains($validationMessageElement->getText(), $message)) {
                 return true;
             }
         }
