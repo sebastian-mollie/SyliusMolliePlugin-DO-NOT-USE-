@@ -56,7 +56,7 @@ final class MollieGatewayFactoryCheckerSpec extends ObjectBehavior
             ->shouldReturn(true);
     }
 
-    public function it_returns_false_if_gateway_name_not_mollie(
+    public function it_returns_false_if_gateway_name_is_not_mollie(
         GatewayConfigInterface $gateway
     ): void {
         $mollieGateways = [
