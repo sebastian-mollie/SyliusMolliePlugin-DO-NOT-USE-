@@ -43,6 +43,7 @@ default:
                 - sylius.behat.context.ui.shop.currency
                 - bitbag_sylius_mollie_plugin.behat.context.ui.admin.order
                 - bitbag_sylius_mollie_plugin.behat.context.setup.product
+                - bitbag_sylius_mollie_plugin.behat.context.api.mollie_api_context
                 - Behat\MinkExtension\Context\MinkContext
                 - sylius.behat.context.ui.admin.managing_payments
                 - bitbag_sylius_mollie_plugin.behat.context.ui.admin.managing_orders

@@ -28,11 +28,12 @@ Feature: Create scheduled Mollie Subscription payment
     Then I should see "[OK] Successfully marked scheduled subscriptions" in the output
     When I run command "cd tests/Application && APP_ENV=test php bin/console mollie:subscription:process"
     Then I should see "[OK] Successfully marked scheduled subscriptions" in the output
-    When I browse orders
+    And I browse orders
     Then I should see 2 orders in the list
     When I browse payments
     Then I should see 2 payments in the list
-    When I choose "Completed" as a payment state
+    When Mollie call notify webhook on newest recurring order
+    Then I choose "Completed" as a payment state
     And I filter
     Then I should see 2 payments in the list
 
@@ -54,7 +55,8 @@ Feature: Create scheduled Mollie Subscription payment
     And all orders have same total set to "$1.00"
     When I browse payments
     Then I should see 2 payments in the list
-    When I choose "Completed" as a payment state
+    When Mollie call notify webhook on newest recurring order
+    Then I choose "Completed" as a payment state
     And I filter
     Then I should see 2 payments in the list
 

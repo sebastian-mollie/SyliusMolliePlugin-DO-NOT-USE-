@@ -1,0 +1,7 @@
+services:
+    bitbag_sylius_mollie_plugin.behat.context.api.mollie_api_context:
+        class: Tests\BitBag\SyliusMolliePlugin\Behat\Context\Api\MollieApiContext
+        public: true
+        arguments:
+            - "@sylius.repository.order"
+            - "@test.client"

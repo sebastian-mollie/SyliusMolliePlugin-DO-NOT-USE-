@@ -8,6 +8,44 @@
   "hostname": "127.0.0.1",
   "routes": [
     {
+      "uuid": "fd0b96f0-af9f-40c4-89d0-48a1526d4590",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "v2/payments/tr_:paymentId-:orderId",
+      "responses": [
+        {
+          "uuid": "b05cb378-9973-4d22-a2a9-c82dedd42e79",
+          "body": "{\n   \"resource\":\"payment\",\n   \"id\":\"tr_recurring_payment_paid\",\n   \"mode\":\"test\",\n   \"createdAt\":\"2022-04-13T16:15:05+00:00\",\n   \"amount\":{\n      \"value\":\"1.00\",\n      \"currency\":\"USD\"\n   },\n   \"description\":\"recurringDescription\",\n   \"method\":\"creditcard\",\n   \"metadata\":{\n      \"order_id\":\"{{urlParam 'orderId'}}\",\n      \"customer_Id\":1,\n      \"molliePaymentMethods\":null,\n      \"cartToken\":null,\n      \"sequenceType\":\"recurring\",\n      \"gateway\":\"mollie_subscription\",\n      \"selected_issuer\":null,\n      \"refund_token\":\"refundToken\"\n   },\n   \"status\":\"paid\",\n   \"paidAt\":\"2022-04-13T16:15:05+00:00\",\n   \"amountRefunded\":{\n      \"value\":\"0.00\",\n      \"currency\":\"USD\"\n   },\n   \"amountRemaining\":{\n      \"value\":\"1.00\",\n      \"currency\":\"USD\"\n   },\n   \"profileId\":\"pfl_profile\",\n   \"customerId\":\"cst_customer\",\n   \"mandateId\":\"mdt_mandate\",\n   \"sequenceType\":\"recurring\",\n   \"redirectUrl\":null,\n   \"webhookUrl\":\"http:\\/\\/127.0.0.1:8218\\/payment\\/notify\\/654fed\",\n   \"settlementAmount\":{\n      \"value\":\"1.00\",\n      \"currency\":\"USD\"\n   },\n   \"details\":{\n      \"cardNumber\":\"6787\",\n      \"cardHolder\":\"T. TEST\",\n      \"cardAudience\":\"consumer\",\n      \"cardLabel\":\"Mastercard\",\n      \"cardCountryCode\":\"NL\",\n      \"cardSecurity\":\"normal\",\n      \"feeRegion\":\"other\"\n   },\n   \"_links\":{\n      \"self\":{\n         \"href\":\"127.0.0.1:8218\\/v2\\/payments\\/tr_{{urlParam 'paymentId'}}\",\n         \"type\":\"application\\/hal+json\"\n      },\n      \"dashboard\":{\n         \"href\":\"https:\\/\\/www.mollie.com\\/dashboard\\/org_123\\/payments\\/tr_{{urlParam 'paymentId'}}\",\n         \"type\":\"text\\/html\"\n      },\n      \"changePaymentState\":{\n         \"href\":\"https:\\/\\/www.mollie.com/checkout/test-mode?method/=creditcard&token=token\",\n         \"type\":\"text\\/html\"\n      },\n      \"customer\":{\n         \"href\":\"https:\\/\\/127.0.0.1:8218\\/v2\\/customers\\/cst_customer\",\n         \"type\":\"application/hal+json\"\n      },\n      \"mandate\":{\n         \"href\":\"https:\\/\\/127.0.0.1:8218\\/v2\\/customers\\/cst_customer\\/mandates\\/mdt_mandate\",\n         \"type\":\"application/hal+json\"\n      },\n      \"documentation\":{\n         \"href\":\"https:\\/\\/docs.mollie.com\\/reference\\/v2\\/payments-api\\/create-order\",\n         \"type\":\"text\\/html\"\n      }\n   }\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Recurring payment, status: paid",
+          "headers": [],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "params",
+              "modifier": "paymentId",
+              "value": "recurring_payment_paid",
+              "operator": "equals"
+            },
+            {
+              "target": "params",
+              "modifier": "orderId",
+              "value": "^\\d+$",
+              "operator": "regex"
+            }
+          ],
+          "rulesOperator": "AND",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        }
+      ],
+      "enabled": true,
+      "randomResponse": false,
+      "sequentialResponse": false
+    },
+    {
       "uuid": "06a1b2ad-9fb7-468c-8a31-bf9e29e4c4cd",
       "documentation": "",
       "method": "post",
@@ -42,7 +80,7 @@
         },
         {
           "uuid": "09c207ee-1f32-409d-b189-650dfc6b7268",
-          "body": "{\n   \"resource\":\"payment\",\n   \"id\":\"tr_recurring_payment_paid\",\n   \"mode\":\"test\",\n   \"createdAt\":\"2022-04-13T16:15:05+00:00\",\n   \"amount\":{\n      \"value\":\"1.00\",\n      \"currency\":\"USD\"\n   },\n   \"description\":\"recurringDescription\",\n   \"method\":\"creditcard\",\n   \"metadata\":{\n      \"order_id\":1,\n      \"customer_Id\":1,\n      \"molliePaymentMethods\":null,\n      \"cartToken\":null,\n      \"sequenceType\":\"recurring\",\n      \"gateway\":\"mollie_subscription\",\n      \"selected_issuer\":null,\n      \"refund_token\":\"refundToken\"\n   },\n   \"status\":\"paid\",\n   \"paidAt\":\"2022-04-13T16:15:05+00:00\",\n   \"amountRefunded\":{\n      \"value\":\"0.00\",\n      \"currency\":\"USD\"\n   },\n   \"amountRemaining\":{\n      \"value\":\"1.00\",\n      \"currency\":\"USD\"\n   },\n   \"profileId\":\"pfl_profile\",\n   \"customerId\":\"cst_customer\",\n   \"mandateId\":\"mdt_mandate\",\n   \"sequenceType\":\"recurring\",\n   \"redirectUrl\":null,\n   \"webhookUrl\":\"http:\\/\\/127.0.0.1:8218\\/payment\\/notify\\/654fed\",\n   \"settlementAmount\":{\n      \"value\":\"1.00\",\n      \"currency\":\"USD\"\n   },\n   \"details\":{\n      \"cardNumber\":\"6787\",\n      \"cardHolder\":\"T. TEST\",\n      \"cardAudience\":\"consumer\",\n      \"cardLabel\":\"Mastercard\",\n      \"cardCountryCode\":\"NL\",\n      \"cardSecurity\":\"normal\",\n      \"feeRegion\":\"other\"\n   },\n   \"_links\":{\n      \"self\":{\n         \"href\":\"127.0.0.1:8218\\/v2\\/payments\\/tr_recurring_payment_paid\",\n         \"type\":\"application\\/hal+json\"\n      },\n      \"dashboard\":{\n         \"href\":\"https:\\/\\/www.mollie.com\\/dashboard\\/org_123\\/payments\\/tr_recurring_payment_paid\",\n         \"type\":\"text\\/html\"\n      },\n      \"changePaymentState\":{\n         \"href\":\"https:\\/\\/www.mollie.com/checkout/test-mode?method/=creditcard&token=token\",\n         \"type\":\"text\\/html\"\n      },\n      \"customer\":{\n         \"href\":\"https:\\/\\/127.0.0.1:8218\\/v2\\/customers\\/cst_customer\",\n         \"type\":\"application/hal+json\"\n      },\n      \"mandate\":{\n         \"href\":\"https:\\/\\/127.0.0.1:8218\\/v2\\/customers\\/cst_customer\\/mandates\\/mdt_mandate\",\n         \"type\":\"application/hal+json\"\n      },\n      \"documentation\":{\n         \"href\":\"https:\\/\\/docs.mollie.com\\/reference\\/v2\\/payments-api\\/create-order\",\n         \"type\":\"text\\/html\"\n      }\n   }\n}",
+          "body": "{\n   \"resource\":\"payment\",\n   \"id\":\"tr_recurring_payment_paid\",\n   \"mode\":\"test\",\n   \"createdAt\":\"2022-04-13T16:15:05+00:00\",\n   \"amount\":{\n      \"value\":\"1.00\",\n      \"currency\":\"USD\"\n   },\n   \"description\":\"recurringDescription\",\n   \"method\":\"creditcard\",\n   \"metadata\":{\n      \"order_id\":1,\n      \"customer_Id\":1,\n      \"molliePaymentMethods\":null,\n      \"cartToken\":null,\n      \"sequenceType\":\"recurring\",\n      \"gateway\":\"mollie_subscription\",\n      \"selected_issuer\":null,\n      \"refund_token\":\"refundToken\"\n   },\n   \"status\":\"paid\",\n   \"paidAt\":\"2022-04-13T16:15:05+00:00\",\n   \"amountRefunded\":{\n      \"value\":\"0.00\",\n      \"currency\":\"USD\"\n   },\n   \"amountRemaining\":{\n      \"value\":\"1.00\",\n      \"currency\":\"USD\"\n   },\n   \"profileId\":\"pfl_profile\",\n   \"customerId\":\"cst_customer\",\n   \"mandateId\":\"mdt_mandate\",\n   \"sequenceType\":\"recurring\",\n   \"redirectUrl\":null,\n   \"webhookUrl\":\"https:\\/\\/127.0.0.1:8080\\/payment\\/notify\\/123edf\",\n   \"settlementAmount\":{\n      \"value\":\"1.00\",\n      \"currency\":\"USD\"\n   },\n   \"details\":{\n      \"cardNumber\":\"6787\",\n      \"cardHolder\":\"T. TEST\",\n      \"cardAudience\":\"consumer\",\n      \"cardLabel\":\"Mastercard\",\n      \"cardCountryCode\":\"NL\",\n      \"cardSecurity\":\"normal\",\n      \"feeRegion\":\"other\"\n   },\n   \"_links\":{\n      \"self\":{\n         \"href\":\"127.0.0.1:8218\\/v2\\/payments\\/tr_recurring_payment_paid\",\n         \"type\":\"application\\/hal+json\"\n      },\n      \"dashboard\":{\n         \"href\":\"https:\\/\\/www.mollie.com\\/dashboard\\/org_123\\/payments\\/tr_recurring_payment_paid\",\n         \"type\":\"text\\/html\"\n      },\n      \"customer\":{\n         \"href\":\"https:\\/\\/127.0.0.1:8218\\/v2\\/customers\\/cst_customer\",\n         \"type\":\"application/hal+json\"\n      },\n      \"mandate\":{\n         \"href\":\"https:\\/\\/127.0.0.1:8218\\/v2\\/customers\\/cst_customer\\/mandates\\/mdt_mandate\",\n         \"type\":\"application/hal+json\"\n      },\n      \"documentation\":{\n         \"href\":\"https:\\/\\/docs.mollie.com\\/reference\\/v2\\/payments-api\\/create-order\",\n         \"type\":\"text\\/html\"\n      }\n   }\n}",
           "latency": 0,
           "statusCode": 200,
           "label": "Recurring payment",
@@ -100,27 +138,6 @@
       "endpoint": "v2/payments/tr_:paymentId",
       "responses": [
         {
-          "uuid": "ca59fc3a-ce19-4259-8b17-6e1c3f728f30",
-          "body": "{\n   \"resource\":\"payment\",\n   \"id\":\"tr_{{urlParam 'paymentId'}}\",\n   \"mode\":\"test\",\n   \"createdAt\":\"2022-04-13T16:15:05+00:00\",\n   \"amount\":{\n      \"value\":\"1.00\",\n      \"currency\":\"USD\"\n   },\n   \"description\":\"recurringDescription\",\n   \"method\":\"creditcard\",\n   \"metadata\":{\n      \"order_id\":1,\n      \"customer_Id\":1,\n      \"molliePaymentMethods\":null,\n      \"cartToken\":null,\n      \"sequenceType\":\"recurring\",\n      \"gateway\":\"mollie_subscription\",\n      \"selected_issuer\":null,\n      \"refund_token\":\"refundToken\"\n   },\n   \"status\":\"paid\",\n   \"paidAt\":\"2022-04-13T16:15:05+00:00\",\n   \"amountRefunded\":{\n      \"value\":\"0.00\",\n      \"currency\":\"USD\"\n   },\n   \"amountRemaining\":{\n      \"value\":\"1.00\",\n      \"currency\":\"USD\"\n   },\n   \"profileId\":\"pfl_profile\",\n   \"customerId\":\"cst_customer\",\n   \"mandateId\":\"mdt_mandate\",\n   \"sequenceType\":\"recurring\",\n   \"redirectUrl\":null,\n   \"webhookUrl\":\"http:\\/\\/127.0.0.1:8218\\/payment\\/notify\\/654fed\",\n   \"settlementAmount\":{\n      \"value\":\"1.00\",\n      \"currency\":\"USD\"\n   },\n   \"details\":{\n      \"cardNumber\":\"6787\",\n      \"cardHolder\":\"T. TEST\",\n      \"cardAudience\":\"consumer\",\n      \"cardLabel\":\"Mastercard\",\n      \"cardCountryCode\":\"NL\",\n      \"cardSecurity\":\"normal\",\n      \"feeRegion\":\"other\"\n   },\n   \"_links\":{\n      \"self\":{\n         \"href\":\"127.0.0.1:8218\\/v2\\/payments\\/tr_{{urlParam 'paymentId'}}\",\n         \"type\":\"application\\/hal+json\"\n      },\n      \"dashboard\":{\n         \"href\":\"https:\\/\\/www.mollie.com\\/dashboard\\/org_123\\/payments\\/tr_{{urlParam 'paymentId'}}\",\n         \"type\":\"text\\/html\"\n      },\n      \"changePaymentState\":{\n         \"href\":\"https:\\/\\/www.mollie.com/checkout/test-mode?method/=creditcard&token=token\",\n         \"type\":\"text\\/html\"\n      },\n      \"customer\":{\n         \"href\":\"https:\\/\\/127.0.0.1:8218\\/v2\\/customers\\/cst_customer\",\n         \"type\":\"application/hal+json\"\n      },\n      \"mandate\":{\n         \"href\":\"https:\\/\\/127.0.0.1:8218\\/v2\\/customers\\/cst_customer\\/mandates\\/mdt_mandate\",\n         \"type\":\"application/hal+json\"\n      },\n      \"documentation\":{\n         \"href\":\"https:\\/\\/docs.mollie.com\\/reference\\/v2\\/payments-api\\/create-order\",\n         \"type\":\"text\\/html\"\n      }\n   }\n}",
-          "latency": 0,
-          "statusCode": 200,
-          "label": "Recurring payment, status: paid",
-          "headers": [],
-          "filePath": "",
-          "sendFileAsBody": false,
-          "rules": [
-            {
-              "target": "params",
-              "modifier": "paymentId",
-              "value": "recurring_payment_paid",
-              "operator": "equals"
-            }
-          ],
-          "rulesOperator": "OR",
-          "disableTemplating": false,
-          "fallbackTo404": false
-        },
-        {
           "uuid": "0fa998f7-c753-41a1-8b5d-3d9472241207",
           "body": "{\n   \"resource\":\"payment\",\n   \"id\":\"tr_{{urlParam 'paymentId'}}\",\n   \"mode\":\"test\",\n   \"createdAt\":\"2022-05-02T18:25:48+00:00\",\n   \"amount\":{\n      \"value\":\"19.99\",\n      \"currency\":\"USD\"\n   },\n   \"description\":\"000000001\",\n   \"method\":\"creditcard\",\n   \"metadata\":{\n      \"order_id\":1,\n      \"customer_id\":1,\n      \"molliePaymentMethods\":\"creditcard\",\n      \"cartToken\":null,\n      \"selected_issuer\":null,\n      \"methodType\":\"Payments API\",\n      \"refund_token\":\"refundToken\"\n   },\n   \"status\":\"paid\",\n   \"paidAt\":\"2022-05-02T18:25:51+00:00\",\n   \"amountRefunded\":{\n      \"value\":\"0.00\",\n      \"currency\":\"USD\"\n   },\n   \"amountRemaining\":{\n      \"value\":\"19.99\",\n      \"currency\":\"USD\"\n   },\n   \"locale\":\"en_US\",\n   \"countryCode\":\"PL\",\n   \"profileId\":\"pfl_profile\",\n   \"customerId\":\"cst_customer\",\n   \"sequenceType\":\"oneoff\",\n   \"redirectUrl\":\"https:\\/\\/127.0.0.1:8080\\/payment\\/capture\\/123edf\",\n   \"webhookUrl\":\"https:\\/\\/127.0.0.1:8080\\/payment\\/notify\\/123edf\",\n   \"settlementAmount\":{\n      \"value\":\"19.99\",\n      \"currency\":\"USD\"\n   },\n   \"details\":{\n      \"cardNumber\":\"6787\",\n      \"cardHolder\":\"T. TEST\",\n      \"cardAudience\":\"consumer\",\n      \"cardLabel\":\"Mastercard\",\n      \"cardCountryCode\":\"NL\",\n      \"cardSecurity\":\"normal\",\n      \"feeRegion\":\"other\"\n   },\n   \"_links\":{\n      \"self\":{\n         \"href\":\"127.0.0.1:8218\\/v2\\/payments\\/tr_{{urlParam 'paymentId'}}\",\n         \"type\":\"application\\/hal+json\"\n      },\n      \"changePaymentState\":{\n         \"href\":\"https://www.mollie.com/checkout/test-mode?method=creditcard&token=3.gwasio\",\n         \"type\":\"text/html\"\n      },\n      \"dashboard\":{\n         \"href\":\"https://www.mollie.com/dashboard/org_4360444/payments/tr_{{urlParam 'paymentId'}}\",\n         \"type\":\"text/html\"\n      },\n      \"customer\":{\n         \"href\":\"127.0.0.1:8218\\/v2\\/customers\\/cst_customer\",\n         \"type\":\"application\\/hal+json\"\n      },\n      \"documentation\":{\n         \"href\":\"https://docs.mollie.com/reference/v2/payments-api/create-payment\",\n         \"type\":\"text/html\"\n      }\n   }\n}",
           "latency": 0,
@@ -155,6 +172,27 @@
               "target": "params",
               "modifier": "paymentId",
               "value": "payment_canceled",
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        },
+        {
+          "uuid": "6410ad84-8f94-4e77-891d-1b8d61418521",
+          "body": "{\n   \"resource\":\"payment\",\n   \"id\":\"tr_recurring_payment_paid\",\n   \"mode\":\"test\",\n   \"createdAt\":\"2022-04-13T16:15:05+00:00\",\n   \"amount\":{\n      \"value\":\"1.00\",\n      \"currency\":\"USD\"\n   },\n   \"description\":\"recurringDescription\",\n   \"method\":\"creditcard\",\n   \"metadata\":{\n      \"order_id\":1,\n      \"customer_Id\":1,\n      \"molliePaymentMethods\":null,\n      \"cartToken\":null,\n      \"sequenceType\":\"recurring\",\n      \"gateway\":\"mollie_subscription\",\n      \"selected_issuer\":null,\n      \"refund_token\":\"refundToken\"\n   },\n   \"status\":\"paid\",\n   \"paidAt\":\"2022-04-13T16:15:05+00:00\",\n   \"amountRefunded\":{\n      \"value\":\"0.00\",\n      \"currency\":\"USD\"\n   },\n   \"amountRemaining\":{\n      \"value\":\"1.00\",\n      \"currency\":\"USD\"\n   },\n   \"profileId\":\"pfl_profile\",\n   \"customerId\":\"cst_customer\",\n   \"mandateId\":\"mdt_mandate\",\n   \"sequenceType\":\"recurring\",\n   \"redirectUrl\":null,\n   \"webhookUrl\":\"http:\\/\\/127.0.0.1:8218\\/payment\\/notify\\/654fed\",\n   \"settlementAmount\":{\n      \"value\":\"1.00\",\n      \"currency\":\"USD\"\n   },\n   \"details\":{\n      \"cardNumber\":\"6787\",\n      \"cardHolder\":\"T. TEST\",\n      \"cardAudience\":\"consumer\",\n      \"cardLabel\":\"Mastercard\",\n      \"cardCountryCode\":\"NL\",\n      \"cardSecurity\":\"normal\",\n      \"feeRegion\":\"other\"\n   },\n   \"_links\":{\n      \"self\":{\n         \"href\":\"127.0.0.1:8218\\/v2\\/payments\\/tr_{{urlParam 'paymentId'}}\",\n         \"type\":\"application\\/hal+json\"\n      },\n      \"dashboard\":{\n         \"href\":\"https:\\/\\/www.mollie.com\\/dashboard\\/org_123\\/payments\\/tr_{{urlParam 'paymentId'}}\",\n         \"type\":\"text\\/html\"\n      },\n      \"changePaymentState\":{\n         \"href\":\"https:\\/\\/www.mollie.com/checkout/test-mode?method/=creditcard&token=token\",\n         \"type\":\"text\\/html\"\n      },\n      \"customer\":{\n         \"href\":\"https:\\/\\/127.0.0.1:8218\\/v2\\/customers\\/cst_customer\",\n         \"type\":\"application/hal+json\"\n      },\n      \"mandate\":{\n         \"href\":\"https:\\/\\/127.0.0.1:8218\\/v2\\/customers\\/cst_customer\\/mandates\\/mdt_mandate\",\n         \"type\":\"application/hal+json\"\n      },\n      \"documentation\":{\n         \"href\":\"https:\\/\\/docs.mollie.com\\/reference\\/v2\\/payments-api\\/create-order\",\n         \"type\":\"text\\/html\"\n      }\n   }\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Recurring payment, status: paid",
+          "headers": [],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "params",
+              "modifier": "paymentId",
+              "value": "recurring_payment_paid",
               "operator": "equals"
             }
           ],
