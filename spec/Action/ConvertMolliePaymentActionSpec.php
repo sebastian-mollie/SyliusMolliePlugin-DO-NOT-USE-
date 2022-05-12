@@ -32,6 +32,7 @@ use Sylius\Component\Core\Model\CustomerInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Model\PaymentInterface;
 use Sylius\Component\Customer\Context\CustomerContextInterface;
+use Sylius\Component\Payment\Model\PaymentMethodInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -80,7 +81,8 @@ final class ConvertMolliePaymentActionSpec extends ObjectBehavior
         RepositoryInterface $mollieMethodsRepository,
         CustomerContextInterface $customerContext,
         ApiCustomerFactoryInterface $apiCustomerFactory,
-        CreateCustomer $mollieCustomer
+        CreateCustomer $mollieCustomer,
+		PaymentMethodInterface $paymentMethod
     ): void {
         $mollieApiClient->isRecurringSubscription()->willReturn(false);
         $this->setApi($mollieApiClient);
@@ -117,8 +119,14 @@ final class ConvertMolliePaymentActionSpec extends ObjectBehavior
         ]);
 
         $request->getSource()->willReturn($payment);
+		$payment->getMethod()->willReturn($paymentMethod);
+		$paymentMethod->getId()->willReturn(1);
 
-        $mollieMethodsRepository->findOneBy(['methodId' => 'ideal'])->willReturn($method);
+		$mollieMethodsRepository->findOneBy([
+			'methodId' => 'ideal',
+			'gateway' => 1,
+		])->willReturn($method);
+
         $method->getPaymentType()->willReturn('payment_type');
         $method->getGateway()->willReturn($gatewayConfig);
         $gatewayConfig->getConfig()->willReturn([
@@ -182,7 +190,8 @@ final class ConvertMolliePaymentActionSpec extends ObjectBehavior
         PaymentDescriptionInterface $paymentDescriptionProvider,
         MollieGatewayConfigInterface $method,
         GatewayConfigInterface $gatewayConfig,
-        RepositoryInterface $mollieMethodsRepository
+        RepositoryInterface $mollieMethodsRepository,
+		PaymentMethodInterface $paymentMethod
     ): void {
         $mollieApiClient->isRecurringSubscription()->willReturn(false);
         $this->setApi($mollieApiClient);
@@ -202,13 +211,19 @@ final class ConvertMolliePaymentActionSpec extends ObjectBehavior
         $request->getTo()->willReturn('array');
 
         $payment->getDetails()->willReturn([
-            'molliePaymentMethods' => 15,
+            'molliePaymentMethods' => 'creditcard',
             'cartToken' => 'token'
         ]);
 
         $request->getSource()->willReturn($payment);
+		$payment->getMethod()->willReturn($paymentMethod);
+		$paymentMethod->getId()->willReturn(1);
 
-        $mollieMethodsRepository->findOneBy(['methodId' => 15])->willReturn($method);
+		$mollieMethodsRepository->findOneBy([
+			'methodId' => 'creditcard',
+			'gateway' => 1,
+		])->willReturn($method);
+
         $method->getPaymentType()->willReturn('payment_type');
         $method->getGateway()->willReturn($gatewayConfig);
         $gatewayConfig->getConfig()->willReturn([]);
@@ -221,7 +236,7 @@ final class ConvertMolliePaymentActionSpec extends ObjectBehavior
             'metadata' => [
                 'order_id' => 1,
                 'customer_id' => 1,
-                'molliePaymentMethods' => 15,
+                'molliePaymentMethods' => 'creditcard',
                 'cartToken' => 'token',
                 'selected_issuer' => null,
                 'methodType' => 'Payments API',
@@ -245,7 +260,8 @@ final class ConvertMolliePaymentActionSpec extends ObjectBehavior
         MollieGatewayConfigInterface $method,
         GatewayConfigInterface $gatewayConfig,
         RepositoryInterface $mollieMethodsRepository,
-        PaymentLocaleResolverInterface $paymentLocaleResolver
+        PaymentLocaleResolverInterface $paymentLocaleResolver,
+		PaymentMethodInterface $paymentMethod
     ): void {
         $mollieApiClient->isRecurringSubscription()->willReturn(false);
         $this->setApi($mollieApiClient);
@@ -265,13 +281,19 @@ final class ConvertMolliePaymentActionSpec extends ObjectBehavior
         $request->getTo()->willReturn('array');
 
         $payment->getDetails()->willReturn([
-            'molliePaymentMethods' => 15,
+            'molliePaymentMethods' => 'creditcard',
             'cartToken' => 'token'
         ]);
 
         $request->getSource()->willReturn($payment);
 
-        $mollieMethodsRepository->findOneBy(['methodId' => 15])->willReturn($method);
+		$payment->getMethod()->willReturn($paymentMethod);
+		$paymentMethod->getId()->willReturn(1);
+
+		$mollieMethodsRepository->findOneBy([
+			'methodId' => 'creditcard',
+			'gateway' => 1,
+		])->willReturn($method);
         $method->getPaymentType()->willReturn('payment_type');
         $method->getGateway()->willReturn($gatewayConfig);
         $gatewayConfig->getConfig()->willReturn([]);
@@ -286,7 +308,7 @@ final class ConvertMolliePaymentActionSpec extends ObjectBehavior
             'metadata' => [
                 'order_id' => 1,
                 'customer_id' => 1,
-                'molliePaymentMethods' => 15,
+                'molliePaymentMethods' => 'creditcard',
                 'cartToken' => 'token',
                 'selected_issuer' => null,
                 'methodType' => 'Payments API',
@@ -313,13 +335,13 @@ final class ConvertMolliePaymentActionSpec extends ObjectBehavior
         RepositoryInterface $mollieMethodsRepository,
         PaymentLocaleResolverInterface $paymentLocaleResolver,
         ConvertOrderInterface $orderConverter,
-        IntToStringConverterInterface $intToStringConverter
+        IntToStringConverterInterface $intToStringConverter,
+		PaymentMethodInterface $paymentMethod
     ): void {
         $mollieApiClient->isRecurringSubscription()->willReturn(false);
         $this->setApi($mollieApiClient);
         $this->setGateway($gateway);
 
-        $mollieMethodsRepository->findOneBy(['methodId' => 15])->willReturn($method);
         $method->getPaymentType()->willReturn('ORDER_API');
         $method->getGateway()->willReturn($gatewayConfig);
         $gatewayConfig->getConfig()->willReturn([]);
@@ -336,7 +358,7 @@ final class ConvertMolliePaymentActionSpec extends ObjectBehavior
         $payment->getAmount()->willReturn(445535);
         $payment->getCurrencyCode()->willReturn('EUR');
         $payment->getDetails()->willReturn([
-            'molliePaymentMethods' => 15,
+            'molliePaymentMethods' => 'creditcard',
             'cartToken' => 'token'
         ]);
 
@@ -350,6 +372,13 @@ final class ConvertMolliePaymentActionSpec extends ObjectBehavior
         $request->getTo()->willReturn('array');
 
         $request->getSource()->willReturn($payment);
+		$payment->getMethod()->willReturn($paymentMethod);
+		$paymentMethod->getId()->willReturn(1);
+
+		$mollieMethodsRepository->findOneBy([
+			'methodId' => 'creditcard',
+			'gateway' => 1,
+		])->willReturn($method);
 
         $paymentLocaleResolver->resolveFromOrder($order)->willReturn('payment_locale');
         $details = [
@@ -361,7 +390,7 @@ final class ConvertMolliePaymentActionSpec extends ObjectBehavior
             'metadata' => [
                 'order_id' => 1,
                 'customer_id' => 1,
-                'molliePaymentMethods' => 15,
+                'molliePaymentMethods' => 'creditcard',
                 'cartToken' => 'token',
                 'selected_issuer' => null,
                 'methodType' => 'Orders API',
