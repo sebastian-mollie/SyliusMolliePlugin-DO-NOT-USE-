@@ -13,11 +13,9 @@ Feature: Enable a mollie options for recurring subscription
     Scenario: Loading payment methods for recurring subscription
       Given I am browsing payment methods
       Then I want to modify the "Mollie Subscription" payment method
-      When I save my changes
-      Then I should be notified with success "Payment method has been successfully updated." message
-      Then I can load payment methods
-      And I should be notified with success "Methods was successfully updated" message
-      And I enable "iDEAL" payment method
+      When I can load payment methods
+      Then I should be notified with success "Methods was successfully updated" message
+      Then I enable "iDEAL" payment method
       And I enable "Credit card" payment method
-      And I save my changes
+      When I save my changes
       Then I should be notified with success "Payment method has been successfully updated." message
