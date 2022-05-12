@@ -112,14 +112,14 @@ final class ConvertMolliePaymentAction extends BaseApiAwareAction implements Act
             $selectedIssuer = PaymentMethod::IDEAL === $molliePaymentMethod ? $paymentOptions['issuers']['id'] : null;
         }
 
-		$paymentMethod = $payment->getMethod();
-		Assert::isInstanceOf($paymentMethod, PaymentMethodInterface::class);
+        $paymentMethod = $payment->getMethod();
+        Assert::isInstanceOf($paymentMethod, PaymentMethodInterface::class);
 
         /** @var MollieGatewayConfigInterface $method */
-		$method = $this->mollieMethodsRepository->findOneBy([
-			'methodId' => $molliePaymentMethod,
-			'gateway' => $paymentMethod->getId(),
-		]);
+        $method = $this->mollieMethodsRepository->findOneBy([
+            'methodId' => $molliePaymentMethod,
+            'gateway' => $paymentMethod->getId(),
+        ]);
         $gatewayConfig = $method->getGateway()->getConfig();
         $details = [
             'amount' => [
