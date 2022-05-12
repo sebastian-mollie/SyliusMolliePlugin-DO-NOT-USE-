@@ -30,6 +30,7 @@ use Sylius\Component\Core\Model\CustomerInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Model\PaymentInterface;
 use Sylius\Component\Customer\Context\CustomerContextInterface;
+use Sylius\Component\Payment\Model\PaymentMethodInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Webmozart\Assert\Assert;
@@ -102,17 +103,23 @@ final class ConvertMolliePaymentAction extends BaseApiAwareAction implements Act
         $paymentOptions = $payment->getDetails();
 
         if (isset($paymentOptions['metadata'])) {
-            $paymentMethod = $paymentOptions['metadata']['molliePaymentMethods'] ?? null;
+            $molliePaymentMethod = $paymentOptions['metadata']['molliePaymentMethods'] ?? null;
             $cartToken = $paymentOptions['metadata']['cartToken'];
-            $selectedIssuer = PaymentMethod::IDEAL === $paymentMethod ? $paymentOptions['metadata']['selected_issuer'] : null;
+            $selectedIssuer = PaymentMethod::IDEAL === $molliePaymentMethod ? $paymentOptions['metadata']['selected_issuer'] : null;
         } else {
-            $paymentMethod = $paymentOptions['molliePaymentMethods'] ?? null;
+            $molliePaymentMethod = $paymentOptions['molliePaymentMethods'] ?? null;
             $cartToken = $paymentOptions['cartToken'];
-            $selectedIssuer = PaymentMethod::IDEAL === $paymentMethod ? $paymentOptions['issuers']['id'] : null;
+            $selectedIssuer = PaymentMethod::IDEAL === $molliePaymentMethod ? $paymentOptions['issuers']['id'] : null;
         }
 
+		$paymentMethod = $payment->getMethod();
+		Assert::isInstanceOf($paymentMethod, PaymentMethodInterface::class);
+
         /** @var MollieGatewayConfigInterface $method */
-        $method = $this->mollieMethodsRepository->findOneBy(['methodId' => $paymentMethod]);
+		$method = $this->mollieMethodsRepository->findOneBy([
+			'methodId' => $molliePaymentMethod,
+			'gateway' => $paymentMethod->getId(),
+		]);
         $gatewayConfig = $method->getGateway()->getConfig();
         $details = [
             'amount' => [
@@ -123,7 +130,7 @@ final class ConvertMolliePaymentAction extends BaseApiAwareAction implements Act
             'metadata' => [
                 'order_id' => $order->getId(),
                 'customer_id' => $customer->getId() ?? null,
-                'molliePaymentMethods' => $paymentMethod ?? null,
+                'molliePaymentMethods' => $molliePaymentMethod ?? null,
                 'cartToken' => $cartToken ?? null,
                 'selected_issuer' => $selectedIssuer ?? null,
             ],
