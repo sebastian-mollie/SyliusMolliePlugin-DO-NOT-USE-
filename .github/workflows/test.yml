@@ -137,7 +137,7 @@ jobs:
                 run: npm install -g @mockoon/cli
 
             -   name: Install wkhtmltopdf package
-                run: apt-get install wkhtmltopdf
+                run: sudo apt-get install wkhtmltopdf
 
             -   name: Check for wkhtmltopdf path
                 run: which wkhtmltopdf
