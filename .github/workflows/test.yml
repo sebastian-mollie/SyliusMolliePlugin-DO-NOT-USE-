@@ -28,6 +28,7 @@ jobs:
             DATABASE_URL: "mysql://root:root@127.0.0.1/sylius?serverVersion=${{ matrix.mysql }}"
             MOLLIE_TEST_API_KEY: "${{ secrets.MOLLIE_TEST_API_KEY }}"
             MOLLIE_PROFILE_KEY: "${{ secrets.MOLLIE_PROFILE_KEY }}"
+            WKHTMLTOPDF_PATH: "/usr/bin/wkhtmltopdf"
 
         steps:
             -   uses: actions/checkout@v2
@@ -134,6 +135,12 @@ jobs:
 
             -   name: Install Mockoon CLI
                 run: npm install -g @mockoon/cli
+
+            -   name: Install wkhtmltopdf package
+                run: apt-get install wkhtmltopdf
+
+            -   name: Check for wkhtmltopdf path
+                run: which wkhtmltopdf
 
             -   name: Run Mockoon for Behat
                 run: mockoon-cli start --data tests/Behat/Mollie_Behat.json
