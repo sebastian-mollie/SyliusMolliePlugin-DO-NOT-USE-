@@ -43,7 +43,7 @@ final class RefundOrderWebhookTest extends FunctionalTestCase
         parent::setUp();
 
         $container = $this->getContainerByVersion();
-
+		dd($_ENV['APP_ENV'], $_ENV['WKHTMLTOPDF_PATH']);
         $this->mollieApiClient = $container->get('bitbag_sylius_mollie_plugin.mollie_api_client');
         $this->mollieApiClient->setApiEndpoint('http://localhost:8217');
         $this->securityTokenRepository = $container->get('sylius.repository.payment_security_token');
