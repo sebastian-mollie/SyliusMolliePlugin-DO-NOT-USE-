@@ -17,6 +17,7 @@ use BitBag\SyliusMolliePlugin\Logger\MollieLoggerActionInterface;
 use Mollie\Api\Resources\Order;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Webmozart\Assert\Assert;
 
 final class OrderRefund implements OrderRefundInterface
 {
@@ -45,10 +46,12 @@ final class OrderRefund implements OrderRefundInterface
             $refundUnits = $this->commandCreator->fromOrder($order);
             $this->commandBus->dispatch($refundUnits);
         } catch (InvalidRefundAmountException $e) {
-			dump($e->getMessage(), $e->getPrevious()->getMessage());
+            Assert::notNull($e->getPrevious());
+            dump($e->getMessage(), $e->getPrevious()->getMessage());
             $this->loggerAction->addNegativeLog($e->getMessage());
         } catch (HandlerFailedException $e) {
-			dump($e->getMessage(), $e->getPrevious()->getMessage());
+            Assert::notNull($e->getPrevious());
+            dump($e->getMessage(), $e->getPrevious()->getMessage());
             $this->loggerAction->addNegativeLog($e->getMessage());
         }
     }
