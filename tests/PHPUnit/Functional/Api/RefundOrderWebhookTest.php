@@ -95,9 +95,7 @@ final class RefundOrderWebhookTest extends FunctionalTestCase
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-		dump($_ENV['APP_ENV']);
-		dd($_ENV['WKHTMLTOPDF_PATH']);
-		dd($_ENV['WKHTMLTOPDF_PATH']);
+
         $order = $this->orderRepository->findOneByNumber('000000001');
         $this->assertEquals('refunded', $order->getPaymentState());
 

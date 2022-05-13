@@ -47,11 +47,13 @@ final class OrderRefund implements OrderRefundInterface
             $this->commandBus->dispatch($refundUnits);
         } catch (InvalidRefundAmountException $e) {
             Assert::notNull($e->getPrevious());
-            dump($e->getMessage(), $e->getPrevious()->getMessage());
+            dd($e->getMessage(), $e->getPrevious()->getMessage());
+            /** @phpstan-ignore-next-line  */
             $this->loggerAction->addNegativeLog($e->getMessage());
         } catch (HandlerFailedException $e) {
             Assert::notNull($e->getPrevious());
-            dump($e->getMessage(), $e->getPrevious()->getMessage());
+            dd($e->getMessage(), $e->getPrevious()->getMessage());
+            /** @phpstan-ignore-next-line  */
             $this->loggerAction->addNegativeLog($e->getMessage());
         }
     }
