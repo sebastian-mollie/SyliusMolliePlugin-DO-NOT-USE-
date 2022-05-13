@@ -43,7 +43,7 @@ final class RefundOrderWebhookTest extends FunctionalTestCase
         parent::setUp();
 
         $container = $this->getContainerByVersion();
-		dd($_ENV['APP_ENV'], $_ENV['WKHTMLTOPDF_PATH']);
+
         $this->mollieApiClient = $container->get('bitbag_sylius_mollie_plugin.mollie_api_client');
         $this->mollieApiClient->setApiEndpoint('http://localhost:8217');
         $this->securityTokenRepository = $container->get('sylius.repository.payment_security_token');
@@ -95,7 +95,9 @@ final class RefundOrderWebhookTest extends FunctionalTestCase
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-
+		dump($_ENV['APP_ENV']);
+		dd($_ENV['WKHTMLTOPDF_PATH']);
+		dd($_ENV['WKHTMLTOPDF_PATH']);
         $order = $this->orderRepository->findOneByNumber('000000001');
         $this->assertEquals('refunded', $order->getPaymentState());
 
