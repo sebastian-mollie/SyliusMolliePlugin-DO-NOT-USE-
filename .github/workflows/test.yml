@@ -28,7 +28,7 @@ jobs:
             DATABASE_URL: "mysql://root:root@127.0.0.1/sylius?serverVersion=${{ matrix.mysql }}"
             MOLLIE_TEST_API_KEY: "${{ secrets.MOLLIE_TEST_API_KEY }}"
             MOLLIE_PROFILE_KEY: "${{ secrets.MOLLIE_PROFILE_KEY }}"
-            WKHTMLTOPDF_PATH: "/usr/bin/wkhtmltopdf"
+            WKHTMLTOPDF_PATH: "/usr/local/bin/wkthmltopdf"
 
         steps:
             -   uses: actions/checkout@v2
@@ -136,8 +136,11 @@ jobs:
             -   name: Install Mockoon CLI
                 run: npm install -g @mockoon/cli
 
-            -   name: Install wkhtmltopdf package
-                run: sudo apt-get install wkhtmltopdf
+            -   name: Install wkthtmltopdf
+                run: |
+                    sudo apt-get install -y xfonts-base xfonts-75dpi
+                    wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.bionic_amd64.deb
+                    sudo dpkg -i wkhtmltox_0.12.6-1.bionic_amd64.deb
 
             -   name: Check for wkhtmltopdf path
                 run: which wkhtmltopdf
