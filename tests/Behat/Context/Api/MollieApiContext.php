@@ -34,7 +34,7 @@ final class MollieApiContext implements Context
     }
 
     /**
-     * @When Mollie call notify webhook on newest recurring order
+     * @When Mollie calls notify webhook on newest recurring order
      */
     public function mollieCallRecurringPaymentWebhook(): void
     {
