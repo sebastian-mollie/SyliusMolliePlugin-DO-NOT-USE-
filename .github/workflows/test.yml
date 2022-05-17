@@ -151,12 +151,3 @@ jobs:
 
             -   name: Stop Mockoon for Behat
                 run: mockoon-cli stop mockoon-mollie-behat
-
-            -   name: Run Mockoon for PHPUnit
-                run: mockoon-cli start --data tests/PHPUnit/Functional/Mockoon.json
-
-            -   name: Run PHPUnit
-                run: vendor/bin/phpunit --colors=always
-
-            -   name: Stop Mockoon for PHPUnit
-                run: mockoon-cli stop mockoon-mollie-phpunit

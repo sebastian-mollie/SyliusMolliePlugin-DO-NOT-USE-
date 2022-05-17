@@ -1,0 +1,4 @@
+services:
+    bitbag_sylius_mollie_plugin.behat.client.test_mollie_api_client:
+        class: Tests\BitBag\SyliusMolliePlugin\Behat\Client\TestMollieApiClient
+        public: true

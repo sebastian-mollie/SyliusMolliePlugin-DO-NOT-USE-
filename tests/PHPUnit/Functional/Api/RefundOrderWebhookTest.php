@@ -6,7 +6,6 @@ namespace Tests\BitBag\SyliusMolliePlugin\PHPUnit\Functional\Api;
 
 use BitBag\SyliusMolliePlugin\Client\MollieApiClient;
 use BitBag\SyliusMolliePlugin\Entity\OrderInterface;
-use BitBag\SyliusMolliePlugin\Repository\CreditMemoRepositoryInterface;
 use BitBag\SyliusMolliePlugin\Repository\OrderRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Payum\Core\Model\Identity;
@@ -43,27 +42,29 @@ final class RefundOrderWebhookTest extends FunctionalTestCase
     {
         parent::setUp();
 
-        $this->mollieApiClient = self::getContainer()->get('bitbag_sylius_mollie_plugin.mollie_api_client');
+        $container = $this->getContainerByVersion();
+
+        $this->mollieApiClient = $container->get('bitbag_sylius_mollie_plugin.mollie_api_client');
         $this->mollieApiClient->setApiEndpoint('http://localhost:8217');
-        $this->securityTokenRepository = self::getContainer()->get('sylius.repository.payment_security_token');
-        $this->orderRepository = self::getContainer()->get('sylius.repository.order');
-        $this->paymentRepository = self::getContainer()->get('sylius.repository.payment');
-        $this->refundRepository = self::getContainer()->get('sylius_refund.repository.refund');
-        $this->refundPaymentRepository = self::getContainer()->get('sylius_refund.repository.refund_payment');
-        $this->creditMemoRepository = self::getContainer()->get('sylius_refund.repository.credit_memo');
-        $this->entityManager = self::getContainer()->get('doctrine.orm.entity_manager');
+        $this->securityTokenRepository = $container->get('sylius.repository.payment_security_token');
+        $this->orderRepository = $container->get('sylius.repository.order');
+        $this->paymentRepository = $container->get('sylius.repository.payment');
+        $this->refundRepository = $container->get('sylius_refund.repository.refund');
+        $this->refundPaymentRepository = $container->get('sylius_refund.repository.refund_payment');
+        $this->creditMemoRepository = $container->get('sylius_refund.repository.credit_memo');
+        $this->entityManager = $container->get('doctrine.orm.entity_manager');
     }
 
     /**
-      * The tested scenario:
-      *
-      * We simulate refunding all (to be honest only one existing) order items in order by
-      * calling the notify webhook (as Mollie does).
-      **/
+     * The tested scenario:
+     *
+     * We simulate refunding all (to be honest only one existing) order items in order by
+     * calling the notify webhook (as Mollie does).
+     **/
     public function test_order_status_after_refund_with_credit_memos(): void
     {
         $fixtures = $this->loadFixturesFromFiles([
-            'Api/RefundOrderWebhookTest/test_order_status_after_refund_with_credit_memos.yaml'
+            'Api/RefundOrderWebhookTest/test_order_status_after_refund_with_credit_memos.yaml',
         ]);
 
         /** @var PaymentInterface $payment */
