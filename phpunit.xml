@@ -16,6 +16,6 @@
         <server name="KERNEL_CLASS" value="Tests\BitBag\SyliusMolliePlugin\Application\Kernel" />
         <server name="EXPECTED_RESPONSE_DIR" value="tests/PHPUnit/Responses/json" />
         <server name="IS_DOCTRINE_ORM_SUPPORTED" value="true" />
-        <server name="WKHTMLTOPDF_PATH" value="%env(WKHTMLTOPDF_PATH)%" />
+        <server name="WKHTMLTOPDF_PATH" value="Tests\BitBag\SyliusMolliePlugin\Application\etc\wkhtmltopdf" />
     </php>
 </phpunit>
