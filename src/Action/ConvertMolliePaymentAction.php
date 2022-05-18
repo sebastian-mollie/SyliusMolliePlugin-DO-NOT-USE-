@@ -112,7 +112,10 @@ final class ConvertMolliePaymentAction extends BaseApiAwareAction implements Act
         }
 
         /** @var MollieGatewayConfigInterface $method */
-        $method = $this->mollieMethodsRepository->findOneBy(['methodId' => $paymentMethod]);
+        $method = $this->mollieMethodsRepository->findOneBy([
+            'methodId' => $paymentMethod,
+            'gateway' => $payment->getMethod()->getId(),
+        ]);
         $gatewayConfig = $method->getGateway()->getConfig();
         $details = [
             'amount' => [
