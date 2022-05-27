@@ -140,7 +140,7 @@ use Sylius\Component\Core\Model\Order as BaseOrder;
 
 class Order extends BaseOrder implements OrderInterface
 {
-    use AbandonedEmailOrderTrait;
+    use OrderTrait;
 }
 ```
 Or this way if you use annotations:
@@ -154,8 +154,6 @@ namespace App\Entity\Order;
 
 use Doctrine\ORM\Mapping as ORM;
 use BitBag\SyliusMolliePlugin\Entity\OrderInterface;
-use BitBag\SyliusMolliePlugin\Entity\OrderTrait;
-
 use Sylius\Component\Core\Model\Order as BaseOrder;
 
 /**
@@ -164,13 +162,21 @@ use Sylius\Component\Core\Model\Order as BaseOrder;
  */
 class Order extends BaseOrder implements OrderInterface
 {
-    use AbandonedEmailOrderTrait;
-
     /**
      * @var bool
      * @ORM\Column(type="boolean", name="abandoned_email")
      */
     protected $abandonedEmail = false;
+
+    public function isAbandonedEmail(): bool
+    {
+        return $this->abandonedEmail;
+    }
+
+    public function setAbandonedEmail(bool $abandonedEmail): void
+    {
+        $this->abandonedEmail = $abandonedEmail;
+    }
 }
 ```
 
