@@ -60,7 +60,7 @@ final class PaymentMethodCheckoutValidator extends ConstraintValidator
             return;
         }
 
-        $this->session->getFlashBag()->add('error', 'bitbag_sylius_mollie_plugin.empty_payment_method_checkout');
+        $this->session->getFlashBag()->add('error', 'bitbag_sylius_mollie_plugin.credit_cart_error.empty_payment_method_checkout');
         if (!property_exists($constraint, 'message')) {
             throw new \InvalidArgumentException();
         }
