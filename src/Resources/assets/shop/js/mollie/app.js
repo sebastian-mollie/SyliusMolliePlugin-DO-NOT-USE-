@@ -1,48 +1,63 @@
 const { Mollie } = window;
 
-$(function () {
+document.addEventListener("DOMContentLoaded", () => {
     let selectedValue = false;
-    let mollieData = $('.online-online-payment__container');
-    const initialOrderTotal = $('#sylius-summary-grand-total').text();
+    let mollieData = document.querySelector('.online-online-payment__container');
+    let summary = document.getElementById('sylius-summary-grand-total');
+    if(!mollieData || !summary) return;
+    const initialOrderTotal = summary.textContent;
     const cardActiveClass = 'online-payment__item--active';
-    const orderTotalRow = $('#sylius-summary-grand-total');
-    const components = Boolean(mollieData.data('components'));
+    const orderTotalRow = document.getElementById('sylius-summary-grand-total');
+    if(!orderTotalRow) return;
+    const components = Boolean(mollieData.getAttribute('data-components'));
 
-    $('input[id*="sylius_checkout_select_payment_"][type=radio]').on('change', ({currentTarget}) => {
-        if (!currentTarget.classList.contains('mollie-payments')) {
-            restoreOrderTotalValue();
-            $(`.${cardActiveClass} input[type="radio"]`).prop('checked', false);
-            $(`.${cardActiveClass}`).removeClass(cardActiveClass);
-        }
-    });
+    document.querySelectorAll('input[id*="sylius_checkout_select_payment_"][type=radio]').forEach((input) => {
+        input.addEventListener('change', function (evt) {
+            if (!input.classList.contains('mollie-payments')) {
+                restoreOrderTotalValue();
+                document.querySelectorAll(`.${cardActiveClass} input[type="radio"]`).forEach((radio) => {
+                    radio.checked = false;
+                });
+                document.querySelectorAll(`.${cardActiveClass}`).forEach((element) => {
+                    element.classList.remove(cardActiveClass);
+                });
+            }
+        })
+    })
 
-    $('.online-payment__input').on('change', ({currentTarget}) => {
-        let currentItem = $(currentTarget).parent('.online-payment__item');
-        currentItem.siblings().removeClass('online-payment__item--active');
-        currentItem.addClass('online-payment__item--active');
-        selectedValue = currentTarget.value;
+    document.querySelectorAll('.online-payment__input').forEach((input) => {
+       input.addEventListener('change', function(evt) {
+           let currentItem = input.parentElement;
+           currentItem.parentElement.querySelectorAll('.online-payment__item--active')
+               .forEach((element) => element.classList.remove('online-payment__item--active'))
+           currentItem.classList.add('online-payment__item--active');
+           selectedValue = input.value;
 
-        if (!$('.mollie-payments').prop('checked')) {
-            $('.mollie-payments').prop('checked', true);
-        }
+           let payment = document.querySelector('.mollie-payments');
+           if (!payment.checked) {
+               payment.checked = true;
+           }
 
-        if (currentItem.data('feeurl')) {
-            getPaymentFee(currentItem.data('feeurl'));
-        }
+           if (currentItem.getAttribute('data-feeurl')) {
+               getPaymentFee(currentItem.getAttribute('data-feeurl'));
+           }
+       })
     });
 
     function getPaymentFee(url) {
         fetch(url)
             .then((response) => response.json())
             .then((data) => {
-                const paymentFeeRow = $('#bitbag-paymentFee-row');
+                const paymentFeeRow = document.getElementById('bitbag-paymentFee-row');
 
-                if (paymentFeeRow.length && data.view) {
-                    paymentFeeRow.replaceWith(data.view);
-                    orderTotalRow.text(data.orderTotal);
+                if (paymentFeeRow && data.view) {
+                    let div = document.createElement('div');
+                    div.innerHTML = data.view.trim();
+                    paymentFeeRow.replaceWith(div.firstChild);
+                    orderTotalRow.textContent = data.orderTotal;
                 } else if (data.view) {
-                    $('#sylius-checkout-subtotal .ui.large.header').before(data.view);
-                    orderTotalRow.text(data.orderTotal);
+                    document.querySelector('#sylius-checkout-subtotal .ui.large.header').insertAdjacentHTML('beforebegin', data.view);
+                    orderTotalRow.textContent = data.orderTotal;
                 } else {
                     restoreOrderTotalValue();
                 }
@@ -50,8 +65,9 @@ $(function () {
     }
 
     function restoreOrderTotalValue() {
-        $('#bitbag-paymentFee-row').replaceWith('');
-        orderTotalRow.text(initialOrderTotal);
+        let fee = document.getElementById('bitbag-paymentFee-row');
+        if(fee) fee.replaceWith('');
+        orderTotalRow.textContent = initialOrderTotal;
     }
 
     if (mollieData.length > 0 && true === components) {
@@ -59,15 +75,15 @@ $(function () {
     }
 
     function initializeCreditCartFields(selectedValue) {
-        const environment = mollieData.data('environment');
+        const environment = mollieData.getAttribute('data-environment');
         let testmode = true;
 
         if (environment === 1) {
             testmode = false;
         }
 
-        const mollie = Mollie(mollieData.data('profile_id'), {
-            locale: mollieData.data('locale'),
+        const mollie = Mollie(mollieData.getAttribute('data-profile_id'), {
+            locale: mollieData.getAttribute('data-locale'),
             testmode: testmode,
         });
 
@@ -138,7 +154,8 @@ $(function () {
         }
 
         form.addEventListener('submit', async (event) => {
-            if ($('.online-payment__input:checked').val() === 'creditcard') {
+            let radio = document.querySelector('.online-payment__input:checked')
+            if (radio && radio.value === 'creditcard') {
                 event.preventDefault();
                 disableForm();
 
