@@ -20,4 +20,6 @@ bitbag_sylius_mollie_plugin:
     possible_fraud: 'Mogelijke fraude'
     authentication_failed: 'Authenticatie mislukt'
     empty_payment_method_checkout: 'Kies een van de Mollie-betalingsmethoden'
+  order_checkout:
+    colliding_products: 'Er zijn gemengde producten (terugkerende en niet-terugkerende) in uw winkelwagen. Doorgaan met gemengde inhoud is verboden.'
 

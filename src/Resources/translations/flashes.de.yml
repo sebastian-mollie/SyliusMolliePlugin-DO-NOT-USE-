@@ -20,4 +20,6 @@ bitbag_sylius_mollie_plugin:
     possible_fraud: 'Möglicher Betrug'
     authentication_failed: 'Authentifizierung fehlgeschlagen'
     empty_payment_method_checkout: 'Wählen Sie eine Mollie-Bezahlmethode'
+  order_checkout:
+    colliding_products: 'In Ihrem Warenkorb befinden sich gemischte Produkte (wiederkehrende und nicht wiederkehrende). Das Fortfahren mit gemischtem Inhalt ist verboten.'
 

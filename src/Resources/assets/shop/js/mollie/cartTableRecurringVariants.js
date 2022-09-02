@@ -1,8 +1,8 @@
 export const model = {
     appendIntervalLabel: (container, interval) => {
-        const __everyDaysLabel = $('#sylius-variants-recurring-interval-days').text();
-        const __everyWeeksLabel = $('#sylius-variants-recurring-interval-weeks').text();
-        const __everyMonthsLabel = $('#sylius-variants-recurring-interval-months').text();
+        const __everyDaysLabel = document.getElementById('sylius-variants-recurring-interval-days').innerText;
+        const __everyWeeksLabel = document.getElementById('sylius-variants-recurring-interval-weeks').innerText;
+        const __everyMonthsLabel = document.getElementById('sylius-variants-recurring-interval-months').innerText;
 
         const [amount, step] = interval.split(/\s+/g);
         let everyLabel = '';
@@ -20,28 +20,37 @@ export const model = {
         }
 
         if (everyLabel !== '') {
-            const __intervalElementContainer = $($('#sylius-variants-recurring-interval-label').html());
-            const __everyLabel = $('<div id="every-label" class="item mollie-every-label-container"/>');
-            __intervalElementContainer.text(everyLabel.replace(/\%amount\%/, amount));
-            __everyLabel.append(__intervalElementContainer);
-            container.append(__everyLabel);
+            const __intervalElementContainer = document.getElementById('sylius-variants-recurring-interval-label').firstChild;
+            const __everyLabel = document.createElement('div');
+            __everyLabel.id = 'every-label';
+            __everyLabel.className = 'item mollie-every-label-container';
+            __intervalElementContainer.textContent = everyLabel.replace(/\%amount\%/, amount);
+            __everyLabel.appendChild(__intervalElementContainer);
+            container.appendChild(__everyLabel);
         }
 
     },
     appendRecurringLabel: (container) => {
-        const __productNameRecurringPrefix = $('#sylius-variants-recurring-label').html();
-        const __prefixLabel = $('<span id="recurring-label" class="item"/>');
-        __prefixLabel.html(__productNameRecurringPrefix);
-        container.append(__prefixLabel);
+        const __productNameRecurringPrefix = document.getElementById('sylius-variants-recurring-label').firstChild;
+        const __prefixLabel = document.createElement('span');
+        __prefixLabel.id = 'recurring-label';
+        __prefixLabel.className = 'item';
+        __prefixLabel.appendChild(__productNameRecurringPrefix);
+        container.appendChild(__prefixLabel);
     },
     appendTimesLabel: (container, times) => {
-        const __recurringTimes = $('#sylius-variants-recurring-times-label').html();
-        const __recurringTimesLabel = $('<span id="recurring-times" class="item"/>');
-        __recurringTimesLabel.html(__recurringTimes).children().prepend(times + ' ');
-        container.append(__recurringTimesLabel);
+        const __recurringTimes = document.getElementById('sylius-variants-recurring-times-label').firstChild;
+        const __recurringTimesLabel = document.createElement('span');
+        __recurringTimesLabel.id = 'recurring-times';
+        __recurringTimesLabel.className = 'item';
+        __recurringTimesLabel.appendChild(__recurringTimes);
+        Array.from(__recurringTimesLabel.children).forEach((e) => {
+            __recurringTimesLabel.prepend(times + ' ')
+        })
+        container.appendChild(__recurringTimesLabel);
     },
     addRecurringDetailsLabels: (itemContainer, totalContainer, interval, times) => {
-        const __recurringContainer = $('<div/>');
+        const __recurringContainer = document.createElement('div');
 
         // recurring label
         model.appendRecurringLabel(__recurringContainer);
@@ -49,14 +58,24 @@ export const model = {
         // times label
         model.appendTimesLabel(__recurringContainer, times);
 
-        itemContainer.append(__recurringContainer);
+        itemContainer.appendChild(__recurringContainer);
 
         model.appendIntervalLabel(totalContainer, interval);
     },
     clearLabels: () => {
-        $('#recurring-label').remove();
-        $('#recurring-times').remove();
-        $('#recurring-interval').remove();
-        $('#every-label').remove();
+        let recurringLabel = document.getElementById('recurring-label');
+        if(recurringLabel) {
+            recurringLabel.remove();
+        }
+
+        let recurringInterval = document.getElementById('recurring-interval');
+        if(recurringInterval) {
+            recurringInterval.remove();
+        }
+
+        let everyLabel = document.getElementById('every-label');
+        if(everyLabel) {
+            everyLabel.remove();
+        }
     }
 }

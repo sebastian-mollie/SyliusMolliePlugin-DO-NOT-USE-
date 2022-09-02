@@ -20,4 +20,6 @@ bitbag_sylius_mollie_plugin:
     possible_fraud: "Risque de fraude"
     authentication_failed: "Échec de l'authentification"
     empty_payment_method_checkout: 'Veuillez choisir une méthode de paiement Mollie'
+  order_checkout:
+    colliding_products: 'Votre panier contient des produits mixtes (récurrents et non récurrents). Il est interdit de poursuivre avec un contenu mixte.'
 

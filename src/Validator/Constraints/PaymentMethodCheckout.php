@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraint;
 final class PaymentMethodCheckout extends Constraint
 {
     /** @var string */
-    public $message = 'bitbag_sylius_mollie_plugin.empty_payment_method_checkout';
+    public $message = 'bitbag_sylius_mollie_plugin.credit_cart_error.empty_payment_method_checkout';
 
     public function validatedBy(): string
     {
